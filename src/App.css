@@ -1,0 +1,240 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+
+* {
+  font-family: 'Poppins', sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #8758ff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.App {
+  text-align: center;
+}
+
+h1 {
+  color: #fff;
+  margin-bottom: 0.5rem;
+  font-size: 1.75rem;
+}
+
+.TodoWrapper {
+  background: #1A1A40;
+  margin-top: 5rem;
+  padding: 2rem;
+  border-radius: 5px;
+}
+
+.TodoForm {
+  width: 100%;
+  display: flex;
+  flex-direction: column;  
+  margin-bottom: 2rem;
+}
+
+.EditTodoForm{
+  padding-bottom: 1rem;
+  background: #a180f7;
+  border-radius: 5px;
+}
+
+.date-title{
+  text-align: left;
+}
+
+.todo-input {
+  outline: none;
+  background: none;
+  border: 1px solid #8758ff;
+  padding: 0.5rem 1rem;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+  width: 300px;
+  color: #fff;
+}
+
+.under-line-inputs{
+  display: flex;
+  justify-content: space-between;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+.todo-input::placeholder {
+  color: #ffffff4d;
+}
+
+.todo-btn {
+  background: #8758ff;
+  color: #fff;
+  border: none;
+  padding: 0.40rem;
+  cursor: pointer;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  vertical-align: middle;
+  
+}
+
+.Todo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #8758ff;
+  color: #fff;
+  padding: 0.5rem 0.75rem;
+  border-radius: 5px;
+  margin-bottom: 0.2rem;
+  cursor: pointer;
+}
+
+.Todo:first-child{
+  border-radius: 0 5px 5px 5px;
+  -webkit-border-radius: 0 5px 5px 5px;
+  -moz-border-radius: 0 5px 5px 5px;
+  -ms-border-radius: 0 5px 5px 5px;
+  -o-border-radius: 0 5px 5px 5px;
+}
+
+.fa-trash {
+  margin-left: 0.75rem;
+}
+
+.TodoItem-text-container{
+  max-width: 315px;
+}
+.TodoItem-text-container p{
+  width: 100%;
+  word-wrap: break-word;
+  font-size: 15px;
+}
+
+.completed {
+  background: #20a05a;
+  text-decoration: line-through;
+}
+
+.weekly-divider{
+  margin-bottom: 1rem;
+  background-color: #4f389e;
+  border-radius: 8px 8px 8px 8px;
+  -webkit-border-radius: 8px 8px 8px 8px;
+  -moz-border-radius: 8px 8px 8px 8px;
+  -ms-border-radius: 8px 8px 8px 8px;
+  -o-border-radius: 8px 8px 8px 8px;
+}
+
+.week-titles{
+  display: flex;
+  flex-direction: column;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 0.2rem;
+  background-color: #8758ff;
+  border-radius: 8px 8px 0 0;
+  -webkit-border-radius: 8px 8px 0 0;
+  -moz-border-radius: 8px 8px 0 0;
+  -ms-border-radius: 8px 8px 0 0;
+  -o-border-radius: 8px 8px 0 0;
+  font-size: 18px;
+}
+
+.completed-week-titles{
+  background-color: #2cd477;
+}
+
+.week-titles h3{
+  text-decoration: underline;
+}
+
+.week-titles-header{
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding: 5px 15px;
+  border-radius: 8px 8px 0 0;
+  -webkit-border-radius: 8px 8px 0 0;
+  -moz-border-radius: 8px 8px 0 0;
+  -ms-border-radius: 8px 8px 0 0;
+  -o-border-radius: 8px 8px 0 0;
+}
+
+.week-titles-editable-content{
+  border-top: 1px solid rgb(11, 11, 11);
+  display: flex;
+  padding: 8px 15px 5px;
+  justify-content: space-between;
+  width: 100%;
+  flex-direction: column;
+  text-align: left;
+}
+.week-titles-editable-content{
+  font-size: 17px;
+}
+.week-titles-editable-content button{
+  padding: 2px 3px;
+  max-width: 70px;
+  background: #1A1A40;
+  font-size: 0.8em;
+}
+
+.daily-divider{
+  border-bottom: 2px solid #1A1A40;
+  width: 100%;
+  margin-bottom: 0.2rem;
+  padding: 5px;
+}
+.daily-divider:last-child{
+  border-bottom: none;
+}
+
+.completed-day{
+  background-color: #25c06a;
+  border-radius: 8px;
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
+  -ms-border-radius: 8px;
+  -o-border-radius: 8px;
+}
+
+.day-header{
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: 0 5px 0 0;
+}
+
+.day-title{
+  text-align: left;
+  color: #fffc2d;
+  font-size: 0.85rem;
+  margin-bottom: 0;
+  width: auto;
+}
+
+.day-title:first-child{
+  background: #579ad9;
+  border-radius: 5px 5px 0 0;
+  padding: 2px 7px;
+  color: #fff;
+}
+
+.type-form-input{
+  display: flex;
+  height: 40px;
+  align-items: flex-start;
+}
+
+.type-form-input input[type="color"]{
+  height: 90%;
+}
+
+.type-form-input input[type="text"]{
+  margin-top: 0;
+}

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { DailyDivider } from "./DailyDivider";
 
 interface IType {
@@ -41,6 +41,19 @@ export const WeeklyDivider = (props: WeeklyDividerProps) => {
   } = props;
   const [weekObjective, setWeekObjective] = useState("");
   const [editingWeekObjective, setEditingWeekObjective] = useState(false);
+
+  //Get the week objective from local storage
+  React.useEffect(() => {
+    const weekObjective = localStorage.getItem("weekObjective");
+    if (weekObjective) {
+      setWeekObjective(weekObjective);
+    }
+  }, []);
+
+  //Save the week objective to local storage
+  React.useEffect(() => {
+    localStorage.setItem("weekObjective", weekObjective);
+  }, [weekObjective]);
 
   // Get an array of unique dates that the tasks belong to in this week
   const dates = [...new Set(todos.map((todo) => todo.date))];

@@ -29,12 +29,12 @@ export const TypeForm = ({ addType }: TypeFormProps) => {
         <input
           type="text"
           value={typeValue}
-          placeholder="Introduce a New Type"
+          placeholder="New Category"
           className="todo-input"
           onChange={(e) => setTypeValue(e.target.value)}
         />
         <button type="submit" className="todo-btn">
-          New-type
+          Add Cat
         </button>
       </div>
     </form>

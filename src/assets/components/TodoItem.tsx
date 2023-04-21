@@ -39,7 +39,7 @@ export const TodoItem = (props: TodoItemProps) => {
       >
         {" "}
         <p className={`${todo.completed && "completed"}`}>
-          {todo.task} / {todo.nType ? todo.nType : "No Type"}
+          {todo.task} / {todo.nType ? todo.nType : "No-cat"}
         </p>
       </div>
 

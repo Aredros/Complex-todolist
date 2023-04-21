@@ -106,7 +106,7 @@ export const WeeklyDivider = (props: WeeklyDividerProps) => {
                 value={weekObjective}
                 onChange={(e) => setWeekObjective(e.target.value)}
               />
-              <button onClick={() => handleWeekObjective}>edit</button>
+              <button onClick={handleWeekObjective}>edit</button>
             </>
           ) : (
             <>

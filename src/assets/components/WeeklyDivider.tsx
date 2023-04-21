@@ -43,8 +43,8 @@ export const WeeklyDivider = (props: WeeklyDividerProps) => {
   const [editingWeekObjective, setEditingWeekObjective] = useState(false);
 
   //Get the week objective from local storage
-  React.useEffect(() => {
-    const weekObjective = localStorage.getItem("weekObjective");
+  useEffect(() => {
+    const weekObjective = localStorage.getItem(`${week}-weekObjective`);
     if (weekObjective) {
       setWeekObjective(weekObjective);
     }
@@ -52,8 +52,15 @@ export const WeeklyDivider = (props: WeeklyDividerProps) => {
 
   //Save the week objective to local storage
   React.useEffect(() => {
-    localStorage.setItem("weekObjective", weekObjective);
+    localStorage.setItem(`${week}-weekObjective`, weekObjective);
   }, [weekObjective]);
+
+  const handleWeekObjective = (e: React.FormEvent) => {
+    e.preventDefault();
+    setWeekObjective(weekObjective);
+    localStorage.setItem(`${week}-weekObjective`, weekObjective);
+    setEditingWeekObjective(!editingWeekObjective);
+  };
 
   // Get an array of unique dates that the tasks belong to in this week
   const dates = [...new Set(todos.map((todo) => todo.date))];
@@ -98,21 +105,16 @@ export const WeeklyDivider = (props: WeeklyDividerProps) => {
                 type="text"
                 value={weekObjective}
                 onChange={(e) => setWeekObjective(e.target.value)}
-                onBlur={() => setEditingWeekObjective(false)}
               />
-              <button onClick={() => setEditingWeekObjective(false)}>
-                edit
-              </button>
+              <button onClick={() => handleWeekObjective}>edit</button>
             </>
           ) : (
             <>
               {" "}
-              <p onClick={() => setEditingWeekObjective(true)}>
+              <p>
                 {weekObjective ? weekObjective : "Write your week objective"}
               </p>
-              <button onClick={() => setEditingWeekObjective(true)}>
-                edit
-              </button>
+              <button onClick={handleWeekObjective}>edit</button>
             </>
           )}
         </div>

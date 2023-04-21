@@ -173,9 +173,13 @@ h1 {
   width: 100%;
   flex-direction: column;
   text-align: left;
-}
-.week-titles-editable-content{
   font-size: 17px;
+  max-width: 400px;
+}
+
+.week-titles-editable-content{
+  width: 100%;
+  word-wrap: break-word;
 }
 .week-titles-editable-content button{
   padding: 2px 3px;

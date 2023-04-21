@@ -59,7 +59,7 @@ export const WeeklyDivider = (props: WeeklyDividerProps) => {
     e.preventDefault();
     setWeekObjective(weekObjective);
     localStorage.setItem(`${week}-weekObjective`, weekObjective);
-    setEditingWeekObjective(!editingWeekObjective);
+    setEditingWeekObjective(false);
   };
 
   // Get an array of unique dates that the tasks belong to in this week
@@ -114,7 +114,9 @@ export const WeeklyDivider = (props: WeeklyDividerProps) => {
               <p>
                 {weekObjective ? weekObjective : "Write your week objective"}
               </p>
-              <button onClick={handleWeekObjective}>edit</button>
+              <button onClick={() => setEditingWeekObjective(true)}>
+                edit
+              </button>
             </>
           )}
         </div>

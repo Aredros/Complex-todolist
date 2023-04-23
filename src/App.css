@@ -92,6 +92,8 @@ h1 {
   border-radius: 5px;
   margin-bottom: 0.2rem;
   cursor: pointer;
+  min-height: 40px;
+  position: relative;
 }
 
 .Todo:first-child{
@@ -102,12 +104,25 @@ h1 {
   -o-border-radius: 0 5px 5px 5px;
 }
 
+.TodoItem-type-color{
+  width: 15px;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  border-radius: 8px 0 8px 8px;
+  -webkit-border-radius: 8px 0 8px 8px;
+  -moz-border-radius: 8px 0 8px 8px;
+  -ms-border-radius: 8px 0 8px 8px;
+  -o-border-radius: 8px 0 8px 8px;
+}
+
 .fa-trash {
   margin-left: 0.75rem;
 }
 
 .TodoItem-text-container{
   max-width: 315px;
+  margin-left: 15px;
 }
 .TodoItem-text-container p{
   width: 100%;
@@ -177,15 +192,33 @@ h1 {
   max-width: 430px;
 }
 
-.week-titles-editable-content{
-  width: 100%;
-  word-wrap: break-word;
+.week-objective-paragraph{
+  font-family: 'Roboto', sans-serif;
+  overflow-wrap: break-word;
+  font-size: 16px;
+  text-align: justify;
+  margin-bottom: 5px;
+  padding: 0 5px;
+  /* background-color: rgba(74, 130, 243, 0.2);
+  border-radius: 6px;
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  -ms-border-radius: 6px;
+  -o-border-radius: 6px; */
 }
+
 .week-titles-editable-content button{
   padding: 2px 3px;
   max-width: 70px;
   background: #1A1A40;
   font-size: 0.8em;
+}
+
+.week-input{
+  margin-bottom: 0.5rem;
+  min-height: 40px ;
+  width: 100%;
+  overflow-wrap: break-word;
 }
 
 .daily-divider{
@@ -227,6 +260,24 @@ h1 {
   border-radius: 5px 5px 0 0;
   padding: 2px 7px;
   color: #fff;
+}
+.today-title{
+  background-color: #57d9c8 !important;
+  position: relative;
+}
+.today-title::before{
+  content: "today";
+  font-size: 0.65rem;
+  position: absolute;
+  left: -48px;
+  background-color: #fff;
+  color: black;
+  padding: 1px 6px;
+  border-radius: 8px;
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
+  -ms-border-radius: 8px;
+  -o-border-radius: 8px;
 }
 
 .type-form-input{

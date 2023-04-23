@@ -101,17 +101,17 @@ export const WeeklyDivider = (props: WeeklyDividerProps) => {
           {editingWeekObjective ? (
             <>
               {" "}
-              <input
-                type="text"
+              <textarea
+                className="week-input"
                 value={weekObjective}
                 onChange={(e) => setWeekObjective(e.target.value)}
-              />
+              ></textarea>
               <button onClick={handleWeekObjective}>edit</button>
             </>
           ) : (
             <>
               {" "}
-              <p>
+              <p className="week-objective-paragraph">
                 {weekObjective ? weekObjective : "Write your week objective"}
               </p>
               <button onClick={() => setEditingWeekObjective(true)}>

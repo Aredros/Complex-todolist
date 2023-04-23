@@ -26,10 +26,9 @@ export const TodoItem = (props: TodoItemProps) => {
   return (
     <div className={`Todo ${todo.completed && "completed"}`}>
       <div
+        className="TodoItem-type-color"
         onClick={() => toggleCompleteTask(todo.id)}
         style={{
-          width: "15px",
-          height: "15px",
           backgroundColor: typecolor ?? "gray",
         }}
       ></div>

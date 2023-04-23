@@ -53,6 +53,9 @@ export const TodoForm = ({ addTodo, types }: TodoFormProps) => {
             value={type}
             onChange={(e) => setType(e.target.value)}
           >
+            <option key="type-id-no-type" value="No-cat">
+              No-cat
+            </option>
             {types.map((type) => (
               <option key={`type-id ${type.id}`} value={type.type}>
                 {type.type}

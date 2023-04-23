@@ -50,12 +50,17 @@ export const DailyDivider = (props: DailyDividerProps) => {
     100
   ).toFixed(0);
 
+  //get today's date so it can be compared with the date title and give a different style and text
+  const today = new Date().toLocaleDateString("en-GB");
+  //get the date from the props and convert it to a date object so it can be compared with today's date
+  const dateObj = new Date(date).toLocaleDateString("en-GB");
+
   return (
     <div
       className={`daily-divider ${dayPercentage === "100" && "completed-day"}`}
     >
       <div className="day-header">
-        <h3 className="day-title">
+        <h3 className={`day-title ${dateObj === today ? "today-title" : ""}`}>
           {" "}
           {
             //use the new Date function to convert the date string to a date object

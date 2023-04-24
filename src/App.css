@@ -288,8 +288,6 @@ h1 {
 .today-title::before{
   content: "today";
   font-size: 0.65rem;
-  position: absolute;
-  left: -48px;
   background-color: #fff;
   color: black;
   padding: 1px 6px;

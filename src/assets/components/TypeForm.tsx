@@ -34,7 +34,7 @@ export const TypeForm = ({ addType }: TypeFormProps) => {
           onChange={(e) => setTypeValue(e.target.value)}
         />
         <button type="submit" className="todo-btn">
-          Add Cat
+          Add
         </button>
       </div>
     </form>

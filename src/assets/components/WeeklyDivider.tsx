@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { DailyDivider } from "./DailyDivider";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faChevronCircleUp,
+  faChevronCircleDown,
+} from "@fortawesome/free-solid-svg-icons";
 
 interface IType {
   type: string;
@@ -41,6 +46,8 @@ export const WeeklyDivider = (props: WeeklyDividerProps) => {
   } = props;
   const [weekObjective, setWeekObjective] = useState("");
   const [editingWeekObjective, setEditingWeekObjective] = useState(false);
+  //state for making the week element collapse when clicking on a button
+  const [weekCollapsed, setWeekCollapsed] = useState(false);
 
   //Get the week objective from local storage
   useEffect(() => {
@@ -114,25 +121,39 @@ export const WeeklyDivider = (props: WeeklyDividerProps) => {
               <p className="week-objective-paragraph">
                 {weekObjective ? weekObjective : "Write your week objective"}
               </p>
-              <button onClick={() => setEditingWeekObjective(true)}>
-                edit
-              </button>
+              <div className="week-buttons">
+                <button onClick={() => setEditingWeekObjective(true)}>
+                  edit
+                </button>
+                <FontAwesomeIcon
+                  icon={weekCollapsed ? faChevronCircleDown : faChevronCircleUp}
+                  onClick={() => setWeekCollapsed(!weekCollapsed)}
+                />
+              </div>
             </>
           )}
         </div>
       </div>
-      {dates.map((date) => (
-        <DailyDivider
-          key={date}
-          date={date}
-          types={types}
-          editTodoTask={editTodoTask}
-          toggleCompleteTask={toggleCompleteTask}
-          deleteTodoTask={deleteTodoTask}
-          finishEditTask={finishEditTask}
-          todos={todos.filter((todo) => todo.date === date)}
-        />
-      ))}
+      <div
+        style={{
+          maxHeight: weekCollapsed ? 0 : "1000px",
+          transition: "max-height 0.7s",
+        }}
+        className={`whole-week`}
+      >
+        {dates.map((date) => (
+          <DailyDivider
+            key={date}
+            date={date}
+            types={types}
+            editTodoTask={editTodoTask}
+            toggleCompleteTask={toggleCompleteTask}
+            deleteTodoTask={deleteTodoTask}
+            finishEditTask={finishEditTask}
+            todos={todos.filter((todo) => todo.date === date)}
+          />
+        ))}
+      </div>
     </div>
   );
 };

@@ -35,20 +35,20 @@ export const EditTodoForm = (props: EditTodoFormProps) => {
 
   return (
     <form className="EditTodoForm" onSubmit={handleSubmit}>
-      <div className="Text-input">
+      <div className="EditTodoForm__Task">
         <input
           type="text"
           value={value}
           placeholder="Update task"
-          className="todo-input"
+          className="EditTodoForm__Task__input"
           onChange={(e) => setValue(e.target.value)}
         />
-        <button type="submit" className="todo-btn">
+        <button type="submit" className="add-btn">
           Update
         </button>
       </div>
-      <div className="under-line-inputs">
-        <div className="Type-input">
+      <div className="EditTodoForm__CatDate">
+        <div className="EditTodoForm__CatDate__category">
           <select
             id={task.id}
             name="type"
@@ -62,7 +62,7 @@ export const EditTodoForm = (props: EditTodoFormProps) => {
             ))}
           </select>
         </div>
-        <div className="Date-input">
+        <div className="EditTodoForm__CatDate__date">
           <input
             type="date"
             id="start"

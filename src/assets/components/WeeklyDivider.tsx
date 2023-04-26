@@ -86,11 +86,12 @@ export const WeeklyDivider = (props: WeeklyDividerProps) => {
   const weekNotComplete = parseInt(weekPercentage) - 100;
 
   return (
-    <div className="weekly-divider">
-      <div className="week-titles">
+    <div className="Weekly-divider">
+      <div className="Weekly-divider__Header">
         <div
-          className={`week-titles-header ${
-            weekPercentage === "100" && "completed-week-titles"
+          className={`Weekly-divider__Header__Titles ${
+            weekPercentage === "100" &&
+            "Weekly-divider__Header__Titles-complete"
           }`}
           style={{
             background: `repeating-linear-gradient(to right, #2cd477 0%, #2cd477 ${weekPercentage}%, #8758ff ${weekNotComplete}%, #8758ff 100%)`,
@@ -101,15 +102,16 @@ export const WeeklyDivider = (props: WeeklyDividerProps) => {
           <p>Week is {weekPercentage}% completed</p>
         </div>
         <div
-          className={`week-titles-editable-content ${
-            weekPercentage === "100" && "completed-week-titles"
+          className={`Weekly-divider__Header__EditableContent ${
+            weekPercentage === "100" &&
+            "Weekly-divider__Header__EditableContent-complete"
           }`}
         >
           {editingWeekObjective ? (
             <>
               {" "}
               <textarea
-                className="week-input"
+                className="Weekly-divider__Header__EditableContent__Editinginput"
                 value={weekObjective}
                 onChange={(e) => setWeekObjective(e.target.value)}
               ></textarea>
@@ -118,10 +120,10 @@ export const WeeklyDivider = (props: WeeklyDividerProps) => {
           ) : (
             <>
               {" "}
-              <p className="week-objective-paragraph">
+              <p className="Weekly-divider__Header__EditableContent__paragraph">
                 {weekObjective ? weekObjective : "Write your week objective"}
               </p>
-              <div className="week-buttons">
+              <div className="editOrCollapse">
                 <button onClick={() => setEditingWeekObjective(true)}>
                   edit
                 </button>
@@ -139,7 +141,7 @@ export const WeeklyDivider = (props: WeeklyDividerProps) => {
           maxHeight: weekCollapsed ? 0 : "2000px",
           transition: "max-height 0.7s",
         }}
-        className={`whole-week`}
+        className="Weekly-divider__Content"
       >
         {dates.map((date) => (
           <DailyDivider

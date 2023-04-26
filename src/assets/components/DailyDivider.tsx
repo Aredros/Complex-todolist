@@ -57,10 +57,14 @@ export const DailyDivider = (props: DailyDividerProps) => {
 
   return (
     <div
-      className={`daily-divider ${dayPercentage === "100" && "completed-day"}`}
+      className={`Daily-divider ${dayPercentage === "100" && "-completed-day"}`}
     >
-      <div className="day-header">
-        <h3 className={`day-title ${dateObj === today ? "today-title" : ""}`}>
+      <div className="Daily-divider__Header">
+        <h3
+          className={`Daily-divider__Header__Title ${
+            dateObj === today ? "todayDate" : ""
+          }`}
+        >
           {" "}
           {
             //use the new Date function to convert the date string to a date object
@@ -71,7 +75,9 @@ export const DailyDivider = (props: DailyDividerProps) => {
             })
           }
         </h3>
-        <p className="day-title">Day {dayPercentage}% completed</p>
+        <p className="Daily-divider__Header__Title">
+          Day {dayPercentage}% completed
+        </p>
       </div>
 
       <ul>

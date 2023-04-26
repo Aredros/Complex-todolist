@@ -17,8 +17,8 @@ export const TypeForm = ({ addType }: TypeFormProps) => {
   };
 
   return (
-    <form className="TodoForm" onSubmit={handleSubmit}>
-      <div className="Text-input type-form-input">
+    <form className="TypeForm" onSubmit={handleSubmit}>
+      <div className="TypeForm__Task type-form-organizer">
         <input
           type="color"
           id="favcolor"
@@ -30,11 +30,10 @@ export const TypeForm = ({ addType }: TypeFormProps) => {
           type="text"
           value={typeValue}
           placeholder="New Category"
-          className="todo-input"
           onChange={(e) => setTypeValue(e.target.value)}
         />
-        <button type="submit" className="todo-btn">
-          Add
+        <button type="submit" className="add-btn">
+          Add Type
         </button>
       </div>
     </form>

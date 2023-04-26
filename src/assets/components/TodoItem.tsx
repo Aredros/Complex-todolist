@@ -24,16 +24,16 @@ export const TodoItem = (props: TodoItemProps) => {
   const typecolor = types.find((type) => type.type === todo.nType)?.color;
 
   return (
-    <div className={`Todo ${todo.completed && "completed"}`}>
+    <div className={`TodoItem ${todo.completed && "completed"}`}>
       <div
-        className="TodoItem-type-color"
+        className="TodoItem__type-color"
         onClick={() => toggleCompleteTask(todo.id)}
         style={{
           backgroundColor: typecolor ?? "gray",
         }}
       ></div>
       <div
-        className="TodoItem-text-container"
+        className="TodoItem__container"
         onClick={() => toggleCompleteTask(todo.id)}
       >
         {" "}
@@ -42,7 +42,7 @@ export const TodoItem = (props: TodoItemProps) => {
         </p>
       </div>
 
-      <div>
+      <div className="TodoItem__icons">
         <FontAwesomeIcon icon={faEdit} onClick={() => editTodoTask(todo.id)} />
         <FontAwesomeIcon
           icon={faTrash}

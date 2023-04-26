@@ -33,20 +33,20 @@ export const TodoForm = ({ addTodo, types }: TodoFormProps) => {
 
   return (
     <form className="TodoForm" onSubmit={handleSubmit}>
-      <div className="Text-input">
+      <div className="TodoForm__Task">
         <input
           type="text"
           value={value}
           placeholder="Add a new task"
-          className="todo-input"
+          className="TodoForm__Task__input"
           onChange={(e) => setValue(e.target.value)}
         />
-        <button type="submit" className="todo-btn">
+        <button type="submit" className="add-btn">
           Add Task
         </button>
       </div>
-      <div className="under-line-inputs">
-        <div className="Type-input">
+      <div className="TodoForm__CatDate">
+        <div className="TodoForm__CatDate__category">
           <select
             id="type"
             name="type"
@@ -63,7 +63,7 @@ export const TodoForm = ({ addTodo, types }: TodoFormProps) => {
             ))}
           </select>
         </div>
-        <div className="Date-input">
+        <div className="TodoForm__CatDate__date">
           <input
             type="date"
             id="startDate"

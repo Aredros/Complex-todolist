@@ -1,4 +1,4 @@
-import "./App.css";
+import "./App.scss";
 import { TodoWrapper } from "./assets/components/TodoWrapper";
 
 function App() {

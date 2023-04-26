@@ -19,7 +19,7 @@ export const TypeItem = (props: TypeItemProps) => {
   return (
     <>
       {types.map((type) => (
-        <div className={`Todo`} key={`typeItem-${type.id}`}>
+        <div className={`TodoItem`} key={`typeItem-${type.id}`}>
           <div
             style={{
               width: "25px",

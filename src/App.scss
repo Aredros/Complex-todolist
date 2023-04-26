@@ -1,0 +1,373 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
+
+* {
+  font-family: "Poppins", sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #8758ff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.App {
+  text-align: center;
+}
+
+.TodoWrapper {
+  background: #1a1a40;
+  margin: auto;
+  padding: 2rem;
+  border-radius: 5px;
+  width: 370px;
+  h1 {
+    color: #fff;
+    margin-bottom: 0.5rem;
+    font-size: 3.2em;
+  }
+}
+/*Effects shared between Creating forms and Editing Forms*/
+.TodoForm,
+.EditTodoForm,
+.TypeForm {
+  width: 306px;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 2rem;
+  &__Task {
+    display: flex;
+    justify-content: center;
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+    // margin: 1rem auto 0.5rem;
+    &__input {
+      outline: none;
+      background: none;
+      border: 1px solid #8758ff;
+      padding: 0.5rem 1rem;
+      width: clamp(150px, 19em, 500px);
+      color: #fff;
+      flex: auto;
+    }
+  }
+  &__CatDate {
+    display: flex;
+    justify-content: space-around;
+    padding-left: 10px;
+    padding-right: 10px;
+    align-items: baseline;
+    input,
+    select {
+      background: none;
+      border: 1px solid #8758ff;
+      padding: 0.5rem 1rem;
+    }
+    select option {
+      background: #372563;
+      border: 1px solid #8758ff;
+      padding: 0.5rem 1rem;
+      color: #fff;
+    }
+  }
+}
+/*Effects only for the editing forms*/
+.EditTodoForm {
+  padding-bottom: 1rem;
+  background: #a180f7;
+  border-radius: 8px;
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
+  -ms-border-radius: 8px;
+  -o-border-radius: 8px;
+}
+
+/*Effects only for the Type-category creating forms*/
+.TypeForm {
+  .type-form-organizer {
+    display: flex;
+    height: 40px;
+    width: 100%;
+
+    input[type="color"] {
+      height: 95%;
+      width: 38px;
+      background: none;
+      border: 2px solid #8758ff;
+      position: relative;
+      &::after {
+        position: absolute;
+        content: "color";
+      }
+    }
+    input[type="text"] {
+      margin-top: 0;
+      height: 100%;
+      flex: auto;
+    }
+  }
+}
+
+.date-title {
+  text-align: left;
+}
+
+.todo-input::placeholder {
+  color: #ffffff4d;
+}
+
+.add-btn {
+  font-size: 0.8em;
+  background: #8758ff;
+  color: #fff;
+  border: none;
+  padding: 0.4rem;
+  cursor: pointer;
+  vertical-align: middle;
+  border-radius: 8px;
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
+  -ms-border-radius: 8px;
+  -o-border-radius: 8px;
+  border-bottom-left-radius: 0;
+  border-top-left-radius: 0;
+}
+
+.TodoItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #8758ff;
+  color: #fff;
+  padding: 0.5rem 0.75rem;
+  border-radius: 5px;
+  margin-bottom: 0.2rem;
+  cursor: pointer;
+  min-height: 40px;
+  position: relative;
+  &:first-child {
+    border-radius: 0 5px 5px 5px;
+    -webkit-border-radius: 0 5px 5px 5px;
+    -moz-border-radius: 0 5px 5px 5px;
+    -ms-border-radius: 0 5px 5px 5px;
+    -o-border-radius: 0 5px 5px 5px;
+  }
+  &__type-color {
+    width: 15px;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    border-radius: 8px 0 8px 8px;
+    -webkit-border-radius: 8px 0 8px 8px;
+    -moz-border-radius: 8px 0 8px 8px;
+    -ms-border-radius: 8px 0 8px 8px;
+    -o-border-radius: 8px 0 8px 8px;
+  }
+  &__container {
+    max-width: 315px;
+    margin-left: 15px;
+    p {
+      width: 100%;
+      word-wrap: break-word;
+      font-size: 15px;
+    }
+  }
+  &__icons {
+    display: flex;
+    gap: 0.75rem;
+  }
+  &.completed {
+    background: #2cd477;
+    text-decoration: line-through;
+  }
+}
+
+.Weekly-divider {
+  margin-bottom: 1rem;
+  background-color: #4f389e;
+  position: relative;
+  border-radius: 8px 8px 8px 8px;
+  -webkit-border-radius: 8px 8px 8px 8px;
+  -moz-border-radius: 8px 8px 8px 8px;
+  -ms-border-radius: 8px 8px 8px 8px;
+  -o-border-radius: 8px 8px 8px 8px;
+  &__Header {
+    display: flex;
+    flex-direction: column;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 0.2rem;
+    background-color: #8758ff;
+    border-radius: 8px 8px 0 0;
+    -webkit-border-radius: 8px 8px 0 0;
+    -moz-border-radius: 8px 8px 0 0;
+    -ms-border-radius: 8px 8px 0 0;
+    -o-border-radius: 8px 8px 0 0;
+    &__Titles {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      padding: 5px 15px;
+      border-radius: 8px 8px 0 0;
+      -webkit-border-radius: 8px 8px 0 0;
+      -moz-border-radius: 8px 8px 0 0;
+      -ms-border-radius: 8px 8px 0 0;
+      -o-border-radius: 8px 8px 0 0;
+      h3 {
+        text-decoration: underline;
+        font-size: 1em;
+      }
+      p {
+        font-size: 15px;
+      }
+      /*cover green if week is completed*/
+      &-complete {
+        background: #20a05a;
+      }
+    }
+    &__EditableContent {
+      border-top: 1px solid rgb(11, 11, 11);
+      display: flex;
+      padding: 8px 15px 5px;
+      justify-content: space-between;
+      width: 100%;
+      flex-direction: column;
+      text-align: left;
+      font-size: 17px;
+      &__Editinginput {
+        margin-bottom: 0.5rem;
+        min-height: 40px;
+        width: 100%;
+        overflow-wrap: break-word;
+      }
+      &__paragraph {
+        font-family: "Roboto", sans-serif;
+        overflow-wrap: break-word;
+        font-size: 16px;
+        text-align: justify;
+        margin-bottom: 5px;
+        padding: 0 5px;
+      }
+      /*cover green if week is completed*/
+      &-complete {
+        background-color: #2cd477;
+      }
+    }
+  }
+  &__Content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 1;
+    overflow: hidden;
+  }
+}
+/*Buttons for edit and Collapse in the week, not boxed in case of reuse*/
+.editOrCollapse {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  justify-content: space-between;
+  button {
+    padding: 2px 15px;
+    max-width: 70px;
+    background: #1a1a40;
+    font-size: 0.8em;
+  }
+}
+
+.Daily-divider {
+  border-bottom: 2px solid #1a1a40;
+  width: 100%;
+  margin-bottom: 0.2rem;
+  padding: 5px;
+  &__Header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    padding: 0 5px 0 0;
+    &__Title {
+      text-align: left;
+      color: #fffc2d;
+      font-size: 0.85rem;
+      margin-bottom: 0;
+      width: auto;
+      &:first-child {
+        background: #579ad9;
+        border-radius: 5px 5px 0 0;
+        padding: 2px 7px;
+        color: #fff;
+      }
+    }
+    .todayDate {
+      background-color: #57d9c8 !important;
+      position: relative;
+      &::before {
+        content: "today";
+        font-size: 0.65rem;
+        background-color: #fff;
+        color: black;
+        padding: 1px 6px;
+        border-radius: 8px;
+        -webkit-border-radius: 8px;
+        -moz-border-radius: 8px;
+        -ms-border-radius: 8px;
+        -o-border-radius: 8px;
+      }
+    }
+  }
+  /*fix last child*/
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.completed-day {
+  background-color: #25c06a;
+  border-radius: 8px;
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
+  -ms-border-radius: 8px;
+  -o-border-radius: 8px;
+}
+
+/*Styles spécifiques pour les écrans de taille moyenne type tablette*/
+@media screen and (min-width: 780px) {
+  .TodoWrapper {
+    width: 550px;
+  }
+
+  .TodoForm {
+    width: 486px;
+    &__CatDate {
+      padding-left: 20px;
+      padding-right: 20px;
+    }
+  }
+
+  .Weekly-divider__Header__Titles {
+    h3 {
+      font-size: 1.17em;
+    }
+    p {
+      font-size: 18px;
+    }
+  }
+
+  .TypeForm {
+    width: 486px;
+  }
+
+  .add-btn {
+    font-size: 1em;
+  }
+}
+
+/*Styles spécifiques pour les grands écrans type écrans d'ordinateur*/
+@media screen and (min-width: 980px) {
+}

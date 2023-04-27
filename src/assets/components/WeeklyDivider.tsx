@@ -94,7 +94,7 @@ export const WeeklyDivider = (props: WeeklyDividerProps) => {
             "Weekly-divider__Header__Titles-complete"
           }`}
           style={{
-            background: `repeating-linear-gradient(to right, #2cd477 0%, #2cd477 ${weekPercentage}%, #8758ff ${weekNotComplete}%, #8758ff 100%)`,
+            background: `repeating-linear-gradient(to right, #2cd477 0%, #2cd477 ${weekPercentage}%, #008b8e ${weekNotComplete}%, #008b8e 100%)`,
             transition: "background 0.5s ease-in-out",
           }}
         >

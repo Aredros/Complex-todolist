@@ -1,5 +1,19 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
 
+/*COLORS*/
+$general-background-save: rgb(7, 0, 128);
+$general-background: linear-gradient(
+  180deg,
+  rgba(7, 0, 128, 1) 0%,
+  rgba(9, 9, 121, 1) 23%,
+  rgba(6, 77, 166, 1) 61%,
+  rgba(1, 188, 226, 1) 92%,
+  rgba(254, 189, 34, 0.8) 100%
+);
+$background-1: #27274d;
+
+/*COLORS END*/
+
 * {
   font-family: "Poppins", sans-serif;
   margin: 0;
@@ -8,7 +22,7 @@
 }
 
 body {
-  background: #8758ff;
+  background: $general-background;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -19,25 +33,30 @@ body {
 }
 
 .TodoWrapper {
-  background: #1a1a40;
-  margin: auto;
-  padding: 2rem;
-  border-radius: 5px;
-  width: 370px;
   h1 {
     color: #fff;
     margin-bottom: 0.5rem;
     font-size: 3.2em;
   }
+  background: $background-1;
+  margin: auto;
+  padding: 2rem;
+  border-radius: 5px;
+  width: 370px;
+  border-radius: 8px;
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
+  -ms-border-radius: 8px;
+  -o-border-radius: 8px;
 }
 /*Effects shared between Creating forms and Editing Forms*/
 .TodoForm,
 .EditTodoForm,
 .TypeForm {
-  width: 306px;
+  width: 95%;
   display: flex;
   flex-direction: column;
-  margin-bottom: 2rem;
+  margin: 0 auto 2rem;
   &__Task {
     display: flex;
     justify-content: center;
@@ -46,43 +65,50 @@ body {
     // margin: 1rem auto 0.5rem;
     &__input {
       outline: none;
-      background: none;
-      border: 1px solid #8758ff;
+      background: #fff;
+      border: 1px solid #fff;
       padding: 0.5rem 1rem;
       width: clamp(150px, 19em, 500px);
-      color: #fff;
+      color: black;
       flex: auto;
     }
   }
   &__CatDate {
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     padding-left: 10px;
     padding-right: 10px;
     align-items: baseline;
     input,
     select {
-      background: none;
-      border: 1px solid #8758ff;
+      background: rgba(95, 95, 95, 0.69);
+      border: 1px solid #313131;
       padding: 0.5rem 1rem;
     }
     select option {
-      background: #372563;
-      border: 1px solid #8758ff;
+      background: #fff;
+      border: 1px solid #313131;
       padding: 0.5rem 1rem;
-      color: #fff;
+      color: black;
     }
   }
 }
 /*Effects only for the editing forms*/
 .EditTodoForm {
+  width: 98%;
+  margin: auto;
   padding-bottom: 1rem;
-  background: #a180f7;
-  border-radius: 8px;
-  -webkit-border-radius: 8px;
-  -moz-border-radius: 8px;
-  -ms-border-radius: 8px;
-  -o-border-radius: 8px;
+  background: #005657;
+  border-radius: 2px;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  -ms-border-radius: 2px;
+  -o-border-radius: 2px;
+  &__Task {
+    width: 98%;
+    margin-left: auto;
+    margin-right: auto;
+  }
 }
 
 /*Effects only for the Type-category creating forms*/
@@ -96,7 +122,7 @@ body {
       height: 95%;
       width: 38px;
       background: none;
-      border: 2px solid #8758ff;
+      border: 2px solid #f2f2f2;
       position: relative;
       &::after {
         position: absolute;
@@ -107,6 +133,7 @@ body {
       margin-top: 0;
       height: 100%;
       flex: auto;
+      background: white;
     }
   }
 }
@@ -121,17 +148,17 @@ body {
 
 .add-btn {
   font-size: 0.8em;
-  background: #8758ff;
+  background: #03b1b4;
   color: #fff;
   border: none;
   padding: 0.4rem;
   cursor: pointer;
   vertical-align: middle;
-  border-radius: 8px;
-  -webkit-border-radius: 8px;
-  -moz-border-radius: 8px;
-  -ms-border-radius: 8px;
-  -o-border-radius: 8px;
+  border-radius: 2px;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  -ms-border-radius: 2px;
+  -o-border-radius: 2px;
   border-bottom-left-radius: 0;
   border-top-left-radius: 0;
 }
@@ -140,31 +167,35 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: #8758ff;
-  color: #fff;
+  background: #fff;
+  color: $background-1;
   padding: 0.5rem 0.75rem;
-  border-radius: 5px;
+  border-radius: 2px;
+  -webkit-border-radius: 1px;
+  -moz-border-radius: 2px;
+  -ms-border-radius: 2px;
+  -o-border-radius: 2px;
   margin-bottom: 0.2rem;
   cursor: pointer;
   min-height: 40px;
   position: relative;
   &:first-child {
-    border-radius: 0 5px 5px 5px;
-    -webkit-border-radius: 0 5px 5px 5px;
-    -moz-border-radius: 0 5px 5px 5px;
-    -ms-border-radius: 0 5px 5px 5px;
-    -o-border-radius: 0 5px 5px 5px;
+    border-radius: 0 2px 2px 2px;
+    -webkit-border-radius: 0 2px 2px 2px;
+    -moz-border-radius: 0 2px 2px 2px;
+    -ms-border-radius: 0 2px 2px 2px;
+    -o-border-radius: 0 2px 2px 2px;
   }
   &__type-color {
     width: 15px;
     height: 100%;
     position: absolute;
     left: 0;
-    border-radius: 8px 0 8px 8px;
-    -webkit-border-radius: 8px 0 8px 8px;
-    -moz-border-radius: 8px 0 8px 8px;
-    -ms-border-radius: 8px 0 8px 8px;
-    -o-border-radius: 8px 0 8px 8px;
+    border-radius: 0 0 2px 2px;
+    -webkit-border-radius: 0 0 2px 2px;
+    -moz-border-radius: 0 0 2px 2px;
+    -ms-border-radius: 0 0 2px 2px;
+    -o-border-radius: 0 0 2px 2px;
   }
   &__container {
     max-width: 315px;
@@ -187,7 +218,7 @@ body {
 
 .Weekly-divider {
   margin-bottom: 1rem;
-  background-color: #4f389e;
+  background-color: #00bdc0;
   position: relative;
   border-radius: 8px 8px 8px 8px;
   -webkit-border-radius: 8px 8px 8px 8px;
@@ -200,7 +231,7 @@ body {
     align-items: baseline;
     justify-content: space-between;
     margin-bottom: 0.2rem;
-    background-color: #8758ff;
+    background-color: #008b8e;
     border-radius: 8px 8px 0 0;
     -webkit-border-radius: 8px 8px 0 0;
     -moz-border-radius: 8px 8px 0 0;
@@ -208,6 +239,7 @@ body {
     -o-border-radius: 8px 8px 0 0;
     &__Titles {
       display: flex;
+      color: white;
       justify-content: space-between;
       align-items: center;
       width: 100%;
@@ -276,7 +308,7 @@ body {
   button {
     padding: 2px 15px;
     max-width: 70px;
-    background: #1a1a40;
+    background: #27275f;
     font-size: 0.8em;
   }
 }
@@ -293,19 +325,19 @@ body {
     padding: 0 5px 0 0;
     &__Title {
       text-align: left;
-      color: #fffc2d;
+      color: #f1ee1a;
       font-size: 0.85rem;
       margin-bottom: 0;
       width: auto;
       &:first-child {
-        background: #579ad9;
+        background: #5085b6;
         border-radius: 5px 5px 0 0;
         padding: 2px 7px;
         color: #fff;
       }
     }
     .todayDate {
-      background-color: #57d9c8 !important;
+      background-color: #44cfa6 !important;
       position: relative;
       &::before {
         content: "today";

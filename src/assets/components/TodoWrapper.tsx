@@ -11,6 +11,9 @@ import { WeeklyDivider } from "./WeeklyDivider";
 import { TypeForm } from "./TypeForm";
 import { v4 as uuidv4 } from "uuid";
 import { TypeItem } from "./TypeItem";
+import { auth, db } from "../../config/firebase";
+import { signOut } from "firebase/auth";
+import { addDoc, collection, doc, setDoc } from "firebase/firestore";
 
 // Define interface for Todo object
 interface ITodo {
@@ -46,6 +49,15 @@ export const TodoWrapper = () => {
       setTypes(JSON.parse(storedTypes));
     }
   }, []); //the empty array is to make sure the useEffect only runs once
+
+  //function to log out//
+  const logItOut = async () => {
+    try {
+      await signOut(auth);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   //function to add a TODO
   const addNewTodo = (todo: string, type: string, date: string) => {
@@ -162,6 +174,7 @@ export const TodoWrapper = () => {
       ))}
       <TypeForm addType={addType} />
       <TypeItem types={types} deleteType={deleteType} />
+      <button onClick={logItOut}>LogOut</button>
     </div>
   );
 };

@@ -1,0 +1,26 @@
+.auth {
+  &__inputs {
+    &__login,
+    &__register {
+      display: flex;
+      gap: 5px;
+      align-items: center;
+      flex-direction: column;
+      margin: 15px auto;
+      input {
+        outline: none;
+        background: #fff;
+        border: 1px solid #fff;
+        padding: 0.5rem 1rem;
+        width: clamp(150px, 19em, 500px);
+        color: #000;
+        flex: auto;
+      }
+      .auth-btn {
+        margin-top: 10px;
+        padding: 10px 25px;
+        font-size: medium;
+      }
+    }
+  }
+}

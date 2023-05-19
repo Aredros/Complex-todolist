@@ -15,6 +15,7 @@ interface DailyDividerProps {
     task: string;
     completed: boolean;
     isEditing: boolean;
+    user: string;
     nType: string;
     date: string;
   }[];
@@ -55,9 +56,16 @@ export const DailyDivider = (props: DailyDividerProps) => {
   //get the date from the props and convert it to a date object so it can be compared with today's date
   const dateObj = new Date(date).toLocaleDateString("en-GB");
 
+  //get in a string the name of the day of the week "monday, tuesday, etc"
+  const dayOfWeek = new Date(date).toLocaleDateString("en-GB", {
+    weekday: "short",
+  });
+
   return (
     <div
-      className={`Daily-divider ${dayPercentage === "100" && "-completed-day"}`}
+      className={`Daily-divider ${dayOfWeek} ${
+        dayPercentage === "100" && "-completed-day"
+      }`}
     >
       <div className="Daily-divider__Header">
         <h3

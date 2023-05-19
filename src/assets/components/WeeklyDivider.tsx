@@ -13,6 +13,7 @@ interface IType {
 }
 
 interface WeeklyDividerProps {
+  weekList: boolean;
   week: string;
   types: IType[];
   todos: {
@@ -20,6 +21,7 @@ interface WeeklyDividerProps {
     task: string;
     completed: boolean;
     isEditing: boolean;
+    user: string;
     nType: string;
     date: string;
   }[];
@@ -37,6 +39,7 @@ interface WeeklyDividerProps {
 export const WeeklyDivider = (props: WeeklyDividerProps) => {
   const {
     week,
+    weekList,
     types,
     todos,
     deleteTodoTask,
@@ -86,7 +89,7 @@ export const WeeklyDivider = (props: WeeklyDividerProps) => {
   const weekNotComplete = parseInt(weekPercentage) - 100;
 
   return (
-    <div className="Weekly-divider">
+    <div className={`Weekly-divider ${!weekList && "Weekly-divider-list"}`}>
       <div className="Weekly-divider__Header">
         <div
           className={`Weekly-divider__Header__Titles ${

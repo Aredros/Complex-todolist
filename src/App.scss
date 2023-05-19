@@ -32,6 +32,25 @@ body {
   text-align: center;
 }
 
+.changeWeekList {
+  display: none;
+  &__buttons {
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+    flex-wrap: wrap;
+    &__button {
+      background: #005657;
+      padding: 2px 10px;
+      border-radius: 8px;
+      -webkit-border-radius: 8px;
+      -moz-border-radius: 8px;
+      -ms-border-radius: 8px;
+      -o-border-radius: 8px;
+    }
+  }
+}
+
 .TodoWrapper {
   h1 {
     color: #fff;
@@ -370,6 +389,16 @@ body {
   -o-border-radius: 8px;
 }
 
+.bottom-buttons {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  padding-top: 15px;
+  button {
+    padding: 5px 10px;
+  }
+}
+
 /*Styles spécifiques pour les écrans de taille moyenne type tablette*/
 @media screen and (min-width: 780px) {
   .TodoWrapper {
@@ -404,4 +433,62 @@ body {
 
 /*Styles spécifiques pour les grands écrans type écrans d'ordinateur*/
 @media screen and (min-width: 980px) {
+  .changeWeekList {
+    display: block;
+  }
+
+  .TodoWrapper--weekly {
+    width: 95vw !important;
+
+    .Weekly-divider-list {
+      .Weekly-divider__Content {
+        display: grid;
+        align-items: stretch;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+        grid-template-rows: 1fr;
+        gap: 0px 0px;
+        grid-template-areas: "Mon Tue Wed Thu" "Fri Sat Sun Count";
+        border-radius: 8px;
+        //NowDaily
+        -webkit-border-radius: 8px;
+        -moz-border-radius: 8px;
+        -ms-border-radius: 8px;
+        -o-border-radius: 8px;
+
+        .Daily-divider {
+          border: 1px solid black;
+          min-height: 300px;
+        }
+      }
+    }
+
+    .Mon {
+      grid-area: Mon;
+    }
+    .Tue {
+      grid-area: Tue;
+    }
+    .Wed {
+      grid-area: Wed;
+    }
+    .Thu {
+      grid-area: Thu;
+    }
+    .Fri {
+      grid-area: Fri;
+    }
+    .Sat {
+      grid-area: Sat;
+    }
+    .Sun {
+      grid-area: Sun;
+    }
+    .Count {
+      grid-area: Count;
+    }
+  }
+
+  // .Weekly-divider-list {
+  //   width: 80vw !important;
+  // }
 }

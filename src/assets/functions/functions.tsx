@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from "uuid";
 interface INTTodoTasks {
   id: string;
   task: string;
+  user: string;
   completed: boolean;
   isEditing: boolean;
   nType: string;

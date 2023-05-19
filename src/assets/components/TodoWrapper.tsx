@@ -13,7 +13,19 @@ import { v4 as uuidv4 } from "uuid";
 import { TypeItem } from "./TypeItem";
 import { auth, db } from "../../config/firebase";
 import { signOut } from "firebase/auth";
-import { addDoc, collection, doc, setDoc } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  doc,
+  setDoc,
+  deleteDoc,
+  query,
+  where,
+  getDocs,
+  DocumentData,
+} from "firebase/firestore";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCalendarDays, faList } from "@fortawesome/free-solid-svg-icons";
 
 // Define interface for Todo object
 interface ITodo {
@@ -21,6 +33,7 @@ interface ITodo {
   task: string;
   completed: boolean;
   isEditing: boolean;
+  user: string;
   nType: string;
   date: string;
 }
@@ -36,6 +49,13 @@ export const TodoWrapper = () => {
   const [todos, setTodos] = useState<ITodo[]>([]); // Specify type as ITodo[]
   const [types, setTypes] = useState<IType[]>([]); // Specify type as IType[]
 
+  //state for choosing between weekly or daily list
+  const [weekList, setWeekList] = useState(true);
+
+  //EXPERIMENT
+  //check if the user is logged in or not
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
   //Fetch the previous todos from LocalStorage
   useEffect(() => {
     //empty array and local storage
@@ -49,6 +69,18 @@ export const TodoWrapper = () => {
       setTypes(JSON.parse(storedTypes));
     }
   }, []); //the empty array is to make sure the useEffect only runs once
+
+  //EXPERIMENT
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      setIsLoggedIn(user ? !user.isAnonymous : false);
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, []);
+  //EXPERIMENT
 
   //function to log out//
   const logItOut = async () => {
@@ -67,6 +99,7 @@ export const TodoWrapper = () => {
       completed: false,
       isEditing: false,
       nType: type,
+      user: auth.currentUser?.email || "", // Provide a default value here,
       date: date,
     };
     setTodos([...todos, newTodo]);
@@ -134,6 +167,84 @@ export const TodoWrapper = () => {
   /****************************************************************** */
   /***************FUNCTIONS FOR DATES AND CHRONOLOGICALLY ARRANGEMENT */
 
+  //EXPERIMENT
+  const sendDataToFirestore = async () => {
+    try {
+      // Send data to Firestore only if the user is logged in
+      if (isLoggedIn) {
+        // Get the current user's email
+        const userEmail = auth.currentUser?.email;
+
+        // Create a query to fetch todos where the user is the same as the current user
+        const q = query(
+          collection(db, "todos"),
+          where("user", "==", userEmail)
+        );
+
+        // Get the documents that match the query
+        const querySnapshot = await getDocs(q);
+
+        // Delete all the documents associated with the user
+        querySnapshot.docs.forEach(async (doc) => {
+          await deleteDoc(doc.ref);
+        });
+
+        // Create a new Firestore collection reference
+        const todosCollectionRef = collection(db, "todos");
+
+        // Loop through the todos and add each one to Firestore
+        todos.forEach(async (todo) => {
+          // Create a new document in the "todos" collection
+          await addDoc(todosCollectionRef, todo);
+        });
+
+        console.log("Data sent to Firestore successfully!");
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  //EXPERIMENT
+  const getTodosFromDatabase = async () => {
+    try {
+      if (auth.currentUser) {
+        // Get the current user's email
+        const userEmail = auth.currentUser.email;
+
+        // Create a query to fetch todos where the user is the same as the current user
+        const q = query(
+          collection(db, "todos"),
+          where("user", "==", userEmail)
+        );
+
+        // Get the documents that match the query
+        const querySnapshot = await getDocs(q);
+
+        // Map the documents to an array of todos
+        const todosFromDatabase: ITodo[] = [];
+        const todoIds: Set<string> = new Set(); // Set to track unique todo IDs
+
+        querySnapshot.docs.forEach((doc) => {
+          const todo = doc.data() as ITodo; // Cast the document data to ITodo
+          if (!todoIds.has(todo.id)) {
+            // Check if the todo ID is already in the set
+            todosFromDatabase.push(todo);
+            todoIds.add(todo.id); // Add the todo ID to the set
+          }
+        });
+
+        // Update the todos state with the retrieved todos
+        setTodos(todosFromDatabase);
+
+        // Do something with the retrieved todos
+        console.log("Todos from database:", todosFromDatabase);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   // function to sort todos tasks based on date
   const sortTodos = (todos: ITodo[]) => {
     return todos.sort(
@@ -157,12 +268,32 @@ export const TodoWrapper = () => {
   }
 
   return (
-    <div className="TodoWrapper">
+    <div className={`TodoWrapper ${!weekList && "TodoWrapper--weekly"}`}>
       <h1>Week Planner</h1>
+      <div className="changeWeekList">
+        <p className="changeWeekList__title">Display type</p>
+        <div className="changeWeekList__buttons">
+          <div
+            className="changeWeekList__buttons__button"
+            onClick={() => setWeekList(true)}
+          >
+            <FontAwesomeIcon icon={faList} />
+            <span> List</span>
+          </div>
+          <div
+            className="changeWeekList__buttons__button"
+            onClick={() => setWeekList(false)}
+          >
+            <FontAwesomeIcon icon={faCalendarDays} />
+            <span> Calendar</span>
+          </div>
+        </div>
+      </div>
       <TodoForm addTodo={addNewTodo} types={types} />
       {weeks.map((week) => (
         <WeeklyDivider
           key={week}
+          weekList={weekList}
           types={types}
           week={week}
           deleteTodoTask={deleteTodoTask}
@@ -174,7 +305,18 @@ export const TodoWrapper = () => {
       ))}
       <TypeForm addType={addType} />
       <TypeItem types={types} deleteType={deleteType} />
-      <button onClick={logItOut}>LogOut</button>
+      <div className="bottom-buttons">
+        {isLoggedIn && (
+          <>
+            <button onClick={sendDataToFirestore}>Send to Database</button>
+
+            <button onClick={getTodosFromDatabase}>
+              Get Todos from Database
+            </button>
+          </>
+        )}
+        <button onClick={logItOut}>LogOut</button>
+      </div>
     </div>
   );
 };

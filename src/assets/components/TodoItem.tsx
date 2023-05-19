@@ -9,7 +9,9 @@ interface TodoItemProps {
     task: string;
     completed: boolean;
     isEditing: boolean;
+    user: string;
     nType: string;
+    date: string;
   };
   deleteTodoTask: (id: string) => void;
   toggleCompleteTask: (id: string) => void;

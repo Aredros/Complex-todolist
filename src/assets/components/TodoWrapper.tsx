@@ -62,7 +62,15 @@ export const TodoWrapper = () => {
     //localStorage.clear();
     const storedTodos = localStorage.getItem("todosLocal");
     if (storedTodos) {
-      setTodos(JSON.parse(storedTodos));
+      const storedTodosAndTaskOrReminders = JSON.parse(storedTodos);
+      const newTodosUpdated = storedTodosAndTaskOrReminders.map((todo: any) => {
+        return {
+          ...todo,
+          taskorreminder: "task",
+        };
+      });
+
+      setTodos(JSON.parse(newTodosUpdated));
     }
     const storedTypes = localStorage.getItem("typesLocal");
     if (storedTypes) {

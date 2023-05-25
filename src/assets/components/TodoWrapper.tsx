@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import {
-  //addTodoTask,
   deleteTodo,
   toggleComplete,
   editTodo,
@@ -33,6 +32,7 @@ interface ITodo {
   task: string;
   completed: boolean;
   isEditing: boolean;
+  taskorreminder: string;
   user: string;
   nType: string;
   date: string;
@@ -92,12 +92,18 @@ export const TodoWrapper = () => {
   };
 
   //function to add a TODO
-  const addNewTodo = (todo: string, type: string, date: string) => {
+  const addNewTodo = (
+    todo: string,
+    type: string,
+    date: string,
+    taskorreminder: string
+  ) => {
     const newTodo = {
       id: uuidv4(),
       task: todo,
       completed: false,
       isEditing: false,
+      taskorreminder: taskorreminder,
       nType: type,
       user: auth.currentUser?.email || "", // Provide a default value here,
       date: date,
@@ -127,12 +133,20 @@ export const TodoWrapper = () => {
 
   //function to change the editing status of a TODO
   const finishEditTask = (
-    id: string,
     task: string,
     type: string,
-    date: string
+    date: string,
+    taskorreminder: string,
+    id: string
   ) => {
-    const updatedTodos = finishEdit(id, task, type, date, todos);
+    const updatedTodos = finishEdit(
+      task,
+      type,
+      date,
+      taskorreminder,
+      id,
+      todos
+    );
     setTodos(updatedTodos);
   };
   /****************************************************************** */
@@ -156,13 +170,19 @@ export const TodoWrapper = () => {
   };
 
   //function to delete a Type
-  const deleteType = (id: string) => {
-    //filter the type to be deleted
-    const updatedTypes = types.filter((t) => t.id !== id);
-    //save the new types array to local storage
-    localStorage.setItem("typesLocal", JSON.stringify(updatedTypes));
-    //set the types array to the updated array
-    setTypes(updatedTypes);
+  const deleteType = (type: string, id: string) => {
+    //check if the type is being used
+    if (todos.some((t) => t.nType === type)) {
+      //if the type is being use, alert the use
+      alert("You cannot delete a type that is being used");
+    } else {
+      //filter the type to be deleted
+      const updatedTypes = types.filter((t) => t.id !== id);
+      //save the new types array to local storage
+      localStorage.setItem("typesLocal", JSON.stringify(updatedTypes));
+      //set the types array to the updated array
+      setTypes(updatedTypes);
+    }
   };
   /****************************************************************** */
   /***************FUNCTIONS FOR DATES AND CHRONOLOGICALLY ARRANGEMENT */
@@ -198,7 +218,7 @@ export const TodoWrapper = () => {
           await addDoc(todosCollectionRef, todo);
         });
 
-        console.log("Data sent to Firestore successfully!");
+        console.log("todos Data sent to Firestore successfully!");
       }
     } catch (err) {
       console.log(err);

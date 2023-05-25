@@ -15,6 +15,7 @@ interface DailyDividerProps {
     task: string;
     completed: boolean;
     isEditing: boolean;
+    taskorreminder: string;
     user: string;
     nType: string;
     date: string;
@@ -24,9 +25,10 @@ interface DailyDividerProps {
   editTodoTask: (id: string) => void;
   finishEditTask: (
     task: string,
-    id: string,
+    type: string,
     date: string,
-    type: string
+    taskorreminder: string,
+    id: string
   ) => void;
 }
 
@@ -42,9 +44,13 @@ export const DailyDivider = (props: DailyDividerProps) => {
   } = props;
 
   //Get the total tasks for the day
-  const totalDayTasks = todos.length;
+  const totalDayTasks = todos.filter(
+    (each) => each.taskorreminder === "task"
+  ).length;
   // Get completed tasks for the day
-  const completedDayTasks = todos.filter((task) => task.completed);
+  const completedDayTasks = todos.filter(
+    (task) => task.completed && task.taskorreminder === "task"
+  );
   // Use both previous variables to calculate the percentage of completed tasks
   const dayPercentage = (
     (completedDayTasks.length / totalDayTasks) *

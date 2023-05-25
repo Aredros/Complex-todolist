@@ -1,7 +1,12 @@
 import React, { useState } from "react";
 
 interface TodoFormProps {
-  addTodo: (task: string, nType: string, date: string) => void;
+  addTodo: (
+    task: string,
+    nType: string,
+    date: string,
+    taskorreminder: string
+  ) => void;
   types: { id: string; type: string; color: string }[];
 }
 
@@ -9,6 +14,7 @@ export const TodoForm = ({ addTodo, types }: TodoFormProps) => {
   const [value, setValue] = useState("");
   const [type, setType] = useState("");
   const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
+  const [taskorreminder, setTaskorreminder] = useState("task");
 
   //function to add a TODO to the array of todos
   const handleSubmit = (e: React.FormEvent) => {
@@ -24,7 +30,7 @@ export const TodoForm = ({ addTodo, types }: TodoFormProps) => {
     }
     if (!value) return;
     //call the addTodo function that was passed down from the App component and send the value of the input field and the type
-    addTodo(value, type, date);
+    addTodo(value, type, date, taskorreminder);
     //reset the input fields after submitting
     setValue("");
 
@@ -33,6 +39,23 @@ export const TodoForm = ({ addTodo, types }: TodoFormProps) => {
 
   return (
     <form className="TodoForm" onSubmit={handleSubmit}>
+      <div className="TodoForm__TaskReminder">
+        <input
+          type="radio"
+          name="task-reminder"
+          value="task"
+          onChange={() => setTaskorreminder("task")}
+          checked={taskorreminder === "task"}
+        />{" "}
+        <label>Task </label>
+        <input
+          type="radio"
+          name="task-reminder"
+          value="reminder"
+          onChange={() => setTaskorreminder("reminder")}
+        />
+        <label>Reminder</label>
+      </div>
       <div className="TodoForm__Task">
         <input
           type="text"
@@ -52,6 +75,7 @@ export const TodoForm = ({ addTodo, types }: TodoFormProps) => {
             name="type"
             value={type}
             onChange={(e) => setType(e.target.value)}
+            {...(taskorreminder === "reminder" && { disabled: true })}
           >
             <option key="type-id-no-type" value="No-cat">
               No-cat

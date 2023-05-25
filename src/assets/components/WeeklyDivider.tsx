@@ -21,6 +21,7 @@ interface WeeklyDividerProps {
     task: string;
     completed: boolean;
     isEditing: boolean;
+    taskorreminder: string;
     user: string;
     nType: string;
     date: string;
@@ -30,9 +31,10 @@ interface WeeklyDividerProps {
   editTodoTask: (id: string) => void;
   finishEditTask: (
     task: string,
-    id: string,
+    type: string,
     date: string,
-    type: string
+    taskorreminder: string,
+    id: string
   ) => void;
 }
 
@@ -75,10 +77,14 @@ export const WeeklyDivider = (props: WeeklyDividerProps) => {
   // Get an array of unique dates that the tasks belong to in this week
   const dates = [...new Set(todos.map((todo) => todo.date))];
 
-  // Get tasks for the week
-  const weekTasks = [...new Set(todos.map((todo) => todo))];
-  // Get completed tasks for the week
-  const completedTasks = weekTasks.filter((task) => task.completed);
+  // Get tasks for the week and weed out the reminders to get only the tasks
+  const weekTasks = [
+    ...new Set(todos.filter((todo) => todo.taskorreminder === "task")),
+  ];
+  // Get completed tasks for the week and weed out the reminders to get only the tasks
+  const completedTasks = weekTasks.filter(
+    (task) => task.completed && task.taskorreminder === "task"
+  );
   // Use both previous variables to calculate the percentage of completed tasks
   const weekPercentage = (
     (completedTasks.length / weekTasks.length) *

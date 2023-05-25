@@ -5,31 +5,15 @@ interface INTTodoTasks {
   task: string;
   user: string;
   completed: boolean;
+  taskorreminder: string;
   isEditing: boolean;
   nType: string;
   date: string;
 }
 /********************************************************** */
 //*****************FUNCTION to addTodo Task**************** */
-export const addTodoTask = (
-  todo: string,
-  type: string,
-  date: string,
-  todos: INTTodoTasks[]
-) => {
-  const newTodoTask = {
-    id: uuidv4(),
-    task: todo,
-    completed: false,
-    isEditing: false,
-    nType: type,
-    date: date,
-  };
-  const newTodos = [...todos, newTodoTask];
-  //store the updated todos state in LocalStorage
-  localStorage.setItem("todosLocal", JSON.stringify(newTodos));
-  return newTodos;
-};
+//Not possible to do for now
+
 /********************************************************** */
 //*****************FUNCTION to delete a Task**************** */
 export const deleteTodo = (id: string, todos: INTTodoTasks[]) => {
@@ -70,6 +54,7 @@ export const finishEdit = (
   task: string,
   type: string,
   date: string,
+  taskorreminder: string,
   id: string,
   todos: INTTodoTasks[]
 ) => {
@@ -80,6 +65,7 @@ export const finishEdit = (
           task: task,
           nType: type,
           date: date,
+          taskorreminder: taskorreminder,
           isEditing: false,
         }
       : todo

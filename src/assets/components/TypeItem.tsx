@@ -10,7 +10,7 @@ interface IType {
 
 interface TypeItemProps {
   types: IType[]; // update the types prop to an array of IType objects
-  deleteType: (id: string) => void;
+  deleteType: (type: string, id: string) => void;
 }
 
 export const TypeItem = (props: TypeItemProps) => {
@@ -33,7 +33,7 @@ export const TypeItem = (props: TypeItemProps) => {
             <FontAwesomeIcon
               key={type.id}
               icon={faTrash}
-              onClick={() => deleteType(type.id)}
+              onClick={() => deleteType(type.type, type.id)}
             />
           </div>
         </div>

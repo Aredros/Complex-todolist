@@ -9,6 +9,7 @@ interface TodoItemProps {
     task: string;
     completed: boolean;
     isEditing: boolean;
+    taskorreminder: string;
     user: string;
     nType: string;
     date: string;
@@ -26,7 +27,11 @@ export const TodoItem = (props: TodoItemProps) => {
   const typecolor = types.find((type) => type.type === todo.nType)?.color;
 
   return (
-    <div className={`TodoItem ${todo.completed && "completed"}`}>
+    <div
+      className={`TodoItem ${todo.completed && "completed"} Todo-${
+        todo.taskorreminder
+      }`}
+    >
       <div
         className="TodoItem__type-color"
         onClick={() => toggleCompleteTask(todo.id)}
@@ -40,7 +45,12 @@ export const TodoItem = (props: TodoItemProps) => {
       >
         {" "}
         <p className={`${todo.completed && "completed"}`}>
-          {todo.task} / {todo.nType ? todo.nType : "No-cat"}
+          {todo.task}
+          {todo.taskorreminder === "task"
+            ? todo.nType
+              ? " / " + todo.nType
+              : " / No-cat"
+            : null}
         </p>
       </div>
 

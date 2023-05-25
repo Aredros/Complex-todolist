@@ -7,11 +7,18 @@ interface IType {
 }
 
 interface EditTodoFormProps {
-  editTask: (task: string, type: string, date: string, id: string) => void;
+  editTask: (
+    task: string,
+    type: string,
+    date: string,
+    taskorreminder: string,
+    id: string
+  ) => void;
   task: {
     task: string;
     nType: string;
     date: string;
+    taskorreminder: string;
     id: string;
     completed: boolean;
     isEditing: boolean;
@@ -25,16 +32,33 @@ export const EditTodoForm = (props: EditTodoFormProps) => {
   const [value, setValue] = useState(task.task);
   const [type, setType] = useState(task.nType);
   const [date, setDate] = useState(task.date);
+  const [taskorreminder, setTaskorreminder] = useState(task.taskorreminder);
 
   //this function is called when the user types in the input field
   const handleSubmit = (e: React.FormEvent) => {
     //preventDefault will prevent the page from reloading
     e.preventDefault();
-    editTask(value, type, date, task.id);
+    editTask(value, type, date, taskorreminder, task.id);
   };
 
   return (
     <form className="EditTodoForm" onSubmit={handleSubmit}>
+      <div className="TodoForm__TaskReminder">
+        <input
+          type="radio"
+          name="task-reminder"
+          onChange={() => setTaskorreminder("task")}
+          checked={taskorreminder === "task"}
+        />{" "}
+        <label>Task </label>
+        <input
+          type="radio"
+          name="task-reminder"
+          onChange={() => setTaskorreminder("reminder")}
+          checked={taskorreminder === "reminder"}
+        />
+        <label>Reminder</label>
+      </div>
       <div className="EditTodoForm__Task">
         <input
           type="text"

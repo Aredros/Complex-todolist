@@ -76,6 +76,11 @@ body {
   display: flex;
   flex-direction: column;
   margin: 0 auto 2rem;
+  &__TaskReminder {
+    display: flex;
+    justify-content: left;
+    gap: 3px;
+  }
   &__Task {
     display: flex;
     justify-content: center;
@@ -234,6 +239,20 @@ body {
   &.completed {
     background: #2cd477;
     text-decoration: line-through;
+  }
+}
+
+//for Reminders
+.Todo-reminder {
+  background: #ffde8c;
+  .TodoItem__type-color {
+    display: none;
+  }
+
+  .TodoItem__container p {
+    font-family: sans-serif;
+    font-weight: 700;
+    font-size: 14px;
   }
 }
 

@@ -45,11 +45,11 @@ export const DailyDivider = (props: DailyDividerProps) => {
 
   //Get the total tasks for the day
   const totalDayTasks = todos.filter(
-    (each) => each.taskorreminder === "task"
+    (each) => each.taskorreminder !== "reminder"
   ).length;
   // Get completed tasks for the day
   const completedDayTasks = todos.filter(
-    (task) => task.completed && task.taskorreminder === "task"
+    (task) => task.completed && task.taskorreminder !== "reminder"
   );
   // Use both previous variables to calculate the percentage of completed tasks
   const dayPercentage = (

@@ -79,11 +79,11 @@ export const WeeklyDivider = (props: WeeklyDividerProps) => {
 
   // Get tasks for the week and weed out the reminders to get only the tasks
   const weekTasks = [
-    ...new Set(todos.filter((todo) => todo.taskorreminder === "task")),
+    ...new Set(todos.filter((todo) => todo.taskorreminder !== "reminder")),
   ];
   // Get completed tasks for the week and weed out the reminders to get only the tasks
   const completedTasks = weekTasks.filter(
-    (task) => task.completed && task.taskorreminder === "task"
+    (task) => task.completed && task.taskorreminder !== "reminder"
   );
   // Use both previous variables to calculate the percentage of completed tasks
   const weekPercentage = (

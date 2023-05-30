@@ -2,8 +2,22 @@ import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash, faEdit } from "@fortawesome/free-solid-svg-icons";
 
+//Define all Style of every individual color of the app
+interface IColors {
+  outerBackgroundColor: string;
+  innerBackgroundColor: string;
+  titleTextColor: string;
+  weeklyCardBG: string;
+  weeklyCardTxt: string;
+  buttonIcons: string;
+  itemBackgroundColor: string;
+  itemText: string;
+  reminderBackgroundColor: string;
+}
+
 interface TodoItemProps {
   types: { type: string; color: string }[];
+  allColors: IColors;
   todo: {
     id: string;
     task: string;
@@ -20,17 +34,30 @@ interface TodoItemProps {
 }
 
 export const TodoItem = (props: TodoItemProps) => {
-  const { types, todo, deleteTodoTask, toggleCompleteTask, editTodoTask } =
-    props;
+  const {
+    types,
+    todo,
+    deleteTodoTask,
+    toggleCompleteTask,
+    editTodoTask,
+    allColors,
+  } = props;
 
   //get the type color
   const typecolor = types.find((type) => type.type === todo.nType)?.color;
 
   return (
-    <div
+    <li
       className={`TodoItem ${todo.completed && "completed"} Todo-${
         todo.taskorreminder
       }`}
+      style={{
+        color: allColors.itemText,
+        backgroundColor:
+          todo.taskorreminder === "reminder"
+            ? allColors.reminderBackgroundColor
+            : allColors.itemBackgroundColor,
+      }}
     >
       <div
         className="TodoItem__type-color"
@@ -55,12 +82,17 @@ export const TodoItem = (props: TodoItemProps) => {
       </div>
 
       <div className="TodoItem__icons">
-        <FontAwesomeIcon icon={faEdit} onClick={() => editTodoTask(todo.id)} />
+        <FontAwesomeIcon
+          icon={faEdit}
+          onClick={() => editTodoTask(todo.id)}
+          style={{ color: allColors.buttonIcons }}
+        />
         <FontAwesomeIcon
           icon={faTrash}
           onClick={() => deleteTodoTask(todo.id)}
+          style={{ color: allColors.buttonIcons }}
         />
       </div>
-    </div>
+    </li>
   );
 };

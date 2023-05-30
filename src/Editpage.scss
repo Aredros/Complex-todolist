@@ -1,0 +1,32 @@
+.editColor-form {
+  border: 3px solid white;
+  padding: 15px 5px;
+  border-radius: 8px;
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
+  -ms-border-radius: 8px;
+  -o-border-radius: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  background-color: rgb(71, 71, 71);
+  div {
+    flex-basis: 50%;
+    text-align: left;
+    input {
+      height: 35px;
+      width: 35px;
+      border: 0;
+    }
+    label {
+      font-size: 15px;
+    }
+  }
+}
+
+/*Styles spécifiques pour les écrans de taille moyenne type tablette*/
+@media screen and (min-width: 780px) {
+}
+
+/*Styles spécifiques pour les grands écrans type écrans d'ordinateur*/
+@media screen and (min-width: 980px) {
+}

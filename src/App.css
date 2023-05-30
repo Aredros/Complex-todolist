@@ -7,13 +7,6 @@
   box-sizing: border-box;
 }
 
-body {
-  background: #8758ff;
-  display: flex;
-
-  align-items: center;
-}
-
 .App {
   text-align: center;
 }

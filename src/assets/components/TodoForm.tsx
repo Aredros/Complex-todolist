@@ -1,6 +1,24 @@
 import React, { useState } from "react";
+import { darken } from "polished";
+
+//Define all Style of every individual color of the app
+interface IColors {
+  outerBackgroundColor: string;
+  innerBackgroundColor: string;
+  titleTextColor: string;
+  weeklyCardBG: string;
+  weeklyBorder: string;
+  weeklyCardTxt: string;
+  buttonIcons: string;
+  buttonText: string;
+  formBackgroundColor: string;
+  itemBackgroundColor: string;
+  itemText: string;
+  reminderBackgroundColor: string;
+}
 
 interface TodoFormProps {
+  allColors: IColors;
   addTodo: (
     task: string,
     nType: string,
@@ -10,7 +28,7 @@ interface TodoFormProps {
   types: { id: string; type: string; color: string }[];
 }
 
-export const TodoForm = ({ addTodo, types }: TodoFormProps) => {
+export const TodoForm = ({ addTodo, types, allColors }: TodoFormProps) => {
   const [value, setValue] = useState("");
   const [type, setType] = useState("");
   const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
@@ -38,7 +56,11 @@ export const TodoForm = ({ addTodo, types }: TodoFormProps) => {
   };
 
   return (
-    <form className="TodoForm" onSubmit={handleSubmit}>
+    <form
+      className="TodoForm"
+      onSubmit={handleSubmit}
+      style={{ background: allColors.formBackgroundColor }}
+    >
       <div className="TodoForm__TaskReminder">
         <input
           type="radio"
@@ -47,14 +69,14 @@ export const TodoForm = ({ addTodo, types }: TodoFormProps) => {
           onChange={() => setTaskorreminder("task")}
           checked={taskorreminder === "task"}
         />{" "}
-        <label>Task </label>
+        <label style={{ color: allColors.titleTextColor }}>Task </label>
         <input
           type="radio"
           name="task-reminder"
           value="reminder"
           onChange={() => setTaskorreminder("reminder")}
         />
-        <label>Reminder</label>
+        <label style={{ color: allColors.titleTextColor }}>Reminder</label>
       </div>
       <div className="TodoForm__Task">
         <input
@@ -64,7 +86,14 @@ export const TodoForm = ({ addTodo, types }: TodoFormProps) => {
           className="TodoForm__Task__input"
           onChange={(e) => setValue(e.target.value)}
         />
-        <button type="submit" className="add-btn">
+        <button
+          type="submit"
+          className="add-btn"
+          style={{
+            backgroundColor: allColors.buttonIcons,
+            color: allColors.buttonText,
+          }}
+        >
           Add Task
         </button>
       </div>

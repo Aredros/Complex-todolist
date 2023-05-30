@@ -1,10 +1,27 @@
 import React, { useState } from "react";
 
-interface TypeFormProps {
-  addType: (type: string, color: string) => void;
+//Define all Style of every individual color of the app
+interface IColors {
+  outerBackgroundColor: string;
+  innerBackgroundColor: string;
+  titleTextColor: string;
+  weeklyCardBG: string;
+  weeklyBorder: string;
+  weeklyCardTxt: string;
+  buttonIcons: string;
+  buttonText: string;
+  formBackgroundColor: string;
+  itemBackgroundColor: string;
+  itemText: string;
+  reminderBackgroundColor: string;
 }
 
-export const TypeForm = ({ addType }: TypeFormProps) => {
+interface TypeFormProps {
+  addType: (type: string, color: string) => void;
+  allColors: IColors;
+}
+
+export const TypeForm = ({ addType, allColors }: TypeFormProps) => {
   const [typeValue, setTypeValue] = useState("");
   const [colorValue, setColorValue] = useState("#ABABAB");
 
@@ -17,7 +34,11 @@ export const TypeForm = ({ addType }: TypeFormProps) => {
   };
 
   return (
-    <form className="TypeForm" onSubmit={handleSubmit}>
+    <form
+      className="TypeForm"
+      onSubmit={handleSubmit}
+      style={{ background: allColors.formBackgroundColor }}
+    >
       <div className="TypeForm__Task type-form-organizer">
         <input
           type="color"
@@ -32,7 +53,14 @@ export const TypeForm = ({ addType }: TypeFormProps) => {
           placeholder="New Category"
           onChange={(e) => setTypeValue(e.target.value)}
         />
-        <button type="submit" className="add-btn">
+        <button
+          type="submit"
+          className="add-btn"
+          style={{
+            backgroundColor: allColors.buttonIcons,
+            color: allColors.buttonText,
+          }}
+        >
           Add Type
         </button>
       </div>

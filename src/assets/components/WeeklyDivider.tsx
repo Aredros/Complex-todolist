@@ -6,6 +6,22 @@ import {
   faChevronCircleDown,
 } from "@fortawesome/free-solid-svg-icons";
 
+//Define all Style of every individual color of the app
+interface IColors {
+  outerBackgroundColor: string;
+  innerBackgroundColor: string;
+  titleTextColor: string;
+  weeklyCardBG: string;
+  weeklyBorder: string;
+  weeklyCardTxt: string;
+  buttonIcons: string;
+  buttonText: string;
+  formBackgroundColor: string;
+  itemBackgroundColor: string;
+  itemText: string;
+  reminderBackgroundColor: string;
+}
+
 interface IType {
   type: string;
   color: string;
@@ -14,6 +30,7 @@ interface IType {
 
 interface WeeklyDividerProps {
   weekList: boolean;
+  allColors: IColors;
   week: string;
   types: IType[];
   todos: {
@@ -41,6 +58,7 @@ interface WeeklyDividerProps {
 export const WeeklyDivider = (props: WeeklyDividerProps) => {
   const {
     week,
+    allColors,
     weekList,
     types,
     todos,
@@ -95,7 +113,13 @@ export const WeeklyDivider = (props: WeeklyDividerProps) => {
   const weekNotComplete = parseInt(weekPercentage) - 100;
 
   return (
-    <div className={`Weekly-divider ${!weekList && "Weekly-divider-list"}`}>
+    <div
+      className={`Weekly-divider ${!weekList && "Weekly-divider-list"}`}
+      style={{
+        backgroundColor: allColors.weeklyCardBG,
+        border: "1px solid " + allColors.weeklyBorder,
+      }}
+    >
       <div className="Weekly-divider__Header">
         <div
           className={`Weekly-divider__Header__Titles ${
@@ -103,18 +127,23 @@ export const WeeklyDivider = (props: WeeklyDividerProps) => {
             "Weekly-divider__Header__Titles-complete"
           }`}
           style={{
-            background: `repeating-linear-gradient(to right, #2cd477 0%, #2cd477 ${weekPercentage}%, #008b8e ${weekNotComplete}%, #008b8e 100%)`,
+            background: `repeating-linear-gradient(to right, #2cd477 0%, #2cd477 ${weekPercentage}%, ${allColors.weeklyCardBG} ${weekNotComplete}%, ${allColors.weeklyCardBG} 100%)`,
             transition: "background 0.5s ease-in-out",
           }}
         >
-          <h3>Week plan</h3>
-          <p>Week is {weekPercentage}% completed</p>
+          <h3 style={{ color: allColors.weeklyCardTxt }}>Week plan</h3>
+          <p style={{ color: allColors.weeklyCardTxt }}>
+            Week is {weekPercentage}% completed
+          </p>
         </div>
         <div
           className={`Weekly-divider__Header__EditableContent ${
             weekPercentage === "100" &&
             "Weekly-divider__Header__EditableContent-complete"
           }`}
+          style={{
+            borderTop: "1px solid " + allColors.weeklyBorder,
+          }}
         >
           {editingWeekObjective ? (
             <>
@@ -124,21 +153,41 @@ export const WeeklyDivider = (props: WeeklyDividerProps) => {
                 value={weekObjective}
                 onChange={(e) => setWeekObjective(e.target.value)}
               ></textarea>
-              <button onClick={handleWeekObjective}>edit</button>
+              <button
+                onClick={handleWeekObjective}
+                style={{
+                  backgroundColor: allColors.buttonIcons,
+                  color: allColors.buttonText,
+                }}
+              >
+                edit
+              </button>
             </>
           ) : (
             <>
               {" "}
-              <p className="Weekly-divider__Header__EditableContent__paragraph">
+              <p
+                className="Weekly-divider__Header__EditableContent__paragraph"
+                style={{ color: allColors.weeklyCardTxt }}
+              >
                 {weekObjective ? weekObjective : "Write your week objective"}
               </p>
               <div className="editOrCollapse">
-                <button onClick={() => setEditingWeekObjective(true)}>
+                <button
+                  onClick={() => setEditingWeekObjective(true)}
+                  style={{
+                    backgroundColor: allColors.buttonIcons,
+                    color: allColors.buttonText,
+                  }}
+                >
                   edit
                 </button>
                 <FontAwesomeIcon
                   icon={weekCollapsed ? faChevronCircleDown : faChevronCircleUp}
                   onClick={() => setWeekCollapsed(!weekCollapsed)}
+                  style={{
+                    color: allColors.buttonIcons,
+                  }}
                 />
               </div>
             </>
@@ -156,6 +205,7 @@ export const WeeklyDivider = (props: WeeklyDividerProps) => {
           <DailyDivider
             key={date}
             date={date}
+            allColors={allColors}
             types={types}
             editTodoTask={editTodoTask}
             toggleCompleteTask={toggleCompleteTask}

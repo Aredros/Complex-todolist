@@ -2,6 +2,21 @@ import React from "react";
 import { TodoItem } from "./TodoItem";
 import { EditTodoForm } from "./EditTodoForm";
 
+//Define all Style of every individual color of the app
+interface IColors {
+  outerBackgroundColor: string;
+  innerBackgroundColor: string;
+  titleTextColor: string;
+  weeklyCardBG: string;
+  weeklyCardTxt: string;
+  buttonIcons: string;
+  buttonText: string;
+  formBackgroundColor: string;
+  itemBackgroundColor: string;
+  itemText: string;
+  reminderBackgroundColor: string;
+}
+
 interface IType {
   type: string;
   color: string;
@@ -9,6 +24,7 @@ interface IType {
 }
 interface DailyDividerProps {
   date: string;
+  allColors: IColors;
   types: IType[];
   todos: {
     id: string;
@@ -41,6 +57,7 @@ export const DailyDivider = (props: DailyDividerProps) => {
     toggleCompleteTask,
     editTodoTask,
     finishEditTask,
+    allColors,
   } = props;
 
   //Get the total tasks for the day
@@ -100,6 +117,7 @@ export const DailyDivider = (props: DailyDividerProps) => {
             <EditTodoForm
               key={todo.task}
               task={todo}
+              allColors={allColors}
               types={types}
               editTask={finishEditTask}
             />
@@ -107,6 +125,7 @@ export const DailyDivider = (props: DailyDividerProps) => {
             <TodoItem
               key={todo.task}
               todo={todo}
+              allColors={allColors}
               types={types}
               editTodoTask={editTodoTask}
               toggleCompleteTask={toggleCompleteTask}

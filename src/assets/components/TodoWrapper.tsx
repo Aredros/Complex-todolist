@@ -25,6 +25,28 @@ import {
 } from "firebase/firestore";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalendarDays, faList } from "@fortawesome/free-solid-svg-icons";
+import Navigation from "./Navigation";
+
+//Define all Style of every individual color of the app
+interface IColors {
+  outerBackgroundColor: string;
+  innerBackgroundColor: string;
+  titleTextColor: string;
+  weeklyCardBG: string;
+  weeklyBorder: string;
+  weeklyCardTxt: string;
+  buttonIcons: string;
+  buttonText: string;
+  formBackgroundColor: string;
+  itemBackgroundColor: string;
+  itemText: string;
+  reminderBackgroundColor: string;
+}
+
+//combine all colors in an array
+interface IcolorArray {
+  allColors: IColors;
+}
 
 // Define interface for Todo object
 interface ITodo {
@@ -44,7 +66,9 @@ interface IType {
   color: string;
 }
 
-export const TodoWrapper = () => {
+export const TodoWrapper = (props: IcolorArray) => {
+  const { allColors } = props;
+
   //state to store the todos
   const [todos, setTodos] = useState<ITodo[]>([]); // Specify type as ITodo[]
   const [types, setTypes] = useState<IType[]>([]); // Specify type as IType[]
@@ -288,32 +312,50 @@ export const TodoWrapper = () => {
   }
 
   return (
-    <div className={`TodoWrapper ${!weekList && "TodoWrapper--weekly"}`}>
-      <h1>Week Planner</h1>
+    <div
+      className={`TodoWrapper ${!weekList && "TodoWrapper--weekly"}`}
+      style={{ backgroundColor: allColors.innerBackgroundColor }}
+    >
+      <Navigation allColors={allColors} />
+      <h1 style={{ color: allColors.titleTextColor }}>Week Planner</h1>
       <div className="changeWeekList">
-        <p className="changeWeekList__title">Display type</p>
+        <p
+          className="changeWeekList__title"
+          style={{ color: allColors.titleTextColor }}
+        >
+          Display type
+        </p>
         <div className="changeWeekList__buttons">
           <div
             className="changeWeekList__buttons__button"
+            style={{ backgroundColor: allColors.buttonIcons }}
             onClick={() => setWeekList(true)}
           >
-            <FontAwesomeIcon icon={faList} />
-            <span> List</span>
+            <FontAwesomeIcon
+              icon={faList}
+              style={{ color: allColors.buttonText }}
+            />
+            <span style={{ color: allColors.buttonText }}> List</span>
           </div>
           <div
             className="changeWeekList__buttons__button"
+            style={{ backgroundColor: allColors.buttonIcons }}
             onClick={() => setWeekList(false)}
           >
-            <FontAwesomeIcon icon={faCalendarDays} />
-            <span> Calendar</span>
+            <FontAwesomeIcon
+              icon={faCalendarDays}
+              style={{ color: allColors.buttonText }}
+            />
+            <span style={{ color: allColors.buttonText }}> Calendar</span>
           </div>
         </div>
       </div>
-      <TodoForm addTodo={addNewTodo} types={types} />
+      <TodoForm allColors={allColors} addTodo={addNewTodo} types={types} />
       {weeks.map((week) => (
         <WeeklyDivider
           key={week}
           weekList={weekList}
+          allColors={allColors}
           types={types}
           week={week}
           deleteTodoTask={deleteTodoTask}
@@ -323,19 +365,41 @@ export const TodoWrapper = () => {
           todos={todos.filter((todo) => getWeek(todo.date) === week)}
         />
       ))}
-      <TypeForm addType={addType} />
-      <TypeItem types={types} deleteType={deleteType} />
+      <TypeForm addType={addType} allColors={allColors} />
+      <TypeItem types={types} deleteType={deleteType} allColors={allColors} />
       <div className="bottom-buttons">
         {isLoggedIn && (
           <>
-            <button onClick={sendDataToFirestore}>Send to Database</button>
+            <button
+              onClick={sendDataToFirestore}
+              style={{
+                backgroundColor: allColors.buttonIcons,
+                color: allColors.buttonText,
+              }}
+            >
+              Send to Database
+            </button>
 
-            <button onClick={getTodosFromDatabase}>
+            <button
+              onClick={getTodosFromDatabase}
+              style={{
+                backgroundColor: allColors.buttonIcons,
+                color: allColors.buttonText,
+              }}
+            >
               Get Todos from Database
             </button>
           </>
         )}
-        <button onClick={logItOut}>LogOut</button>
+        <button
+          onClick={logItOut}
+          style={{
+            backgroundColor: allColors.buttonIcons,
+            color: allColors.buttonText,
+          }}
+        >
+          LogOut
+        </button>
       </div>
     </div>
   );

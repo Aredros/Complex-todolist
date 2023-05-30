@@ -1,5 +1,17 @@
 import React, { useState } from "react";
 
+//Define all Style of every individual color of the app
+interface IColors {
+  outerBackgroundColor: string;
+  innerBackgroundColor: string;
+  titleTextColor: string;
+  weeklyCardBG: string;
+  weeklyCardTxt: string;
+  buttonIcons: string;
+  buttonText: string;
+  formBackgroundColor: string;
+}
+
 interface IType {
   type: string;
   color: string;
@@ -14,6 +26,7 @@ interface EditTodoFormProps {
     taskorreminder: string,
     id: string
   ) => void;
+  allColors: IColors;
   task: {
     task: string;
     nType: string;
@@ -27,7 +40,7 @@ interface EditTodoFormProps {
 }
 
 export const EditTodoForm = (props: EditTodoFormProps) => {
-  const { editTask, task, types } = props;
+  const { editTask, task, types, allColors } = props;
 
   const [value, setValue] = useState(task.task);
   const [type, setType] = useState(task.nType);
@@ -42,7 +55,11 @@ export const EditTodoForm = (props: EditTodoFormProps) => {
   };
 
   return (
-    <form className="EditTodoForm" onSubmit={handleSubmit}>
+    <form
+      className="EditTodoForm"
+      onSubmit={handleSubmit}
+      style={{ background: allColors.formBackgroundColor }}
+    >
       <div className="TodoForm__TaskReminder">
         <input
           type="radio"
@@ -50,14 +67,14 @@ export const EditTodoForm = (props: EditTodoFormProps) => {
           onChange={() => setTaskorreminder("task")}
           checked={taskorreminder === "task"}
         />{" "}
-        <label>Task </label>
+        <label style={{ color: allColors.titleTextColor }}>Task </label>
         <input
           type="radio"
           name="task-reminder"
           onChange={() => setTaskorreminder("reminder")}
           checked={taskorreminder === "reminder"}
         />
-        <label>Reminder</label>
+        <label style={{ color: allColors.titleTextColor }}>Reminder</label>
       </div>
       <div className="EditTodoForm__Task">
         <input
@@ -67,7 +84,14 @@ export const EditTodoForm = (props: EditTodoFormProps) => {
           className="EditTodoForm__Task__input"
           onChange={(e) => setValue(e.target.value)}
         />
-        <button type="submit" className="add-btn">
+        <button
+          type="submit"
+          className="add-btn"
+          style={{
+            backgroundColor: allColors.buttonIcons,
+            color: allColors.buttonText,
+          }}
+        >
           Update
         </button>
       </div>

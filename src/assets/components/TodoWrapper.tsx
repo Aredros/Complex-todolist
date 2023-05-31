@@ -94,7 +94,7 @@ export const TodoWrapper = (props: IcolorArray) => {
     }
   }, []); //the empty array is to make sure the useEffect only runs once
 
-  //EXPERIMENT
+  //Verifying if the user is Anon or not
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       setIsLoggedIn(user ? !user.isAnonymous : false);
@@ -104,7 +104,6 @@ export const TodoWrapper = (props: IcolorArray) => {
       unsubscribe();
     };
   }, []);
-  //EXPERIMENT
 
   //function to log out//
   const logItOut = async () => {
@@ -242,7 +241,7 @@ export const TodoWrapper = (props: IcolorArray) => {
           await addDoc(todosCollectionRef, todo);
         });
 
-        console.log("todos Data sent to Firestore successfully!");
+        alert("todos Data sent to Firestore successfully!");
       }
     } catch (err) {
       console.log(err);

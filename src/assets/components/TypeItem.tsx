@@ -17,7 +17,7 @@ interface IColors {
 
 interface IType {
   id: string;
-  type: string;
+  typeName: string;
   color: string;
 }
 
@@ -49,12 +49,12 @@ export const TypeItem = (props: TypeItemProps) => {
               background: type.color,
             }}
           ></div>
-          <p>{type.type}</p>
+          <p>{type.typeName}</p>
           <div>
             <FontAwesomeIcon
               key={type.id}
               icon={faTrash}
-              onClick={() => deleteType(type.type, type.id)}
+              onClick={() => deleteType(type.typeName, type.id)}
               style={{ color: allColors.buttonIcons }}
             />
           </div>

@@ -33,11 +33,6 @@ $background-1: #27274d;
   }
 }
 
-.TodoWrapper {
-  text-align: center;
-  position: relative;
-}
-
 .changeWeekList {
   display: none;
   &__buttons {
@@ -62,10 +57,13 @@ $background-1: #27274d;
     margin-bottom: 0.5rem;
     font-size: 3.2em;
   }
+  text-align: center;
+  position: relative;
   margin: auto;
   padding: 2rem;
   border-radius: 5px;
   width: 370px;
+  min-height: 90vh;
   border-radius: 8px;
   -webkit-border-radius: 8px;
   -moz-border-radius: 8px;
@@ -191,6 +189,7 @@ $background-1: #27274d;
 
 .add-btn {
   font-size: 0.8em;
+  overflow: hidden;
   color: #fff;
   border: none;
   padding: 0.4rem;

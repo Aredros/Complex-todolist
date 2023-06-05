@@ -23,12 +23,26 @@ interface IColors {
 }
 
 interface IType {
-  type: string;
+  typeName: string;
   color: string;
   id: string;
 }
 
+// Define interface for Todo object
+interface ITodo {
+  id: string;
+  task: string;
+  completed: boolean;
+  isEditing: boolean;
+  taskorreminder: string;
+  user: string;
+  nType: string;
+  date: string;
+  archived: boolean;
+}
+
 interface WeeklyDividerProps {
+  parentElement: string;
   weekList: boolean;
   allColors: IColors;
   week: string;
@@ -42,21 +56,25 @@ interface WeeklyDividerProps {
     user: string;
     nType: string;
     date: string;
+    archived: boolean;
   }[];
   deleteTodoTask: (id: string) => void;
-  toggleCompleteTask: (id: string) => void;
-  editTodoTask: (id: string) => void;
-  finishEditTask: (
+  toggleCompleteTask?: (id: string) => void;
+  editTodoTask?: (id: string) => void;
+  finishEditTask?: (
     task: string,
     type: string,
     date: string,
     taskorreminder: string,
     id: string
   ) => void;
+  getDoneTodoList?: (doneTodoList: ITodo[]) => void;
+  archiveMultipleTodos?: (id: string[]) => void;
 }
 
 export const WeeklyDivider = (props: WeeklyDividerProps) => {
   const {
+    parentElement,
     week,
     allColors,
     weekList,
@@ -65,6 +83,7 @@ export const WeeklyDivider = (props: WeeklyDividerProps) => {
     deleteTodoTask,
     toggleCompleteTask,
     editTodoTask,
+    archiveMultipleTodos,
     finishEditTask,
   } = props;
   const [weekObjective, setWeekObjective] = useState("");
@@ -111,6 +130,13 @@ export const WeeklyDivider = (props: WeeklyDividerProps) => {
 
   //calculate how much of the week is not complete -only used for the style
   const weekNotComplete = parseInt(weekPercentage) - 100;
+
+  //handle the click to send ALL items to the archive
+  const handleArchiveClick = (todos: ITodo[]) => {
+    (archiveMultipleTodos as (ids: string[]) => void)(
+      todos.map((todo) => todo.id)
+    );
+  };
 
   return (
     <div
@@ -214,6 +240,9 @@ export const WeeklyDivider = (props: WeeklyDividerProps) => {
             todos={todos.filter((todo) => todo.date === date)}
           />
         ))}
+        {parentElement === "TodoWrapper" && (
+          <button onClick={() => handleArchiveClick(todos)}>Archive</button>
+        )}
       </div>
     </div>
   );

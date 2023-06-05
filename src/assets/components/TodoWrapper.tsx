@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import {
-  deleteTodo,
-  toggleComplete,
-  editTodo,
-  finishEdit,
+  deleteTodoFunction,
+  toggleCompleteFunction,
+  editTodoFunction,
+  finishEditFunction,
+  archiveTaskFunction,
 } from "../functions/functions";
 import { TodoForm } from "./TodoForm";
 import { WeeklyDivider } from "./WeeklyDivider";
@@ -15,17 +16,15 @@ import { signOut } from "firebase/auth";
 import {
   addDoc,
   collection,
-  doc,
-  setDoc,
   deleteDoc,
   query,
   where,
   getDocs,
-  DocumentData,
 } from "firebase/firestore";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalendarDays, faList } from "@fortawesome/free-solid-svg-icons";
 import Navigation from "./Navigation";
+import DbAndLogOut from "./DbAndLogOut";
 
 //Define all Style of every individual color of the app
 interface IColors {
@@ -42,12 +41,6 @@ interface IColors {
   itemText: string;
   reminderBackgroundColor: string;
 }
-
-//combine all colors in an array
-interface IcolorArray {
-  allColors: IColors;
-}
-
 // Define interface for Todo object
 interface ITodo {
   id: string;
@@ -58,27 +51,26 @@ interface ITodo {
   user: string;
   nType: string;
   date: string;
+  archived: boolean;
 }
-
 interface IType {
   id: string; // Add ID field to IType interface
-  type: string;
+  typeName: string;
   color: string;
 }
+//passing the props
+interface Iprops {
+  allColors: IColors;
+  getDoneTodoList: (doneTodoList: ITodo[]) => void;
+}
 
-export const TodoWrapper = (props: IcolorArray) => {
-  const { allColors } = props;
-
-  //state to store the todos
-  const [todos, setTodos] = useState<ITodo[]>([]); // Specify type as ITodo[]
-  const [types, setTypes] = useState<IType[]>([]); // Specify type as IType[]
-
-  //state for choosing between weekly or daily list
-  const [weekList, setWeekList] = useState(true);
-
-  //EXPERIMENT
-  //check if the user is logged in or not
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+export const TodoWrapper = (props: Iprops) => {
+  const { allColors, getDoneTodoList } = props; //props being brought by parent component
+  //
+  const [todos, setTodos] = useState<ITodo[]>([]); // Array of todo objects
+  const [types, setTypes] = useState<IType[]>([]); // Array of type objects
+  const [weekList, setWeekList] = useState(true); //state for choosing between weekly or daily list
+  const [isLoggedIn, setIsLoggedIn] = useState(false); //check if the user is logged in or not
 
   //Fetch the previous todos from LocalStorage
   useEffect(() => {
@@ -92,10 +84,7 @@ export const TodoWrapper = (props: IcolorArray) => {
     if (storedTypes) {
       setTypes(JSON.parse(storedTypes));
     }
-  }, []); //the empty array is to make sure the useEffect only runs once
-
-  //Verifying if the user is Anon or not
-  useEffect(() => {
+    //Verifying if the user is Anon or not
     const unsubscribe = auth.onAuthStateChanged((user) => {
       setIsLoggedIn(user ? !user.isAnonymous : false);
     });
@@ -103,7 +92,7 @@ export const TodoWrapper = (props: IcolorArray) => {
     return () => {
       unsubscribe();
     };
-  }, []);
+  }, []); //the empty array is to make sure the useEffect only runs once
 
   //function to log out//
   const logItOut = async () => {
@@ -130,6 +119,7 @@ export const TodoWrapper = (props: IcolorArray) => {
       nType: type,
       user: auth.currentUser?.email || "", // Provide a default value here,
       date: date,
+      archived: false,
     };
     setTodos([...todos, newTodo]);
     //store the updated todos state in LocalStorage
@@ -138,19 +128,34 @@ export const TodoWrapper = (props: IcolorArray) => {
 
   //function to delete a TODO
   const deleteTodoTask = (id: string) => {
-    const updatedTodos = deleteTodo(id, todos);
+    const updatedTodos = deleteTodoFunction(id, todos, "todosLocal");
     setTodos(updatedTodos);
+  };
+
+  //Function to change the Archived boolean status
+  const archiveMultipleTodos = (ids: string[]) => {
+    const updatedTodos = archiveTaskFunction(ids, todos, "todosLocal");
+    getDoneTodoList(updatedTodos);
+
+    const updatedTodosLocal = ids.reduce(
+      (acc, id) => {
+        return deleteTodoFunction(id, acc, "todosLocal");
+      },
+      [...todos]
+    );
+
+    setTodos(updatedTodosLocal);
   };
 
   //function to change the completed status of a TODO
   const toggleCompleteTask = (id: string) => {
-    const updatedTodos = toggleComplete(id, todos);
+    const updatedTodos = toggleCompleteFunction(id, todos, "todosLocal");
     setTodos(updatedTodos);
   };
 
   //function to change the editing status of a TODO
   const editTodoTask = (id: string) => {
-    const updatedTodos = editTodo(id, todos);
+    const updatedTodos = editTodoFunction(id, todos, "todosLocal");
     setTodos(updatedTodos);
   };
 
@@ -162,13 +167,14 @@ export const TodoWrapper = (props: IcolorArray) => {
     taskorreminder: string,
     id: string
   ) => {
-    const updatedTodos = finishEdit(
+    const updatedTodos = finishEditFunction(
       task,
       type,
       date,
       taskorreminder,
       id,
-      todos
+      todos,
+      "todosLocal"
     );
     setTodos(updatedTodos);
   };
@@ -176,12 +182,12 @@ export const TodoWrapper = (props: IcolorArray) => {
   /****************FUNCTIONS TO ALTER THE TYPES */
 
   //function to create a new Type
-  const addType = (type: string, color: string) => {
+  const addType = (typeName: string, color: string) => {
     //check if the type already exists
-    if (!types.some((t) => t.type === type)) {
+    if (!types.some((t) => t.typeName === typeName)) {
       const newType: IType = {
         id: uuidv4(), // Assign a unique ID to the new type
-        type: type,
+        typeName: typeName,
         color: color,
       };
       const newTypes = [...types, newType];
@@ -350,56 +356,39 @@ export const TodoWrapper = (props: IcolorArray) => {
         </div>
       </div>
       <TodoForm allColors={allColors} addTodo={addNewTodo} types={types} />
-      {weeks.map((week) => (
-        <WeeklyDivider
-          key={week}
-          weekList={weekList}
-          allColors={allColors}
-          types={types}
-          week={week}
-          deleteTodoTask={deleteTodoTask}
-          toggleCompleteTask={toggleCompleteTask}
-          editTodoTask={editTodoTask}
-          finishEditTask={finishEditTask}
-          todos={todos.filter((todo) => getWeek(todo.date) === week)}
-        />
-      ))}
+      {weeks.map(
+        (week) =>
+          todos.some(
+            (todo) => !todo.archived && getWeek(todo.date) === week
+          ) && (
+            <WeeklyDivider
+              key={week}
+              parentElement={"TodoWrapper"}
+              weekList={weekList}
+              allColors={allColors}
+              types={types}
+              week={week}
+              deleteTodoTask={deleteTodoTask}
+              toggleCompleteTask={toggleCompleteTask}
+              editTodoTask={editTodoTask}
+              finishEditTask={finishEditTask}
+              getDoneTodoList={getDoneTodoList}
+              archiveMultipleTodos={archiveMultipleTodos}
+              todos={todos.filter(
+                (todo) => getWeek(todo.date) === week && !todo.archived
+              )}
+            />
+          )
+      )}
       <TypeForm addType={addType} allColors={allColors} />
       <TypeItem types={types} deleteType={deleteType} allColors={allColors} />
-      <div className="bottom-buttons">
-        {isLoggedIn && (
-          <>
-            <button
-              onClick={sendDataToFirestore}
-              style={{
-                backgroundColor: allColors.buttonIcons,
-                color: allColors.buttonText,
-              }}
-            >
-              Send to Database
-            </button>
-
-            <button
-              onClick={getTodosFromDatabase}
-              style={{
-                backgroundColor: allColors.buttonIcons,
-                color: allColors.buttonText,
-              }}
-            >
-              Get Todos from Database
-            </button>
-          </>
-        )}
-        <button
-          onClick={logItOut}
-          style={{
-            backgroundColor: allColors.buttonIcons,
-            color: allColors.buttonText,
-          }}
-        >
-          LogOut
-        </button>
-      </div>
+      <DbAndLogOut
+        isLoggedIn={isLoggedIn}
+        logItOut={logItOut}
+        allColors={allColors}
+        sendDataToFirestore={sendDataToFirestore}
+        getTodosFromDatabase={getTodosFromDatabase}
+      />
     </div>
   );
 };

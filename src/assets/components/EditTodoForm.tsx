@@ -13,13 +13,13 @@ interface IColors {
 }
 
 interface IType {
-  type: string;
+  typeName: string;
   color: string;
   id: string;
 }
 
 interface EditTodoFormProps {
-  editTask: (
+  editTask?: (
     task: string,
     type: string,
     date: string,
@@ -51,7 +51,7 @@ export const EditTodoForm = (props: EditTodoFormProps) => {
   const handleSubmit = (e: React.FormEvent) => {
     //preventDefault will prevent the page from reloading
     e.preventDefault();
-    editTask(value, type, date, taskorreminder, task.id);
+    editTask?.(value, type, date, taskorreminder, task.id);
   };
 
   return (
@@ -104,8 +104,8 @@ export const EditTodoForm = (props: EditTodoFormProps) => {
             onChange={(e) => setType(e.target.value)}
           >
             {types.map((type) => (
-              <option key={type.id} value={type.type}>
-                {type.type}
+              <option key={type.id} value={type.typeName}>
+                {type.typeName}
               </option>
             ))}
           </select>

@@ -26,6 +26,12 @@ function Navigation(props: IcolorArray) {
         <p style={{ color: allColors.titleTextColor }}>Home</p>
       </Link>
       <Link
+        to="/Complex-todolist/archive"
+        style={{ backgroundColor: allColors.innerBackgroundColor }}
+      >
+        <p style={{ color: allColors.titleTextColor }}>Archive</p>
+      </Link>
+      <Link
         to="/Complex-todolist/styles"
         style={{ backgroundColor: allColors.innerBackgroundColor }}
       >

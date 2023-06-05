@@ -1,7 +1,7 @@
 import "./App.scss";
 import "./Login.scss";
 import "./Editpage.scss";
-
+import { deleteTodoFunction } from "./assets/functions/functions";
 import { useState, useEffect } from "react";
 import { TodoWrapper } from "./assets/components/TodoWrapper";
 import { Auth } from "./assets/components/auth";
@@ -9,11 +9,40 @@ import { auth } from "./config/firebase";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import StylesEdit from "./assets/components/StylesEdit";
+import { Archive } from "./assets/components/Archive";
+
+// Interface for the done TODOS gotten from TodoWrapper
+interface IDoneTodo {
+  id: string;
+  task: string;
+  completed: boolean;
+  isEditing: boolean;
+  taskorreminder: string;
+  user: string;
+  nType: string;
+  date: string;
+  archived: boolean;
+}
+
+interface IColorFunctions {
+  change_outerBackgroundColor: (color: string) => void;
+  change_innerBackgroundColor: (color: string) => void;
+  change_titleTextColor: (color: string) => void;
+  change_weeklyCardBG: (color: string) => void;
+  change_weeklyCardTxt: (color: string) => void;
+  change_buttonIcons: (color: string) => void;
+  change_buttonText: (color: string) => void;
+  change_formBackgroundColor: (color: string) => void;
+  change_itemBackgroundColor: (color: string) => void;
+  change_itemText: (color: string) => void;
+  change_reminderBackgroundColor: (color: string) => void;
+}
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [doneTodoList, setDoneTodoList] = useState<IDoneTodo[]>([]);
 
-  //array that stores all colors
+  //array that stores all colors that will be used in the app
   const [allColors, setAllColors] = useState({
     outerBackgroundColor: "#334549",
     innerBackgroundColor: "#ffffff",
@@ -29,8 +58,14 @@ function App() {
     reminderBackgroundColor: "#ffde8c",
   });
 
-  //useEffect to get all stored colors in localStorage
   useEffect(() => {
+    //Fetch the previous todos from LocalStorage
+    const storedTodos = localStorage.getItem("doneTodoList");
+    if (storedTodos) {
+      setDoneTodoList(JSON.parse(storedTodos));
+    }
+
+    //useEffect to get all stored colors in localStorage
     Object.keys(allColors).forEach((key) => {
       const stored_indiv_color = localStorage.getItem(key);
       if (stored_indiv_color) {
@@ -41,146 +76,7 @@ function App() {
       }
       // console.log(key + " : " + allColors[key]);
     });
-    //empty array and local storage
-    //localStorage.clear();
-  }, []);
-
-  //Function to change with a button outerBackgroundColor
-  const changeOuterBackgroundColor = (color: string) => {
-    const newColor = {
-      ...allColors,
-      outerBackgroundColor: color,
-    };
-    setAllColors(newColor);
-    //save in local storage individualy
-    localStorage.setItem("outerBackgroundColor", color);
-  };
-
-  //Function to change with a button innerBackgroundColor
-  const changeInnerBackgroundColor = (color: string) => {
-    const newColor = {
-      ...allColors,
-      innerBackgroundColor: color,
-    };
-    setAllColors(newColor);
-    //save in local storage
-    localStorage.setItem("innerBackgroundColor", color);
-  };
-
-  const changeTitleTextColor = (color: string) => {
-    const newColor = {
-      ...allColors,
-      titleTextColor: color,
-    };
-    setAllColors(newColor);
-    //save in local storage
-    localStorage.setItem("titleTextColor", color);
-  };
-
-  const changeWeeklyCardBG = (color: string) => {
-    const newColor = {
-      ...allColors,
-      weeklyCardBG: color,
-    };
-    setAllColors(newColor);
-    //save in local storage
-    localStorage.setItem("weeklyCardBG", color);
-  };
-
-  const changeWeeklyBorder = (color: string) => {
-    const newColor = {
-      ...allColors,
-      weeklyBorder: color,
-    };
-    setAllColors(newColor);
-    //save in local storage
-    localStorage.setItem("weeklyBorder", color);
-  };
-
-  const changeWeeklyCardTxt = (color: string) => {
-    const newColor = {
-      ...allColors,
-      weeklyCardTxt: color,
-    };
-    setAllColors(newColor);
-    //save in local storage
-    localStorage.setItem("weeklyCardTxt", color);
-  };
-
-  const changeButtonIcons = (color: string) => {
-    const newColor = {
-      ...allColors,
-      buttonIcons: color,
-    };
-    setAllColors(newColor);
-    ///save in local storage
-    localStorage.setItem("buttonIcons", color);
-  };
-
-  const changeButtonText = (color: string) => {
-    const newColor = {
-      ...allColors,
-      buttonText: color,
-    };
-    setAllColors(newColor);
-    //save in local storage
-    localStorage.setItem("buttonText", color);
-  };
-
-  const changeFormBackgroundColor = (color: string) => {
-    const newColor = {
-      ...allColors,
-      formBackgroundColor: color,
-    };
-    setAllColors(newColor);
-    //save in local storage
-    localStorage.setItem("formBackgroundColor", color);
-  };
-
-  const changeItemBackgroundColor = (color: string) => {
-    const newColor = {
-      ...allColors,
-      itemBackgroundColor: color,
-    };
-    setAllColors(newColor);
-    //save in local storage
-    localStorage.setItem("itemBackgroundColor", color);
-  };
-
-  const changeItemText = (color: string) => {
-    const newColor = {
-      ...allColors,
-      itemText: color,
-    };
-    setAllColors(newColor);
-    //save in local storage
-    localStorage.setItem("itemText", color);
-  };
-
-  const changeReminderBackgroundColor = (color: string) => {
-    const newColor = {
-      ...allColors,
-      reminderBackgroundColor: color,
-    };
-    setAllColors(newColor);
-    //save in local storage
-    localStorage.setItem("reminderBackgroundColor", color);
-  };
-
-  const allColorFunctions = {
-    changeOuterBackgroundColor,
-    changeInnerBackgroundColor,
-    changeTitleTextColor,
-    changeWeeklyCardBG,
-    changeWeeklyBorder,
-    changeWeeklyCardTxt,
-    changeButtonIcons,
-    changeButtonText,
-    changeFormBackgroundColor,
-    changeItemBackgroundColor,
-    changeItemText,
-    changeReminderBackgroundColor,
-  };
+  }, []); //the empty array is to make sure the useEffect only runs once
 
   //useEffect used to  check if the user is authenticated or not
   useEffect(() => {
@@ -195,6 +91,71 @@ function App() {
     return () => unsubscribe();
   }, []);
 
+  //Function to save colors in localStorage
+  const ProcessColorSave = (colorName: string, color: string) => {
+    //Save in state
+    setAllColors((prevColors) => ({ ...prevColors, [colorName]: color }));
+    //Save in local Storage
+    localStorage.setItem(colorName, color);
+  };
+  //Function tos change all colors in the apps
+  const changeColor: IColorFunctions = {
+    change_outerBackgroundColor: (color) => {
+      ProcessColorSave("outerBackgroundColor", color);
+    },
+    change_innerBackgroundColor: (color) => {
+      ProcessColorSave("innerBackgroundColor", color);
+    },
+    change_titleTextColor: (color) => {
+      ProcessColorSave("titleTextColor", color);
+    },
+    change_weeklyCardBG: (color) => {
+      ProcessColorSave("weeklyCardBG", color);
+    },
+    change_weeklyCardTxt: (color) => {
+      ProcessColorSave("weeklyCardTxt", color);
+    },
+    change_buttonIcons: (color) => {
+      ProcessColorSave("buttonIcons", color);
+    },
+    change_buttonText: (color) => {
+      ProcessColorSave("buttonText", color);
+    },
+    change_formBackgroundColor: (color) => {
+      ProcessColorSave("formBackgroundColor", color);
+    },
+    change_itemBackgroundColor: (color) => {
+      ProcessColorSave("itemBackgroundColor", color);
+    },
+    change_itemText: (color) => {
+      ProcessColorSave("itemText", color);
+    },
+    change_reminderBackgroundColor: (color) => {
+      ProcessColorSave("reminderBackgroundColor", color);
+    },
+  };
+
+  //function to get the TodosFrom the child component
+  const getDoneTodoList = (doneItems: IDoneTodo[]) => {
+    const filteredItems = doneItems.filter((item) => {
+      return !doneTodoList.some((doneItem) => doneItem.id === item.id);
+    });
+
+    setDoneTodoList((doneTodoList) => [...doneTodoList, ...filteredItems]);
+
+    // Update local storage with the updated doneTodoList state
+    localStorage.setItem(
+      `doneTodoList`,
+      JSON.stringify([...doneTodoList, ...filteredItems])
+    );
+  };
+
+  //function to delete a TODO
+  const deleteDONETodoTask = (id: string) => {
+    const updatedTodos = deleteTodoFunction(id, doneTodoList, "doneTodoList");
+    setDoneTodoList(updatedTodos);
+  };
+
   return (
     <div
       className="App"
@@ -205,14 +166,29 @@ function App() {
           <Routes>
             <Route
               path="/Complex-todolist/"
-              element={<TodoWrapper allColors={allColors} />}
+              element={
+                <TodoWrapper
+                  getDoneTodoList={getDoneTodoList}
+                  allColors={allColors}
+                />
+              }
+            />
+            <Route
+              path="/Complex-todolist/archive"
+              element={
+                <Archive
+                  doneTodoList={doneTodoList}
+                  allColors={allColors}
+                  deleteDONETodoTask={deleteDONETodoTask}
+                />
+              }
             />
             <Route
               path="/Complex-todolist/styles"
               element={
                 <StylesEdit
                   allColors={allColors}
-                  allColorFunctions={allColorFunctions}
+                  allColorFunctions={changeColor}
                 />
               }
             />

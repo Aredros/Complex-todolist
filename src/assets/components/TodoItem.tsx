@@ -16,7 +16,7 @@ interface IColors {
 }
 
 interface TodoItemProps {
-  types: { type: string; color: string }[];
+  types: { typeName: string; color: string }[];
   allColors: IColors;
   todo: {
     id: string;
@@ -29,8 +29,8 @@ interface TodoItemProps {
     date: string;
   };
   deleteTodoTask: (id: string) => void;
-  toggleCompleteTask: (id: string) => void;
-  editTodoTask: (id: string) => void;
+  toggleCompleteTask?: (id: string) => void;
+  editTodoTask?: (id: string) => void;
 }
 
 export const TodoItem = (props: TodoItemProps) => {
@@ -44,7 +44,16 @@ export const TodoItem = (props: TodoItemProps) => {
   } = props;
 
   //get the type color
-  const typecolor = types.find((type) => type.type === todo.nType)?.color;
+  const typecolor = types.find((type) => type.typeName === todo.nType)?.color;
+
+  const handleToggleClick = () => {
+    //handle the click to send ALL items to the archive
+    toggleCompleteTask?.(todo.id);
+  };
+
+  const handleEditClick = () => {
+    editTodoTask?.(todo.id);
+  };
 
   return (
     <li
@@ -61,15 +70,12 @@ export const TodoItem = (props: TodoItemProps) => {
     >
       <div
         className="TodoItem__type-color"
-        onClick={() => toggleCompleteTask(todo.id)}
+        onClick={handleToggleClick}
         style={{
           backgroundColor: typecolor ?? "gray",
         }}
       ></div>
-      <div
-        className="TodoItem__container"
-        onClick={() => toggleCompleteTask(todo.id)}
-      >
+      <div className="TodoItem__container" onClick={handleToggleClick}>
         {" "}
         <p className={`${todo.completed && "completed"}`}>
           {todo.task}
@@ -84,7 +90,7 @@ export const TodoItem = (props: TodoItemProps) => {
       <div className="TodoItem__icons">
         <FontAwesomeIcon
           icon={faEdit}
-          onClick={() => editTodoTask(todo.id)}
+          onClick={handleEditClick}
           style={{ color: allColors.buttonIcons }}
         />
         <FontAwesomeIcon

@@ -18,7 +18,7 @@ interface IColors {
 }
 
 interface IType {
-  type: string;
+  typeName: string;
   color: string;
   id: string;
 }
@@ -37,9 +37,9 @@ interface DailyDividerProps {
     date: string;
   }[];
   deleteTodoTask: (id: string) => void;
-  toggleCompleteTask: (id: string) => void;
-  editTodoTask: (id: string) => void;
-  finishEditTask: (
+  toggleCompleteTask?: (id: string) => void;
+  editTodoTask?: (id: string) => void;
+  finishEditTask?: (
     task: string,
     type: string,
     date: string,

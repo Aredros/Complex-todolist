@@ -24,17 +24,17 @@ interface IColors {
 }
 
 interface IColorFuncts {
-  changeOuterBackgroundColor: (color: string) => void;
-  changeInnerBackgroundColor: (color: string) => void;
-  changeTitleTextColor: (color: string) => void;
-  changeWeeklyCardBG: (color: string) => void;
-  changeWeeklyCardTxt: (color: string) => void;
-  changeButtonIcons: (color: string) => void;
-  changeButtonText: (color: string) => void;
-  changeFormBackgroundColor: (color: string) => void;
-  changeItemBackgroundColor: (color: string) => void;
-  changeItemText: (color: string) => void;
-  changeReminderBackgroundColor: (color: string) => void;
+  change_outerBackgroundColor: (color: string) => void;
+  change_innerBackgroundColor: (color: string) => void;
+  change_titleTextColor: (color: string) => void;
+  change_weeklyCardBG: (color: string) => void;
+  change_weeklyCardTxt: (color: string) => void;
+  change_buttonIcons: (color: string) => void;
+  change_buttonText: (color: string) => void;
+  change_formBackgroundColor: (color: string) => void;
+  change_itemBackgroundColor: (color: string) => void;
+  change_itemText: (color: string) => void;
+  change_reminderBackgroundColor: (color: string) => void;
 }
 
 //combine all colors in an array
@@ -93,7 +93,7 @@ function StylesEdit(props: IcolorArray) {
             type="color"
             value={outerBGcolor}
             onChange={(e) => {
-              allColorFunctions.changeOuterBackgroundColor(e.target.value);
+              allColorFunctions.change_outerBackgroundColor(e.target.value);
               setOuterBGcolor(e.target.value);
             }}
           />
@@ -104,7 +104,7 @@ function StylesEdit(props: IcolorArray) {
             type="color"
             value={innerBGcolor}
             onChange={(e) => {
-              allColorFunctions.changeInnerBackgroundColor(e.target.value);
+              allColorFunctions.change_innerBackgroundColor(e.target.value);
               setInnerBGcolor(e.target.value);
             }}
           />
@@ -115,7 +115,7 @@ function StylesEdit(props: IcolorArray) {
             type="color"
             value={TitleTextColor}
             onChange={(e) => {
-              allColorFunctions.changeTitleTextColor(e.target.value);
+              allColorFunctions.change_titleTextColor(e.target.value);
               setTitleTextColor(e.target.value);
             }}
           />
@@ -126,7 +126,7 @@ function StylesEdit(props: IcolorArray) {
             type="color"
             value={weeklyCardBG}
             onChange={(e) => {
-              allColorFunctions.changeWeeklyCardBG(e.target.value);
+              allColorFunctions.change_weeklyCardBG(e.target.value);
               setWeeklyCardBG(e.target.value);
             }}
           />
@@ -137,7 +137,7 @@ function StylesEdit(props: IcolorArray) {
             type="color"
             value={weeklyCardTextColor}
             onChange={(e) => {
-              allColorFunctions.changeWeeklyCardTxt(e.target.value);
+              allColorFunctions.change_weeklyCardTxt(e.target.value);
               setWeeklyCardTextColor(e.target.value);
             }}
           />
@@ -148,7 +148,7 @@ function StylesEdit(props: IcolorArray) {
             type="color"
             value={buttonIconsColor}
             onChange={(e) => {
-              allColorFunctions.changeButtonIcons(e.target.value);
+              allColorFunctions.change_buttonIcons(e.target.value);
               setButtonIconsColor(e.target.value);
             }}
           />
@@ -159,7 +159,7 @@ function StylesEdit(props: IcolorArray) {
             type="color"
             value={buttonTextColor}
             onChange={(e) => {
-              allColorFunctions.changeButtonText(e.target.value);
+              allColorFunctions.change_buttonText(e.target.value);
               setButtonTextColor(e.target.value);
             }}
           />
@@ -170,7 +170,7 @@ function StylesEdit(props: IcolorArray) {
             type="color"
             value={formBackgroundColor}
             onChange={(e) => {
-              allColorFunctions.changeFormBackgroundColor(e.target.value);
+              allColorFunctions.change_formBackgroundColor(e.target.value);
               setFormBackgroundColor(e.target.value);
             }}
           />
@@ -181,7 +181,7 @@ function StylesEdit(props: IcolorArray) {
             type="color"
             value={itemBackgroundColor}
             onChange={(e) => {
-              allColorFunctions.changeItemBackgroundColor(e.target.value);
+              allColorFunctions.change_itemBackgroundColor(e.target.value);
               setItemBackgroundColor(e.target.value);
             }}
           />
@@ -192,7 +192,7 @@ function StylesEdit(props: IcolorArray) {
             type="color"
             value={itemTextColor}
             onChange={(e) => {
-              allColorFunctions.changeItemText(e.target.value);
+              allColorFunctions.change_itemText(e.target.value);
               setItemTextColor(e.target.value);
             }}
           />
@@ -203,7 +203,7 @@ function StylesEdit(props: IcolorArray) {
             type="color"
             value={reminderBackgroundColor}
             onChange={(e) => {
-              allColorFunctions.changeReminderBackgroundColor(e.target.value);
+              allColorFunctions.change_reminderBackgroundColor(e.target.value);
               setReminderBackgroundColor(e.target.value);
             }}
           />
@@ -262,7 +262,13 @@ function StylesEdit(props: IcolorArray) {
               <p className="Daily-divider__Header__Title">Day 50% completed</p>
             </div>
             <ul>
-              <li className={`TodoItem Todo-task`}>
+              <li
+                className={`TodoItem Todo-task`}
+                style={{
+                  color: allColors.itemText,
+                  backgroundColor: allColors.itemBackgroundColor,
+                }}
+              >
                 <div
                   className="TodoItem__type-color"
                   style={{
@@ -284,7 +290,13 @@ function StylesEdit(props: IcolorArray) {
                   />
                 </div>
               </li>
-              <li className={`TodoItem Todo-task`}>
+              <li
+                className={`TodoItem Todo-task`}
+                style={{
+                  color: allColors.itemText,
+                  backgroundColor: allColors.itemBackgroundColor,
+                }}
+              >
                 <div
                   className="TodoItem__type-color"
                   style={{

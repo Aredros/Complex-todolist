@@ -25,7 +25,7 @@ interface TodoFormProps {
     date: string,
     taskorreminder: string
   ) => void;
-  types: { id: string; type: string; color: string }[];
+  types: { id: string; typeName: string; color: string }[];
 }
 
 export const TodoForm = ({ addTodo, types, allColors }: TodoFormProps) => {
@@ -44,7 +44,7 @@ export const TodoForm = ({ addTodo, types, allColors }: TodoFormProps) => {
     }
     //If no type is selected, set it to the first type in the array
     if (!type) {
-      setType(types[0].type);
+      setType(types[0].typeName);
     }
     if (!value) return;
     //call the addTodo function that was passed down from the App component and send the value of the input field and the type
@@ -110,8 +110,8 @@ export const TodoForm = ({ addTodo, types, allColors }: TodoFormProps) => {
               No-cat
             </option>
             {types.map((type) => (
-              <option key={`type-id ${type.id}`} value={type.type}>
-                {type.type}
+              <option key={`type-id ${type.id}`} value={type.typeName}>
+                {type.typeName}
               </option>
             ))}
           </select>

@@ -370,10 +370,17 @@ $background-1: #27274d;
   gap: 5px;
   align-items: center;
   justify-content: space-between;
+  div {
+    display: flex;
+    gap: 5px;
+  }
   button {
     padding: 2px 15px;
-    max-width: 70px;
+    max-width: 100px;
     font-size: 0.8em;
+    display: flex;
+    gap: 5px;
+    align-items: center;
   }
 }
 
@@ -490,7 +497,7 @@ $background-1: #27274d;
         grid-template-columns: 1fr 1fr 1fr 1fr;
         grid-template-rows: 1fr;
         gap: 0px 0px;
-        grid-template-areas: "Mon Tue Wed Thu" "Fri Sat Sun Count";
+        grid-template-areas: "Mon Tue Wed Thu" "Fri Sat Sun LastSpace";
         border-radius: 8px;
         //NowDaily
         -webkit-border-radius: 8px;
@@ -526,8 +533,8 @@ $background-1: #27274d;
     .Sun {
       grid-area: Sun;
     }
-    .Count {
-      grid-area: Count;
+    .LastSpace {
+      grid-area: LastSpace;
     }
   }
 

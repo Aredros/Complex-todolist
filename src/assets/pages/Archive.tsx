@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { WeeklyDivider } from "./WeeklyDivider";
+import { WeeklyDivider } from "../components/WeeklyDivider";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalendarDays, faList } from "@fortawesome/free-solid-svg-icons";
-import Navigation from "./Navigation";
+import Navigation from "../components/Navigation";
 
 //Define all Style of every individual color of the app
 interface IColors {

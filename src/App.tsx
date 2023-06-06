@@ -3,13 +3,13 @@ import "./Login.scss";
 import "./Editpage.scss";
 import { deleteTodoFunction } from "./assets/functions/functions";
 import { useState, useEffect } from "react";
-import { TodoWrapper } from "./assets/components/TodoWrapper";
-import { Auth } from "./assets/components/auth";
+import { TodoWrapper } from "./assets/pages/TodoWrapper";
+import { Auth } from "./assets/pages/auth";
 import { auth } from "./config/firebase";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import StylesEdit from "./assets/components/StylesEdit";
-import { Archive } from "./assets/components/Archive";
+import StylesEdit from "./assets/pages/StylesEdit";
+import { Archive } from "./assets/pages/Archive";
 
 // Interface for the done TODOS gotten from TodoWrapper
 interface IDoneTodo {

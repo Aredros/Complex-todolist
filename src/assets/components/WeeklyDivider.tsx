@@ -4,7 +4,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faChevronCircleUp,
   faChevronCircleDown,
+  faBoxArchive,
+  faEdit,
 } from "@fortawesome/free-solid-svg-icons";
+import { WeekSuccessPercentage } from "./WeekSuccessPercentage";
 
 //Define all Style of every individual color of the app
 interface IColors {
@@ -86,30 +89,8 @@ export const WeeklyDivider = (props: WeeklyDividerProps) => {
     archiveMultipleTodos,
     finishEditTask,
   } = props;
-  const [weekObjective, setWeekObjective] = useState("");
-  const [editingWeekObjective, setEditingWeekObjective] = useState(false);
-  //state for making the week element collapse when clicking on a button
-  const [weekCollapsed, setWeekCollapsed] = useState(false);
 
-  //Get the week objective from local storage
-  useEffect(() => {
-    const weekObjective = localStorage.getItem(`${week}-weekObjective`);
-    if (weekObjective) {
-      setWeekObjective(weekObjective);
-    }
-  }, []);
-
-  //Save the week objective to local storage
-  React.useEffect(() => {
-    localStorage.setItem(`${week}-weekObjective`, weekObjective);
-  }, [weekObjective]);
-
-  const handleWeekObjective = (e: React.FormEvent) => {
-    e.preventDefault();
-    setWeekObjective(weekObjective);
-    localStorage.setItem(`${week}-weekObjective`, weekObjective);
-    setEditingWeekObjective(false);
-  };
+  const [weekCollapsed, setWeekCollapsed] = useState(false); //state for making the week element collapse when clicking on a button
 
   // Get an array of unique dates that the tasks belong to in this week
   const dates = [...new Set(todos.map((todo) => todo.date))];
@@ -132,100 +113,46 @@ export const WeeklyDivider = (props: WeeklyDividerProps) => {
   const weekNotComplete = parseInt(weekPercentage) - 100;
 
   //handle the click to send ALL items to the archive
-  const handleArchiveClick = (todos: ITodo[]) => {
-    (archiveMultipleTodos as (ids: string[]) => void)(
-      todos.map((todo) => todo.id)
-    );
+  const handleArchiveClick = (todosToArchive: ITodo[] | undefined = todos) => {
+    if (Array.isArray(todosToArchive)) {
+      (archiveMultipleTodos as (ids: string[]) => void)(
+        todosToArchive.map((todo) => todo.id)
+      );
+    }
+  };
+
+  //Change the Collapsed state
+  const handleCollapseClick = () => {
+    setWeekCollapsed(!weekCollapsed);
   };
 
   return (
     <div
-      className={`Weekly-divider ${!weekList && "Weekly-divider-list"}`}
+      className={`Weekly-divider ${
+        weekList === true ? "vertical-divider-list" : "Weekly-divider-list"
+      }`}
       style={{
         backgroundColor: allColors.weeklyCardBG,
         border: "1px solid " + allColors.weeklyBorder,
       }}
     >
-      <div className="Weekly-divider__Header">
-        <div
-          className={`Weekly-divider__Header__Titles ${
-            weekPercentage === "100" &&
-            "Weekly-divider__Header__Titles-complete"
-          }`}
-          style={{
-            background: `repeating-linear-gradient(to right, #2cd477 0%, #2cd477 ${weekPercentage}%, ${allColors.weeklyCardBG} ${weekNotComplete}%, ${allColors.weeklyCardBG} 100%)`,
-            transition: "background 0.5s ease-in-out",
-          }}
-        >
-          <h3 style={{ color: allColors.weeklyCardTxt }}>Week plan</h3>
-          <p style={{ color: allColors.weeklyCardTxt }}>
-            Week is {weekPercentage}% completed
-          </p>
-        </div>
-        <div
-          className={`Weekly-divider__Header__EditableContent ${
-            weekPercentage === "100" &&
-            "Weekly-divider__Header__EditableContent-complete"
-          }`}
-          style={{
-            borderTop: "1px solid " + allColors.weeklyBorder,
-          }}
-        >
-          {editingWeekObjective ? (
-            <>
-              {" "}
-              <textarea
-                className="Weekly-divider__Header__EditableContent__Editinginput"
-                value={weekObjective}
-                onChange={(e) => setWeekObjective(e.target.value)}
-              ></textarea>
-              <button
-                onClick={handleWeekObjective}
-                style={{
-                  backgroundColor: allColors.buttonIcons,
-                  color: allColors.buttonText,
-                }}
-              >
-                edit
-              </button>
-            </>
-          ) : (
-            <>
-              {" "}
-              <p
-                className="Weekly-divider__Header__EditableContent__paragraph"
-                style={{ color: allColors.weeklyCardTxt }}
-              >
-                {weekObjective ? weekObjective : "Write your week objective"}
-              </p>
-              <div className="editOrCollapse">
-                <button
-                  onClick={() => setEditingWeekObjective(true)}
-                  style={{
-                    backgroundColor: allColors.buttonIcons,
-                    color: allColors.buttonText,
-                  }}
-                >
-                  edit
-                </button>
-                <FontAwesomeIcon
-                  icon={weekCollapsed ? faChevronCircleDown : faChevronCircleUp}
-                  onClick={() => setWeekCollapsed(!weekCollapsed)}
-                  style={{
-                    color: allColors.buttonIcons,
-                  }}
-                />
-              </div>
-            </>
-          )}
-        </div>
-      </div>
+      <WeekSuccessPercentage
+        parentElement={parentElement}
+        week={week}
+        weekPercentage={weekPercentage}
+        allColors={allColors}
+        handleArchiveClick={handleArchiveClick}
+        weekCollapsed={weekCollapsed}
+        handleCollapseClick={handleCollapseClick}
+        weekNotComplete={weekNotComplete}
+        todos={todos}
+      />
       <div
         style={{
           maxHeight: weekCollapsed ? 0 : "2000px",
           transition: "max-height 0.7s",
         }}
-        className="Weekly-divider__Content"
+        className={`Weekly-divider__Content content_week_of_${parentElement}`}
       >
         {dates.map((date) => (
           <DailyDivider
@@ -240,9 +167,6 @@ export const WeeklyDivider = (props: WeeklyDividerProps) => {
             todos={todos.filter((todo) => todo.date === date)}
           />
         ))}
-        {parentElement === "TodoWrapper" && (
-          <button onClick={() => handleArchiveClick(todos)}>Archive</button>
-        )}
       </div>
     </div>
   );

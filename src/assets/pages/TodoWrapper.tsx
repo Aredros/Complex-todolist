@@ -6,11 +6,11 @@ import {
   finishEditFunction,
   archiveTaskFunction,
 } from "../functions/functions";
-import { TodoForm } from "./TodoForm";
-import { WeeklyDivider } from "./WeeklyDivider";
-import { TypeForm } from "./TypeForm";
+import { TodoForm } from "../components/TodoForm";
+import { WeeklyDivider } from "../components/WeeklyDivider";
+import { TypeForm } from "../components/TypeForm";
 import { v4 as uuidv4 } from "uuid";
-import { TypeItem } from "./TypeItem";
+import { TypeItem } from "../components/TypeItem";
 import { auth, db } from "../../config/firebase";
 import { signOut } from "firebase/auth";
 import {
@@ -23,8 +23,8 @@ import {
 } from "firebase/firestore";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalendarDays, faList } from "@fortawesome/free-solid-svg-icons";
-import Navigation from "./Navigation";
-import DbAndLogOut from "./DbAndLogOut";
+import Navigation from "../components/Navigation";
+import DbAndLogOut from "../components/DbAndLogOut";
 
 //Define all Style of every individual color of the app
 interface IColors {

@@ -36,10 +36,15 @@ export const FilterTodoItem = ({
 }: TodoFormProps) => {
   const [markedOneItem, setMarkedOneItem] = useState("");
 
-  //function to add a TODO to the array of todos
+  // function to handle filtering of items
   const handleButtonClick = (filteredItem: string) => {
-    filterOneItem(filteredItem);
-    setMarkedOneItem("");
+    if (filteredItem === "") {
+      // If "Show all" option is selected, pass an empty string to indicate showing all items
+      filterOneItem("");
+    } else {
+      filterOneItem(filteredItem);
+    }
+    setMarkedOneItem(filteredItem);
   };
 
   return (

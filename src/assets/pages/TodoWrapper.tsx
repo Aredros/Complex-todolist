@@ -25,6 +25,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalendarDays, faList } from "@fortawesome/free-solid-svg-icons";
 import Navigation from "../components/Navigation";
 import DbAndLogOut from "../components/DbAndLogOut";
+import { FilterTodoItem } from "../components/FilterTodoItem";
 
 //Define all Style of every individual color of the app
 interface IColors {
@@ -71,6 +72,7 @@ export const TodoWrapper = (props: Iprops) => {
   const [types, setTypes] = useState<IType[]>([]); // Array of type objects
   const [weekList, setWeekList] = useState(true); //state for choosing between weekly or daily list
   const [isLoggedIn, setIsLoggedIn] = useState(false); //check if the user is logged in or not
+  const [filteredType, setFilteredType] = useState<string | null>(null);
 
   //Fetch the previous todos from LocalStorage
   useEffect(() => {
@@ -316,6 +318,11 @@ export const TodoWrapper = (props: Iprops) => {
     return `${date.getFullYear()}-W${weekNo.toString().padStart(2, "0")}`;
   }
 
+  // Function to filter todos by type
+  function filterOneItem(type: string) {
+    setFilteredType(type);
+  }
+
   return (
     <div
       className={`TodoWrapper ${!weekList && "TodoWrapper--weekly"}`}
@@ -356,6 +363,13 @@ export const TodoWrapper = (props: Iprops) => {
         </div>
       </div>
       <TodoForm allColors={allColors} addTodo={addNewTodo} types={types} />
+      {isLoggedIn && (
+        <FilterTodoItem
+          types={types}
+          filterOneItem={filterOneItem}
+          allColors={allColors}
+        />
+      )}
       {weeks.map(
         (week) =>
           todos.some(
@@ -375,7 +389,9 @@ export const TodoWrapper = (props: Iprops) => {
               getDoneTodoList={getDoneTodoList}
               archiveMultipleTodos={archiveMultipleTodos}
               todos={todos.filter(
-                (todo) => getWeek(todo.date) === week && !todo.archived
+                (todo) =>
+                  getWeek(todo.date) === week &&
+                  (!filteredType || todo.nType === filteredType)
               )}
             />
           )

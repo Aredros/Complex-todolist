@@ -1,22 +1,6 @@
-import React, { useState } from "react";
-
-//Define all Style of every individual color of the app
-interface IColors {
-  outerBackgroundColor: string;
-  innerBackgroundColor: string;
-  titleTextColor: string;
-  weeklyCardBG: string;
-  weeklyCardTxt: string;
-  buttonIcons: string;
-  buttonText: string;
-  formBackgroundColor: string;
-}
-
-interface IType {
-  typeName: string;
-  color: string;
-  id: string;
-}
+import React, { useState, useContext } from "react";
+import { AppContext } from "../../App";
+import { TypesContext } from "../pages/TodoWrapper";
 
 interface EditTodoFormProps {
   editTask?: (
@@ -26,7 +10,6 @@ interface EditTodoFormProps {
     taskorreminder: string,
     id: string
   ) => void;
-  allColors: IColors;
   task: {
     task: string;
     nType: string;
@@ -36,16 +19,18 @@ interface EditTodoFormProps {
     completed: boolean;
     isEditing: boolean;
   };
-  types: IType[];
 }
 
 export const EditTodoForm = (props: EditTodoFormProps) => {
-  const { editTask, task, types, allColors } = props;
+  const { editTask, task } = props;
 
   const [value, setValue] = useState(task.task);
   const [type, setType] = useState(task.nType);
   const [date, setDate] = useState(task.date);
   const [taskorreminder, setTaskorreminder] = useState(task.taskorreminder);
+
+  const { allColors } = useContext(AppContext) || {}; // Destructure allColors from the context
+  const { types } = useContext(TypesContext) || {}; // Destructure types from the context
 
   //this function is called when the user types in the input field
   const handleSubmit = (e: React.FormEvent) => {
@@ -58,7 +43,7 @@ export const EditTodoForm = (props: EditTodoFormProps) => {
     <form
       className="EditTodoForm"
       onSubmit={handleSubmit}
-      style={{ background: allColors.formBackgroundColor }}
+      style={{ background: allColors?.formBackgroundColor }}
     >
       <div className="TodoForm__TaskReminder">
         <input
@@ -67,14 +52,14 @@ export const EditTodoForm = (props: EditTodoFormProps) => {
           onChange={() => setTaskorreminder("task")}
           checked={taskorreminder === "task"}
         />{" "}
-        <label style={{ color: allColors.titleTextColor }}>Task </label>
+        <label style={{ color: allColors?.titleTextColor }}>Task </label>
         <input
           type="radio"
           name="task-reminder"
           onChange={() => setTaskorreminder("reminder")}
           checked={taskorreminder === "reminder"}
         />
-        <label style={{ color: allColors.titleTextColor }}>Reminder</label>
+        <label style={{ color: allColors?.titleTextColor }}>Reminder</label>
       </div>
       <div className="EditTodoForm__Task">
         <input
@@ -88,8 +73,8 @@ export const EditTodoForm = (props: EditTodoFormProps) => {
           type="submit"
           className="add-btn"
           style={{
-            backgroundColor: allColors.buttonIcons,
-            color: allColors.buttonText,
+            backgroundColor: allColors?.buttonIcons,
+            color: allColors?.buttonText,
           }}
         >
           Update
@@ -103,7 +88,7 @@ export const EditTodoForm = (props: EditTodoFormProps) => {
             value={type}
             onChange={(e) => setType(e.target.value)}
           >
-            {types.map((type) => (
+            {types?.map((type) => (
               <option key={type.id} value={type.typeName}>
                 {type.typeName}
               </option>

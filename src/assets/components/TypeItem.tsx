@@ -1,44 +1,28 @@
-import React from "react";
+import React, { useContext } from "react";
+import { AppContext } from "../../App";
+import { TypesContext } from "../pages/TodoWrapper";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash, faEdit } from "@fortawesome/free-solid-svg-icons";
 
-//Define all Style of every individual color of the app
-interface IColors {
-  outerBackgroundColor: string;
-  innerBackgroundColor: string;
-  titleTextColor: string;
-  weeklyCardBG: string;
-  weeklyCardTxt: string;
-  buttonIcons: string;
-  itemBackgroundColor: string;
-  itemText: string;
-  reminderBackgroundColor: string;
-}
-
-interface IType {
-  id: string;
-  typeName: string;
-  color: string;
-}
-
 interface TypeItemProps {
-  types: IType[]; // update the types prop to an array of IType objects
   deleteType: (type: string, id: string) => void;
-  allColors: IColors;
 }
 
 export const TypeItem = (props: TypeItemProps) => {
-  const { types, deleteType, allColors } = props;
+  const { deleteType } = props;
+
+  const { allColors } = useContext(AppContext) || {}; // Destructure allColors from the context
+  const { types } = useContext(TypesContext) || { types: null }; // Destructure allColors from the context
 
   return (
     <>
-      {types.map((type) => (
+      {types?.map((type) => (
         <div
           className={`TodoItem`}
           key={`typeItem-${type.id}`}
           style={{
-            backgroundColor: allColors.itemBackgroundColor,
-            color: allColors.itemText,
+            backgroundColor: allColors?.itemBackgroundColor,
+            color: allColors?.itemText,
           }}
         >
           <div
@@ -55,7 +39,7 @@ export const TypeItem = (props: TypeItemProps) => {
               key={type.id}
               icon={faTrash}
               onClick={() => deleteType(type.typeName, type.id)}
-              style={{ color: allColors.buttonIcons }}
+              style={{ color: allColors?.buttonIcons }}
             />
           </div>
         </div>

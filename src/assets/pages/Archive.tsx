@@ -1,24 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext, createContext } from "react";
+import { AppContext } from "../../App";
 import { WeeklyDivider } from "../components/WeeklyDivider";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalendarDays, faList } from "@fortawesome/free-solid-svg-icons";
 import Navigation from "../components/Navigation";
-
-//Define all Style of every individual color of the app
-interface IColors {
-  outerBackgroundColor: string;
-  innerBackgroundColor: string;
-  titleTextColor: string;
-  weeklyCardBG: string;
-  weeklyBorder: string;
-  weeklyCardTxt: string;
-  buttonIcons: string;
-  buttonText: string;
-  formBackgroundColor: string;
-  itemBackgroundColor: string;
-  itemText: string;
-  reminderBackgroundColor: string;
-}
 
 // Define interface for Todo object
 interface ITodo {
@@ -39,17 +24,26 @@ interface IType {
   color: string;
 }
 
+interface ITypesContextValue {
+  types: IType[] | null;
+}
+
 //passing the props
 interface Iprops {
-  allColors: IColors;
   doneTodoList: ITodo[];
   deleteDONETodoTask: (id: string) => void;
 }
 
+export const TypesContext = React.createContext<ITypesContextValue>({
+  types: null,
+});
+
 export const Archive = (props: Iprops) => {
-  const { allColors, doneTodoList, deleteDONETodoTask } = props; //props being brought by parent component
+  const { doneTodoList, deleteDONETodoTask } = props; //props being brought by parent component
   const [types, setTypes] = useState<IType[]>([]); // Specify type as IType[]
   const [weekList, setWeekList] = useState(true); //state for choosing between weekly or daily list
+
+  const { allColors } = useContext(AppContext) || {}; // Destructure allColors from the context
 
   /****************************************************************** */
   /***************FUNCTIONS FOR DATES AND CHRONOLOGICALLY ARRANGEMENT */
@@ -77,59 +71,59 @@ export const Archive = (props: Iprops) => {
   }
 
   return (
-    <div
-      className={`TodoWrapper ${!weekList && "TodoWrapper--weekly"}`}
-      style={{ backgroundColor: allColors.innerBackgroundColor }}
-    >
-      <Navigation allColors={allColors} />
-      <p style={{ color: allColors.titleTextColor }}>
-        Only working with LocalStorage for the time being
-      </p>
-      <h1 style={{ color: allColors.titleTextColor }}>Archive</h1>
-      <div className="changeWeekList">
-        <p
-          className="changeWeekList__title"
-          style={{ color: allColors.titleTextColor }}
-        >
-          Display type
+    <TypesContext.Provider value={{ types }}>
+      <div
+        className={`TodoWrapper ${!weekList && "TodoWrapper--weekly"}`}
+        style={{ backgroundColor: allColors?.innerBackgroundColor }}
+      >
+        <Navigation />
+        <p style={{ color: allColors?.titleTextColor }}>
+          Only working with LocalStorage for the time being
         </p>
-        <div className="changeWeekList__buttons">
-          <div
-            className="changeWeekList__buttons__button"
-            style={{ backgroundColor: allColors.buttonIcons }}
-            onClick={() => setWeekList(true)}
+        <h1 style={{ color: allColors?.titleTextColor }}>Archive</h1>
+        <div className="changeWeekList">
+          <p
+            className="changeWeekList__title"
+            style={{ color: allColors?.titleTextColor }}
           >
-            <FontAwesomeIcon
-              icon={faList}
-              style={{ color: allColors.buttonText }}
-            />
-            <span style={{ color: allColors.buttonText }}> List</span>
-          </div>
-          <div
-            className="changeWeekList__buttons__button"
-            style={{ backgroundColor: allColors.buttonIcons }}
-            onClick={() => setWeekList(false)}
-          >
-            <FontAwesomeIcon
-              icon={faCalendarDays}
-              style={{ color: allColors.buttonText }}
-            />
-            <span style={{ color: allColors.buttonText }}> Calendar</span>
+            Display type
+          </p>
+          <div className="changeWeekList__buttons">
+            <div
+              className="changeWeekList__buttons__button"
+              style={{ backgroundColor: allColors?.buttonIcons }}
+              onClick={() => setWeekList(true)}
+            >
+              <FontAwesomeIcon
+                icon={faList}
+                style={{ color: allColors?.buttonText }}
+              />
+              <span style={{ color: allColors?.buttonText }}> List</span>
+            </div>
+            <div
+              className="changeWeekList__buttons__button"
+              style={{ backgroundColor: allColors?.buttonIcons }}
+              onClick={() => setWeekList(false)}
+            >
+              <FontAwesomeIcon
+                icon={faCalendarDays}
+                style={{ color: allColors?.buttonText }}
+              />
+              <span style={{ color: allColors?.buttonText }}> Calendar</span>
+            </div>
           </div>
         </div>
+        {weeks.map((week) => (
+          <WeeklyDivider
+            key={week}
+            parentElement={"Archive"}
+            weekList={weekList}
+            week={week}
+            deleteTodoTask={deleteDONETodoTask}
+            todos={doneTodoList.filter((todo) => getWeek(todo.date) === week)}
+          />
+        ))}
       </div>
-      {weeks.map((week) => (
-        <WeeklyDivider
-          key={week}
-          parentElement={"Archive"}
-          weekList={weekList}
-          allColors={allColors}
-          types={types}
-          week={week}
-          deleteTodoTask={deleteDONETodoTask}
-          todos={doneTodoList.filter((todo) => getWeek(todo.date) === week)}
-        />
-      ))}
-    </div>
+    </TypesContext.Provider>
   );
 };

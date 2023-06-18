@@ -1,36 +1,18 @@
-import React from "react";
-
-//Define all Style of every individual color of the app
-interface IColors {
-  outerBackgroundColor: string;
-  innerBackgroundColor: string;
-  titleTextColor: string;
-  weeklyCardBG: string;
-  weeklyCardTxt: string;
-  buttonIcons: string;
-  buttonText: string;
-  formBackgroundColor: string;
-  itemBackgroundColor: string;
-  itemText: string;
-  reminderBackgroundColor: string;
-}
+import React, { useContext } from "react";
+import { AppContext } from "../../App";
 
 interface ITDBandLog {
   isLoggedIn: Boolean;
-  allColors: IColors;
   sendDataToFirestore: () => void;
   logItOut: () => void;
   getTodosFromDatabase: () => void;
 }
 
 function DbAndLogOut(props: ITDBandLog) {
-  const {
-    isLoggedIn,
-    allColors,
-    logItOut,
-    sendDataToFirestore,
-    getTodosFromDatabase,
-  } = props;
+  const { isLoggedIn, logItOut, sendDataToFirestore, getTodosFromDatabase } =
+    props;
+
+  const { allColors } = useContext(AppContext) || {}; // Destructure allColors from the context
   return (
     <div className="bottom-buttons">
       {isLoggedIn && (
@@ -38,8 +20,8 @@ function DbAndLogOut(props: ITDBandLog) {
           <button
             onClick={sendDataToFirestore}
             style={{
-              backgroundColor: allColors.buttonIcons,
-              color: allColors.buttonText,
+              backgroundColor: allColors?.buttonIcons,
+              color: allColors?.buttonText,
             }}
           >
             Send to Database
@@ -48,8 +30,8 @@ function DbAndLogOut(props: ITDBandLog) {
           <button
             onClick={getTodosFromDatabase}
             style={{
-              backgroundColor: allColors.buttonIcons,
-              color: allColors.buttonText,
+              backgroundColor: allColors?.buttonIcons,
+              color: allColors?.buttonText,
             }}
           >
             Get Todos from Database
@@ -59,8 +41,8 @@ function DbAndLogOut(props: ITDBandLog) {
       <button
         onClick={logItOut}
         style={{
-          backgroundColor: allColors.buttonIcons,
-          color: allColors.buttonText,
+          backgroundColor: allColors?.buttonIcons,
+          color: allColors?.buttonText,
         }}
       >
         LogOut

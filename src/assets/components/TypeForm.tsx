@@ -1,29 +1,42 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { AppContext } from "../../App";
+import { TypesContext } from "../pages/TodoWrapper";
+import { v4 as uuidv4 } from "uuid";
 
-//Define all Style of every individual color of the app
-interface IColors {
-  outerBackgroundColor: string;
-  innerBackgroundColor: string;
-  titleTextColor: string;
-  weeklyCardBG: string;
-  weeklyBorder: string;
-  weeklyCardTxt: string;
-  buttonIcons: string;
-  buttonText: string;
-  formBackgroundColor: string;
-  itemBackgroundColor: string;
-  itemText: string;
-  reminderBackgroundColor: string;
+interface IType {
+  id: string; // Add ID field to IType interface
+  typeName: string;
+  color: string;
 }
 
-interface TypeFormProps {
-  addType: (type: string, color: string) => void;
-  allColors: IColors;
-}
-
-export const TypeForm = ({ addType, allColors }: TypeFormProps) => {
+export const TypeForm = () => {
   const [typeValue, setTypeValue] = useState("");
   const [colorValue, setColorValue] = useState("#ABABAB");
+
+  const { allColors } = useContext(AppContext) || {};
+  const { types, setTypes } = useContext(TypesContext) || {};
+
+  //function to create a new Type
+  const addType = (typeName: string, color: string) => {
+    if (types === null) {
+      // Handle the case where types is null (optional)
+      console.log("Types array is null");
+      return;
+    }
+    //check if the type already exists
+    if (!types?.some((t) => t.typeName === typeName)) {
+      const newType: IType = {
+        id: uuidv4(), // Assign a unique ID to the new type
+        typeName: typeName,
+        color: color,
+      };
+      const newTypes = [...types, newType];
+      //add the new type to the types array
+      setTypes(newTypes);
+      //save the new types array to local storage
+      localStorage.setItem("typesLocal", JSON.stringify(newTypes));
+    }
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -37,7 +50,7 @@ export const TypeForm = ({ addType, allColors }: TypeFormProps) => {
     <form
       className="TypeForm"
       onSubmit={handleSubmit}
-      style={{ background: allColors.formBackgroundColor }}
+      style={{ background: allColors?.formBackgroundColor }}
     >
       <div className="TypeForm__Task type-form-organizer">
         <input
@@ -57,8 +70,8 @@ export const TypeForm = ({ addType, allColors }: TypeFormProps) => {
           type="submit"
           className="add-btn"
           style={{
-            backgroundColor: allColors.buttonIcons,
-            color: allColors.buttonText,
+            backgroundColor: allColors?.buttonIcons,
+            color: allColors?.buttonText,
           }}
         >
           Add Type

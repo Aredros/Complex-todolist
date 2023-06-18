@@ -1,23 +1,10 @@
-import React from "react";
+import React, { useContext } from "react";
+import { AppContext } from "../../App";
+import { TypesContext } from "../pages/TodoWrapper";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash, faEdit } from "@fortawesome/free-solid-svg-icons";
 
-//Define all Style of every individual color of the app
-interface IColors {
-  outerBackgroundColor: string;
-  innerBackgroundColor: string;
-  titleTextColor: string;
-  weeklyCardBG: string;
-  weeklyCardTxt: string;
-  buttonIcons: string;
-  itemBackgroundColor: string;
-  itemText: string;
-  reminderBackgroundColor: string;
-}
-
 interface TodoItemProps {
-  types: { typeName: string; color: string }[];
-  allColors: IColors;
   todo: {
     id: string;
     task: string;
@@ -34,21 +21,17 @@ interface TodoItemProps {
 }
 
 export const TodoItem = (props: TodoItemProps) => {
-  const {
-    types,
-    todo,
-    deleteTodoTask,
-    toggleCompleteTask,
-    editTodoTask,
-    allColors,
-  } = props;
+  const { todo, deleteTodoTask, toggleCompleteTask, editTodoTask } = props;
+
+  const { allColors } = useContext(AppContext) || {}; // Destructure allColors from the context
+  const { types } = useContext(TypesContext) || {}; // Destructure types from the context
 
   //get the type color
-  const typecolor = types.find((type) => type.typeName === todo.nType)?.color;
+  const typecolor = types?.find((type) => type.typeName === todo.nType)?.color;
 
   const handleToggleClick = () => {
-    //handle the click to send ALL items to the archive
-    toggleCompleteTask?.(todo.id);
+    //handle the mark task as completed
+    todo.taskorreminder === "task" ? toggleCompleteTask?.(todo.id) : null;
   };
 
   const handleEditClick = () => {
@@ -61,11 +44,11 @@ export const TodoItem = (props: TodoItemProps) => {
         todo.taskorreminder
       }`}
       style={{
-        color: allColors.itemText,
+        color: allColors?.itemText,
         backgroundColor:
           todo.taskorreminder === "reminder"
-            ? allColors.reminderBackgroundColor
-            : allColors.itemBackgroundColor,
+            ? allColors?.reminderBackgroundColor
+            : allColors?.itemBackgroundColor,
       }}
     >
       <div
@@ -91,12 +74,12 @@ export const TodoItem = (props: TodoItemProps) => {
         <FontAwesomeIcon
           icon={faEdit}
           onClick={handleEditClick}
-          style={{ color: allColors.buttonIcons }}
+          style={{ color: allColors?.buttonIcons }}
         />
         <FontAwesomeIcon
           icon={faTrash}
           onClick={() => deleteTodoTask(todo.id)}
-          style={{ color: allColors.buttonIcons }}
+          style={{ color: allColors?.buttonIcons }}
         />
       </div>
     </li>

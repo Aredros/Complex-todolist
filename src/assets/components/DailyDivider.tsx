@@ -1,31 +1,8 @@
-import React from "react";
 import { TodoItem } from "./TodoItem";
 import { EditTodoForm } from "./EditTodoForm";
 
-//Define all Style of every individual color of the app
-interface IColors {
-  outerBackgroundColor: string;
-  innerBackgroundColor: string;
-  titleTextColor: string;
-  weeklyCardBG: string;
-  weeklyCardTxt: string;
-  buttonIcons: string;
-  buttonText: string;
-  formBackgroundColor: string;
-  itemBackgroundColor: string;
-  itemText: string;
-  reminderBackgroundColor: string;
-}
-
-interface IType {
-  typeName: string;
-  color: string;
-  id: string;
-}
 interface DailyDividerProps {
   date: string;
-  allColors: IColors;
-  types: IType[];
   todos: {
     id: string;
     task: string;
@@ -51,13 +28,11 @@ interface DailyDividerProps {
 export const DailyDivider = (props: DailyDividerProps) => {
   const {
     date,
-    types,
     todos,
     deleteTodoTask,
     toggleCompleteTask,
     editTodoTask,
     finishEditTask,
-    allColors,
   } = props;
 
   //Get the total tasks for the day
@@ -107,7 +82,9 @@ export const DailyDivider = (props: DailyDividerProps) => {
           }
         </h3>
         <p className="Daily-divider__Header__Title">
-          Day {dayPercentage}% completed
+          {isNaN(parseFloat(dayPercentage))
+            ? "No tasks today"
+            : `Day ${dayPercentage}% completed`}
         </p>
       </div>
 
@@ -117,16 +94,12 @@ export const DailyDivider = (props: DailyDividerProps) => {
             <EditTodoForm
               key={todo.task}
               task={todo}
-              allColors={allColors}
-              types={types}
               editTask={finishEditTask}
             />
           ) : (
             <TodoItem
               key={todo.task}
               todo={todo}
-              allColors={allColors}
-              types={types}
               editTodoTask={editTodoTask}
               toggleCompleteTask={toggleCompleteTask}
               deleteTodoTask={deleteTodoTask}

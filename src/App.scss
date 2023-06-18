@@ -248,6 +248,8 @@ $background-1: #27274d;
   &__container {
     max-width: 315px;
     margin-left: 15px;
+    flex-grow: 1;
+    text-align: left;
     p {
       width: 100%;
       word-wrap: break-word;
@@ -340,6 +342,7 @@ $background-1: #27274d;
         min-height: 40px;
         width: 100%;
         overflow-wrap: break-word;
+        white-space: pre-wrap;
       }
       &__paragraph {
         font-family: "Roboto", sans-serif;

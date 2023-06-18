@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext, createContext } from "react";
+import { AppContext } from "../../App";
 import {
   deleteTodoFunction,
   toggleCompleteFunction,
@@ -27,21 +28,6 @@ import Navigation from "../components/Navigation";
 import DbAndLogOut from "../components/DbAndLogOut";
 import { FilterTodoItem } from "../components/FilterTodoItem";
 
-//Define all Style of every individual color of the app
-interface IColors {
-  outerBackgroundColor: string;
-  innerBackgroundColor: string;
-  titleTextColor: string;
-  weeklyCardBG: string;
-  weeklyBorder: string;
-  weeklyCardTxt: string;
-  buttonIcons: string;
-  buttonText: string;
-  formBackgroundColor: string;
-  itemBackgroundColor: string;
-  itemText: string;
-  reminderBackgroundColor: string;
-}
 // Define interface for Todo object
 interface ITodo {
   id: string;
@@ -59,17 +45,31 @@ interface IType {
   typeName: string;
   color: string;
 }
+
+interface ITypesContextValue {
+  types: IType[] | null;
+  setTypes: (types: IType[]) => void;
+}
+
 //passing the props
 interface Iprops {
-  allColors: IColors;
   getDoneTodoList: (doneTodoList: ITodo[]) => void;
 }
 
+export const TypesContext = React.createContext<ITypesContextValue>({
+  types: null,
+  setTypes: () => {}, // Add a default empty function for setTypes
+});
+
 export const TodoWrapper = (props: Iprops) => {
-  const { allColors, getDoneTodoList } = props; //props being brought by parent component
+  const { getDoneTodoList } = props; //props being brought by parent component
+
+  const { allColors } = useContext(AppContext) || {}; //getting the colors from the context
   //
   const [todos, setTodos] = useState<ITodo[]>([]); // Array of todo objects
-  const [types, setTypes] = useState<IType[]>([]); // Array of type objects
+  const [types, setTypes] = useState<IType[]>([
+    { id: "1", typeName: "No-cat", color: "#f8f8f8" },
+  ]); // Array of type objects
   const [weekList, setWeekList] = useState(true); //state for choosing between weekly or daily list
   const [isLoggedIn, setIsLoggedIn] = useState(false); //check if the user is logged in or not
   const [filteredType, setFilteredType] = useState<string | null>(null);
@@ -182,23 +182,6 @@ export const TodoWrapper = (props: Iprops) => {
   };
   /****************************************************************** */
   /****************FUNCTIONS TO ALTER THE TYPES */
-
-  //function to create a new Type
-  const addType = (typeName: string, color: string) => {
-    //check if the type already exists
-    if (!types.some((t) => t.typeName === typeName)) {
-      const newType: IType = {
-        id: uuidv4(), // Assign a unique ID to the new type
-        typeName: typeName,
-        color: color,
-      };
-      const newTypes = [...types, newType];
-      //add the new type to the types array
-      setTypes(newTypes);
-      //save the new types array to local storage
-      localStorage.setItem("typesLocal", JSON.stringify(newTypes));
-    }
-  };
 
   //function to delete a Type
   const deleteType = (type: string, id: string) => {
@@ -324,87 +307,80 @@ export const TodoWrapper = (props: Iprops) => {
   }
 
   return (
-    <div
-      className={`TodoWrapper ${!weekList && "TodoWrapper--weekly"}`}
-      style={{ backgroundColor: allColors.innerBackgroundColor }}
-    >
-      <Navigation allColors={allColors} />
-      <h1 style={{ color: allColors.titleTextColor }}>Week Planner</h1>
-      <div className="changeWeekList">
-        <p
-          className="changeWeekList__title"
-          style={{ color: allColors.titleTextColor }}
-        >
-          Display type
-        </p>
-        <div className="changeWeekList__buttons">
-          <div
-            className="changeWeekList__buttons__button"
-            style={{ backgroundColor: allColors.buttonIcons }}
-            onClick={() => setWeekList(true)}
+    <TypesContext.Provider value={{ types, setTypes }}>
+      <div
+        className={`TodoWrapper ${!weekList && "TodoWrapper--weekly"}`}
+        style={{ backgroundColor: allColors?.innerBackgroundColor }}
+      >
+        <Navigation />
+        <h1 style={{ color: allColors?.titleTextColor }}>Week Planner</h1>
+        <div className="changeWeekList">
+          <p
+            className="changeWeekList__title"
+            style={{ color: allColors?.titleTextColor }}
           >
-            <FontAwesomeIcon
-              icon={faList}
-              style={{ color: allColors.buttonText }}
-            />
-            <span style={{ color: allColors.buttonText }}> List</span>
-          </div>
-          <div
-            className="changeWeekList__buttons__button"
-            style={{ backgroundColor: allColors.buttonIcons }}
-            onClick={() => setWeekList(false)}
-          >
-            <FontAwesomeIcon
-              icon={faCalendarDays}
-              style={{ color: allColors.buttonText }}
-            />
-            <span style={{ color: allColors.buttonText }}> Calendar</span>
+            Display type
+          </p>
+          <div className="changeWeekList__buttons">
+            <div
+              className="changeWeekList__buttons__button"
+              style={{ backgroundColor: allColors?.buttonIcons }}
+              onClick={() => setWeekList(true)}
+            >
+              <FontAwesomeIcon
+                icon={faList}
+                style={{ color: allColors?.buttonText }}
+              />
+              <span style={{ color: allColors?.buttonText }}> List</span>
+            </div>
+            <div
+              className="changeWeekList__buttons__button"
+              style={{ backgroundColor: allColors?.buttonIcons }}
+              onClick={() => setWeekList(false)}
+            >
+              <FontAwesomeIcon
+                icon={faCalendarDays}
+                style={{ color: allColors?.buttonText }}
+              />
+              <span style={{ color: allColors?.buttonText }}> Calendar</span>
+            </div>
           </div>
         </div>
-      </div>
-      <TodoForm allColors={allColors} addTodo={addNewTodo} types={types} />
-      {isLoggedIn && (
-        <FilterTodoItem
-          types={types}
-          filterOneItem={filterOneItem}
-          allColors={allColors}
+        <TodoForm addTodo={addNewTodo} />
+        {isLoggedIn && <FilterTodoItem filterOneItem={filterOneItem} />}
+        {weeks.map(
+          (week) =>
+            todos.some(
+              (todo) => !todo.archived && getWeek(todo.date) === week
+            ) && (
+              <WeeklyDivider
+                key={week}
+                parentElement={"TodoWrapper"}
+                weekList={weekList}
+                week={week}
+                deleteTodoTask={deleteTodoTask}
+                toggleCompleteTask={toggleCompleteTask}
+                editTodoTask={editTodoTask}
+                finishEditTask={finishEditTask}
+                getDoneTodoList={getDoneTodoList}
+                archiveMultipleTodos={archiveMultipleTodos}
+                todos={todos.filter(
+                  (todo) =>
+                    getWeek(todo.date) === week &&
+                    (!filteredType || todo.nType === filteredType)
+                )}
+              />
+            )
+        )}
+        <TypeForm />
+        <TypeItem deleteType={deleteType} />
+        <DbAndLogOut
+          isLoggedIn={isLoggedIn}
+          logItOut={logItOut}
+          sendDataToFirestore={sendDataToFirestore}
+          getTodosFromDatabase={getTodosFromDatabase}
         />
-      )}
-      {weeks.map(
-        (week) =>
-          todos.some(
-            (todo) => !todo.archived && getWeek(todo.date) === week
-          ) && (
-            <WeeklyDivider
-              key={week}
-              parentElement={"TodoWrapper"}
-              weekList={weekList}
-              allColors={allColors}
-              types={types}
-              week={week}
-              deleteTodoTask={deleteTodoTask}
-              toggleCompleteTask={toggleCompleteTask}
-              editTodoTask={editTodoTask}
-              finishEditTask={finishEditTask}
-              getDoneTodoList={getDoneTodoList}
-              archiveMultipleTodos={archiveMultipleTodos}
-              todos={todos.filter(
-                (todo) =>
-                  getWeek(todo.date) === week &&
-                  (!filteredType || todo.nType === filteredType)
-              )}
-            />
-          )
-      )}
-      <TypeForm addType={addType} allColors={allColors} />
-      <TypeItem types={types} deleteType={deleteType} allColors={allColors} />
-      <DbAndLogOut
-        isLoggedIn={isLoggedIn}
-        logItOut={logItOut}
-        allColors={allColors}
-        sendDataToFirestore={sendDataToFirestore}
-        getTodosFromDatabase={getTodosFromDatabase}
-      />
-    </div>
+      </div>
+    </TypesContext.Provider>
   );
 };

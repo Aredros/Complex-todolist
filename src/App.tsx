@@ -2,7 +2,7 @@ import "./App.scss";
 import "./Login.scss";
 import "./Editpage.scss";
 import { deleteTodoFunction } from "./assets/functions/functions";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext, createContext } from "react";
 import { TodoWrapper } from "./assets/pages/TodoWrapper";
 import { Auth } from "./assets/pages/auth";
 import { auth } from "./config/firebase";
@@ -24,19 +24,30 @@ interface IDoneTodo {
   archived: boolean;
 }
 
-interface IColorFunctions {
-  change_outerBackgroundColor: (color: string) => void;
-  change_innerBackgroundColor: (color: string) => void;
-  change_titleTextColor: (color: string) => void;
-  change_weeklyCardBG: (color: string) => void;
-  change_weeklyCardTxt: (color: string) => void;
-  change_buttonIcons: (color: string) => void;
-  change_buttonText: (color: string) => void;
-  change_formBackgroundColor: (color: string) => void;
-  change_itemBackgroundColor: (color: string) => void;
-  change_itemText: (color: string) => void;
-  change_reminderBackgroundColor: (color: string) => void;
+interface IAppContext {
+  outerBackgroundColor: string;
+  innerBackgroundColor: string;
+  titleTextColor: string;
+  weeklyCardBG: string;
+  weeklyBorder: string;
+  weeklyCardTxt: string;
+  buttonIcons: string;
+  buttonText: string;
+  formBackgroundColor: string;
+  itemBackgroundColor: string;
+  itemText: string;
+  reminderBackgroundColor: string;
 }
+
+interface ITallColors {
+  allColors: IAppContext;
+  setAllColors: React.Dispatch<React.SetStateAction<IAppContext>>;
+}
+
+//crearting context that will pass the colors
+export const AppContext = React.createContext<ITallColors | undefined>(
+  undefined
+);
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -91,50 +102,6 @@ function App() {
     return () => unsubscribe();
   }, []);
 
-  //Function to save colors in localStorage
-  const ProcessColorSave = (colorName: string, color: string) => {
-    //Save in state
-    setAllColors((prevColors) => ({ ...prevColors, [colorName]: color }));
-    //Save in local Storage
-    localStorage.setItem(colorName, color);
-  };
-  //Function tos change all colors in the apps
-  const changeColor: IColorFunctions = {
-    change_outerBackgroundColor: (color) => {
-      ProcessColorSave("outerBackgroundColor", color);
-    },
-    change_innerBackgroundColor: (color) => {
-      ProcessColorSave("innerBackgroundColor", color);
-    },
-    change_titleTextColor: (color) => {
-      ProcessColorSave("titleTextColor", color);
-    },
-    change_weeklyCardBG: (color) => {
-      ProcessColorSave("weeklyCardBG", color);
-    },
-    change_weeklyCardTxt: (color) => {
-      ProcessColorSave("weeklyCardTxt", color);
-    },
-    change_buttonIcons: (color) => {
-      ProcessColorSave("buttonIcons", color);
-    },
-    change_buttonText: (color) => {
-      ProcessColorSave("buttonText", color);
-    },
-    change_formBackgroundColor: (color) => {
-      ProcessColorSave("formBackgroundColor", color);
-    },
-    change_itemBackgroundColor: (color) => {
-      ProcessColorSave("itemBackgroundColor", color);
-    },
-    change_itemText: (color) => {
-      ProcessColorSave("itemText", color);
-    },
-    change_reminderBackgroundColor: (color) => {
-      ProcessColorSave("reminderBackgroundColor", color);
-    },
-  };
-
   //function to get the TodosFrom the child component
   const getDoneTodoList = (doneItems: IDoneTodo[]) => {
     const filteredItems = doneItems.filter((item) => {
@@ -157,47 +124,37 @@ function App() {
   };
 
   return (
-    <div
-      className="App"
-      style={{ backgroundColor: allColors.outerBackgroundColor }}
+    <AppContext.Provider
+      value={{ allColors: allColors as IAppContext, setAllColors }}
     >
-      {isAuthenticated ? (
-        <BrowserRouter>
-          <Routes>
-            <Route
-              path="/Complex-todolist/"
-              element={
-                <TodoWrapper
-                  getDoneTodoList={getDoneTodoList}
-                  allColors={allColors}
-                />
-              }
-            />
-            <Route
-              path="/Complex-todolist/archive"
-              element={
-                <Archive
-                  doneTodoList={doneTodoList}
-                  allColors={allColors}
-                  deleteDONETodoTask={deleteDONETodoTask}
-                />
-              }
-            />
-            <Route
-              path="/Complex-todolist/styles"
-              element={
-                <StylesEdit
-                  allColors={allColors}
-                  allColorFunctions={changeColor}
-                />
-              }
-            />
-          </Routes>
-        </BrowserRouter>
-      ) : (
-        <Auth />
-      )}
-    </div>
+      <div
+        className="App"
+        style={{ backgroundColor: allColors.outerBackgroundColor }}
+      >
+        {isAuthenticated ? (
+          <BrowserRouter>
+            <Routes>
+              <Route
+                path="/Complex-todolist/"
+                element={<TodoWrapper getDoneTodoList={getDoneTodoList} />}
+              />
+              <Route
+                path="/Complex-todolist/archive"
+                element={
+                  <Archive
+                    doneTodoList={doneTodoList}
+                    deleteDONETodoTask={deleteDONETodoTask}
+                  />
+                }
+              />
+              <Route path="/Complex-todolist/styles" element={<StylesEdit />} />
+            </Routes>
+          </BrowserRouter>
+        ) : (
+          <Auth />
+        )}
+      </div>
+    </AppContext.Provider>
   );
 }
 

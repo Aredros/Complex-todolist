@@ -1,41 +1,29 @@
-import React from "react";
+import React, { useContext } from "react";
+import { AppContext } from "../../App";
 import { NavLink, Link } from "react-router-dom";
 
-//Define all Style of every individual color of the app
-interface IColors {
-  outerBackgroundColor: string;
-  innerBackgroundColor: string;
-  weeklyCardBG: string;
-  titleTextColor: string;
-}
-
-//combine all colors in an array
-interface IcolorArray {
-  allColors: IColors;
-}
-
-function Navigation(props: IcolorArray) {
-  const { allColors } = props;
+function Navigation() {
+  const { allColors } = useContext(AppContext) || {};
 
   return (
     <div className="navigation">
       <Link
         to="/Complex-todolist/"
-        style={{ backgroundColor: allColors.innerBackgroundColor }}
+        style={{ backgroundColor: allColors?.innerBackgroundColor }}
       >
-        <p style={{ color: allColors.titleTextColor }}>Home</p>
+        <p style={{ color: allColors?.titleTextColor }}>Home</p>
       </Link>
       <Link
         to="/Complex-todolist/archive"
-        style={{ backgroundColor: allColors.innerBackgroundColor }}
+        style={{ backgroundColor: allColors?.innerBackgroundColor }}
       >
-        <p style={{ color: allColors.titleTextColor }}>Archive</p>
+        <p style={{ color: allColors?.titleTextColor }}>Archive</p>
       </Link>
       <Link
         to="/Complex-todolist/styles"
-        style={{ backgroundColor: allColors.innerBackgroundColor }}
+        style={{ backgroundColor: allColors?.innerBackgroundColor }}
       >
-        <p style={{ color: allColors.titleTextColor }}>Styles</p>
+        <p style={{ color: allColors?.titleTextColor }}>Styles</p>
       </Link>
     </div>
   );

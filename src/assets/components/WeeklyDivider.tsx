@@ -1,35 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import { AppContext } from "../../App";
 import { DailyDivider } from "./DailyDivider";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faChevronCircleUp,
-  faChevronCircleDown,
-  faBoxArchive,
-  faEdit,
-} from "@fortawesome/free-solid-svg-icons";
 import { WeekSuccessPercentage } from "./WeekSuccessPercentage";
-
-//Define all Style of every individual color of the app
-interface IColors {
-  outerBackgroundColor: string;
-  innerBackgroundColor: string;
-  titleTextColor: string;
-  weeklyCardBG: string;
-  weeklyBorder: string;
-  weeklyCardTxt: string;
-  buttonIcons: string;
-  buttonText: string;
-  formBackgroundColor: string;
-  itemBackgroundColor: string;
-  itemText: string;
-  reminderBackgroundColor: string;
-}
-
-interface IType {
-  typeName: string;
-  color: string;
-  id: string;
-}
 
 // Define interface for Todo object
 interface ITodo {
@@ -47,9 +19,7 @@ interface ITodo {
 interface WeeklyDividerProps {
   parentElement: string;
   weekList: boolean;
-  allColors: IColors;
   week: string;
-  types: IType[];
   todos: {
     id: string;
     task: string;
@@ -79,9 +49,7 @@ export const WeeklyDivider = (props: WeeklyDividerProps) => {
   const {
     parentElement,
     week,
-    allColors,
     weekList,
-    types,
     todos,
     deleteTodoTask,
     toggleCompleteTask,
@@ -91,6 +59,8 @@ export const WeeklyDivider = (props: WeeklyDividerProps) => {
   } = props;
 
   const [weekCollapsed, setWeekCollapsed] = useState(false); //state for making the week element collapse when clicking on a button
+
+  const { allColors } = useContext(AppContext) || {}; // Destructure allColors from the context
 
   // Get an array of unique dates that the tasks belong to in this week
   const dates = [...new Set(todos.map((todo) => todo.date))];
@@ -132,20 +102,18 @@ export const WeeklyDivider = (props: WeeklyDividerProps) => {
         weekList === true ? "vertical-divider-list" : "Weekly-divider-list"
       }`}
       style={{
-        backgroundColor: allColors.weeklyCardBG,
-        border: "1px solid " + allColors.weeklyBorder,
+        backgroundColor: allColors?.weeklyCardBG,
+        border: "1px solid " + allColors?.weeklyBorder,
       }}
     >
       <WeekSuccessPercentage
         parentElement={parentElement}
         week={week}
         weekPercentage={weekPercentage}
-        allColors={allColors}
         handleArchiveClick={handleArchiveClick}
         weekCollapsed={weekCollapsed}
         handleCollapseClick={handleCollapseClick}
         weekNotComplete={weekNotComplete}
-        todos={todos}
       />
       <div
         style={{
@@ -158,8 +126,6 @@ export const WeeklyDivider = (props: WeeklyDividerProps) => {
           <DailyDivider
             key={date}
             date={date}
-            allColors={allColors}
-            types={types}
             editTodoTask={editTodoTask}
             toggleCompleteTask={toggleCompleteTask}
             deleteTodoTask={deleteTodoTask}

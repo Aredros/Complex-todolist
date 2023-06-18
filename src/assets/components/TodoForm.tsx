@@ -1,38 +1,24 @@
-import React, { useState } from "react";
-import { darken } from "polished";
-
-//Define all Style of every individual color of the app
-interface IColors {
-  outerBackgroundColor: string;
-  innerBackgroundColor: string;
-  titleTextColor: string;
-  weeklyCardBG: string;
-  weeklyBorder: string;
-  weeklyCardTxt: string;
-  buttonIcons: string;
-  buttonText: string;
-  formBackgroundColor: string;
-  itemBackgroundColor: string;
-  itemText: string;
-  reminderBackgroundColor: string;
-}
+import React, { useState, useContext } from "react";
+import { AppContext } from "../../App";
+import { TypesContext } from "../pages/TodoWrapper";
 
 interface TodoFormProps {
-  allColors: IColors;
   addTodo: (
     task: string,
     nType: string,
     date: string,
     taskorreminder: string
   ) => void;
-  types: { id: string; typeName: string; color: string }[];
 }
 
-export const TodoForm = ({ addTodo, types, allColors }: TodoFormProps) => {
+export const TodoForm = ({ addTodo }: TodoFormProps) => {
   const [value, setValue] = useState("");
   const [type, setType] = useState("");
   const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
   const [taskorreminder, setTaskorreminder] = useState("task");
+
+  const { allColors } = useContext(AppContext) || {}; // Destructure allColors from the context
+  const { types } = useContext(TypesContext) || { types: null }; // Destructure types from the context
 
   //function to add a TODO to the array of todos
   const handleSubmit = (e: React.FormEvent) => {
@@ -43,7 +29,7 @@ export const TodoForm = ({ addTodo, types, allColors }: TodoFormProps) => {
       setDate(new Date().toISOString().slice(0, 10));
     }
     //If no type is selected, set it to the first type in the array
-    if (!type) {
+    if (!type && types) {
       setType(types[0].typeName);
     }
     if (!value) return;
@@ -59,7 +45,7 @@ export const TodoForm = ({ addTodo, types, allColors }: TodoFormProps) => {
     <form
       className="TodoForm"
       onSubmit={handleSubmit}
-      style={{ background: allColors.formBackgroundColor }}
+      style={{ background: allColors?.formBackgroundColor }}
     >
       <div className="TodoForm__TaskReminder">
         <input
@@ -69,14 +55,14 @@ export const TodoForm = ({ addTodo, types, allColors }: TodoFormProps) => {
           onChange={() => setTaskorreminder("task")}
           checked={taskorreminder === "task"}
         />{" "}
-        <label style={{ color: allColors.titleTextColor }}>Task </label>
+        <label style={{ color: allColors?.titleTextColor }}>Task </label>
         <input
           type="radio"
           name="task-reminder"
           value="reminder"
           onChange={() => setTaskorreminder("reminder")}
         />
-        <label style={{ color: allColors.titleTextColor }}>Reminder</label>
+        <label style={{ color: allColors?.titleTextColor }}>Reminder</label>
       </div>
       <div className="TodoForm__Task">
         <input
@@ -90,8 +76,8 @@ export const TodoForm = ({ addTodo, types, allColors }: TodoFormProps) => {
           type="submit"
           className="add-btn"
           style={{
-            backgroundColor: allColors.buttonIcons,
-            color: allColors.buttonText,
+            backgroundColor: allColors?.buttonIcons,
+            color: allColors?.buttonText,
           }}
         >
           Add Task
@@ -106,10 +92,7 @@ export const TodoForm = ({ addTodo, types, allColors }: TodoFormProps) => {
             onChange={(e) => setType(e.target.value)}
             {...(taskorreminder === "reminder" && { disabled: true })}
           >
-            <option key="type-id-no-type" value="No-cat">
-              No-cat
-            </option>
-            {types.map((type) => (
+            {types?.map((type) => (
               <option key={`type-id ${type.id}`} value={type.typeName}>
                 {type.typeName}
               </option>

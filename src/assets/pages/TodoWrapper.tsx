@@ -2,7 +2,6 @@ import React, { useEffect, useState, useContext, createContext } from "react";
 import { AppContext } from "../../App";
 import {
   deleteTodoFunction,
-  toggleCompleteFunction,
   editTodoFunction,
   finishEditFunction,
   archiveTaskFunction,
@@ -10,7 +9,6 @@ import {
 import { TodoForm } from "../components/TodoForm";
 import { WeeklyDivider } from "../components/WeeklyDivider";
 import { TypeForm } from "../components/TypeForm";
-import { v4 as uuidv4 } from "uuid";
 import { TypeItem } from "../components/TypeItem";
 import { auth, db } from "../../config/firebase";
 import { signOut } from "firebase/auth";
@@ -49,6 +47,9 @@ interface IType {
 interface ITypesContextValue {
   types: IType[] | null;
   setTypes: (types: IType[]) => void;
+  todos: ITodo[] | null;
+  setTodos: (todos: ITodo[]) => void;
+  isLoggedIn: boolean;
 }
 
 //passing the props
@@ -57,8 +58,11 @@ interface Iprops {
 }
 
 export const TypesContext = React.createContext<ITypesContextValue>({
+  todos: null,
+  setTodos: () => {}, // Add a default empty function for setTodos
   types: null,
   setTypes: () => {}, // Add a default empty function for setTypes
+  isLoggedIn: false,
 });
 
 export const TodoWrapper = (props: Iprops) => {
@@ -78,10 +82,6 @@ export const TodoWrapper = (props: Iprops) => {
   useEffect(() => {
     //empty array and local storage
     //localStorage.clear();
-    const storedTodos = localStorage.getItem("todosLocal");
-    if (storedTodos) {
-      setTodos(JSON.parse(storedTodos));
-    }
     const storedTypes = localStorage.getItem("typesLocal");
     if (storedTypes) {
       setTypes(JSON.parse(storedTypes));
@@ -96,6 +96,66 @@ export const TodoWrapper = (props: Iprops) => {
     };
   }, []); //the empty array is to make sure the useEffect only runs once
 
+  useEffect(() => {
+    // Get todos from Firestore database
+    const getTodosFromDatabase = async () => {
+      try {
+        if (auth.currentUser) {
+          // Get the current user's email
+          const userEmail = auth.currentUser.email;
+
+          // Create a query to fetch todos where the user is the same as the current user
+          const q = query(
+            collection(db, "todos"),
+            where("user", "==", userEmail)
+          );
+
+          // Get the documents that match the query
+          const querySnapshot = await getDocs(q);
+
+          // Map the documents to an array of todos
+          const todosFromDatabase: ITodo[] = [];
+          const todoIds: Set<string> = new Set(); // Set to track unique todo IDs
+
+          querySnapshot.docs.forEach((doc) => {
+            const todo = doc.data() as ITodo; // Cast the document data to ITodo
+            if (!todoIds.has(todo.id)) {
+              // Check if the todo ID is already in the set
+              todosFromDatabase.push(todo);
+              todoIds.add(todo.id); // Add the todo ID to the set
+            }
+          });
+
+          // Update the todos state with the retrieved todos
+          setTodos(todosFromDatabase);
+
+          // Do something with the retrieved todos
+          console.log("Todos from database:", todosFromDatabase);
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    const storedTodos = localStorage.getItem("todosLocal");
+    if (isLoggedIn) {
+      // Fetch todos from Firebase
+      getTodosFromDatabase();
+    } else if (storedTodos) {
+      // Fetch todos from LocalStorage
+      setTodos(JSON.parse(storedTodos));
+    }
+
+    // Verifying if the user is Anon or not
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      setIsLoggedIn(user ? !user.isAnonymous : false);
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, [isLoggedIn]); // Run the effect whenever the isLoggedIn state changes
+
   //function to log out//
   const logItOut = async () => {
     try {
@@ -103,35 +163,6 @@ export const TodoWrapper = (props: Iprops) => {
     } catch (err) {
       console.log(err);
     }
-  };
-
-  //function to add a TODO
-  const addNewTodo = (
-    todo: string,
-    type: string,
-    date: string,
-    taskorreminder: string
-  ) => {
-    const newTodo = {
-      id: uuidv4(),
-      task: todo,
-      completed: false,
-      isEditing: false,
-      taskorreminder: taskorreminder,
-      nType: type,
-      user: auth.currentUser?.email || "", // Provide a default value here,
-      date: date,
-      archived: false,
-    };
-    setTodos([...todos, newTodo]);
-    //store the updated todos state in LocalStorage
-    localStorage.setItem("todosLocal", JSON.stringify([...todos, newTodo]));
-  };
-
-  //function to delete a TODO
-  const deleteTodoTask = (id: string) => {
-    const updatedTodos = deleteTodoFunction(id, todos, "todosLocal");
-    setTodos(updatedTodos);
   };
 
   //Function to change the Archived boolean status
@@ -149,37 +180,6 @@ export const TodoWrapper = (props: Iprops) => {
     setTodos(updatedTodosLocal);
   };
 
-  //function to change the completed status of a TODO
-  const toggleCompleteTask = (id: string) => {
-    const updatedTodos = toggleCompleteFunction(id, todos, "todosLocal");
-    setTodos(updatedTodos);
-  };
-
-  //function to change the editing status of a TODO
-  const editTodoTask = (id: string) => {
-    const updatedTodos = editTodoFunction(id, todos, "todosLocal");
-    setTodos(updatedTodos);
-  };
-
-  //function to change the editing status of a TODO
-  const finishEditTask = (
-    task: string,
-    type: string,
-    date: string,
-    taskorreminder: string,
-    id: string
-  ) => {
-    const updatedTodos = finishEditFunction(
-      task,
-      type,
-      date,
-      taskorreminder,
-      id,
-      todos,
-      "todosLocal"
-    );
-    setTodos(updatedTodos);
-  };
   /****************************************************************** */
   /****************FUNCTIONS TO ALTER THE TYPES */
 
@@ -230,6 +230,8 @@ export const TodoWrapper = (props: Iprops) => {
         todos.forEach(async (todo) => {
           // Create a new document in the "todos" collection
           await addDoc(todosCollectionRef, todo);
+          // Do something with the retrieved todos
+          console.log("Todos SENT to database:", todo);
         });
 
         alert("todos Data sent to Firestore successfully!");
@@ -307,7 +309,9 @@ export const TodoWrapper = (props: Iprops) => {
   }
 
   return (
-    <TypesContext.Provider value={{ types, setTypes }}>
+    <TypesContext.Provider
+      value={{ types, setTypes, todos, setTodos, isLoggedIn }}
+    >
       <div
         className={`TodoWrapper ${!weekList && "TodoWrapper--weekly"}`}
         style={{ backgroundColor: allColors?.innerBackgroundColor }}
@@ -346,7 +350,7 @@ export const TodoWrapper = (props: Iprops) => {
             </div>
           </div>
         </div>
-        <TodoForm addTodo={addNewTodo} />
+        <TodoForm />
         {isLoggedIn && <FilterTodoItem filterOneItem={filterOneItem} />}
         {weeks.map(
           (week) =>
@@ -358,10 +362,6 @@ export const TodoWrapper = (props: Iprops) => {
                 parentElement={"TodoWrapper"}
                 weekList={weekList}
                 week={week}
-                deleteTodoTask={deleteTodoTask}
-                toggleCompleteTask={toggleCompleteTask}
-                editTodoTask={editTodoTask}
-                finishEditTask={finishEditTask}
                 getDoneTodoList={getDoneTodoList}
                 archiveMultipleTodos={archiveMultipleTodos}
                 todos={todos.filter(

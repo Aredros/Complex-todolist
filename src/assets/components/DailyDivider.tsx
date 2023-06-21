@@ -1,7 +1,25 @@
+import React, { useState, useEffect, useContext } from "react";
+import { AppContext } from "../../App";
 import { TodoItem } from "./TodoItem";
 import { EditTodoForm } from "./EditTodoForm";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBoxArchive } from "@fortawesome/free-solid-svg-icons";
+
+// Define interface for Todo object
+interface ITodo {
+  id: string;
+  task: string;
+  completed: boolean;
+  isEditing: boolean;
+  taskorreminder: string;
+  user: string;
+  nType: string;
+  date: string;
+  archived: boolean;
+}
 
 interface DailyDividerProps {
+  parentElement: string;
   date: string;
   todos: {
     id: string;
@@ -12,28 +30,15 @@ interface DailyDividerProps {
     user: string;
     nType: string;
     date: string;
+    archived: boolean;
   }[];
-  deleteTodoTask: (id: string) => void;
-  toggleCompleteTask?: (id: string) => void;
-  editTodoTask?: (id: string) => void;
-  finishEditTask?: (
-    task: string,
-    type: string,
-    date: string,
-    taskorreminder: string,
-    id: string
-  ) => void;
+  archiveMultipleTodos?: (id: string[]) => void;
 }
 
 export const DailyDivider = (props: DailyDividerProps) => {
-  const {
-    date,
-    todos,
-    deleteTodoTask,
-    toggleCompleteTask,
-    editTodoTask,
-    finishEditTask,
-  } = props;
+  const { parentElement, date, todos, archiveMultipleTodos } = props;
+
+  const { allColors } = useContext(AppContext) || {}; // Destructure allColors from the context
 
   //Get the total tasks for the day
   const totalDayTasks = todos.filter(
@@ -59,6 +64,15 @@ export const DailyDivider = (props: DailyDividerProps) => {
     weekday: "short",
   });
 
+  //handle the click to send ALL items to the archive
+  const handleArchiveClick = (todosToArchive: ITodo[] | undefined = todos) => {
+    if (Array.isArray(todosToArchive)) {
+      (archiveMultipleTodos as (ids: string[]) => void)(
+        todosToArchive.map((todo) => todo.id)
+      );
+    }
+  };
+
   return (
     <div
       className={`Daily-divider ${dayOfWeek} ${
@@ -67,7 +81,7 @@ export const DailyDivider = (props: DailyDividerProps) => {
     >
       <div className="Daily-divider__Header">
         <h3
-          className={`Daily-divider__Header__Title ${
+          className={`Daily-divider__Header__Title date ${
             dateObj === today ? "todayDate" : ""
           }`}
         >
@@ -81,29 +95,34 @@ export const DailyDivider = (props: DailyDividerProps) => {
             })
           }
         </h3>
-        <p className="Daily-divider__Header__Title">
-          {isNaN(parseFloat(dayPercentage))
-            ? "No tasks today"
-            : `Day ${dayPercentage}% completed`}
-        </p>
+
+        <div className="percentageAndArchive">
+          <p className="Daily-divider__Header__Title">
+            {isNaN(parseFloat(dayPercentage))
+              ? "No tasks today"
+              : `Day ${dayPercentage}% completed`}
+          </p>
+          {parentElement === "TodoWrapper" && (
+            <div
+              className="daily-archive"
+              onClick={() => handleArchiveClick()}
+              style={{
+                backgroundColor: allColors?.buttonIcons,
+                color: allColors?.buttonText,
+              }}
+            >
+              <FontAwesomeIcon icon={faBoxArchive} />
+            </div>
+          )}
+        </div>
       </div>
 
       <ul>
         {todos.map((todo) =>
           todo.isEditing ? (
-            <EditTodoForm
-              key={todo.task}
-              task={todo}
-              editTask={finishEditTask}
-            />
+            <EditTodoForm key={todo.task} task={todo} />
           ) : (
-            <TodoItem
-              key={todo.task}
-              todo={todo}
-              editTodoTask={editTodoTask}
-              toggleCompleteTask={toggleCompleteTask}
-              deleteTodoTask={deleteTodoTask}
-            />
+            <TodoItem key={todo.task} todo={todo} />
           )
         )}
       </ul>

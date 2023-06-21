@@ -263,6 +263,11 @@ $background-1: #27274d;
   &.completed {
     background: #2cd477 !important;
     text-decoration: line-through;
+    min-height: 35px;
+    font-size: 13px;
+  }
+  .completed {
+    font-size: 13px;
   }
   // border-radius: 2px;
   // -webkit-border-radius: 2px;
@@ -281,7 +286,6 @@ $background-1: #27274d;
   .TodoItem__container p {
     font-family: sans-serif;
     font-weight: 700;
-    font-size: 14px;
   }
 }
 
@@ -402,19 +406,37 @@ $background-1: #27274d;
     align-items: baseline;
     justify-content: space-between;
     padding: 0 5px 0 0;
+
     &__Title {
       text-align: left;
       color: #bd6b00;
       font-size: 0.85rem;
       margin-bottom: 0;
       width: auto;
-      &:first-child {
+      &.date {
         background: #5085b6;
         border-radius: 5px 5px 0 0;
         padding: 2px 7px;
         color: #fff;
       }
     }
+    .percentageAndArchive {
+      display: flex;
+      gap: 5px;
+      .daily-archive {
+        padding: 3px;
+        align-items: center;
+        display: flex;
+        font-size: 12px;
+        line-height: 0;
+        border-radius: 3px;
+        -webkit-border-radius: 3px;
+        -moz-border-radius: 3px;
+        -ms-border-radius: 3px;
+        -o-border-radius: 3px;
+      }
+    }
+
     .todayDate {
       background-color: #44cfa6 !important;
       position: relative;

@@ -119,7 +119,6 @@ export const Archive = (props: Iprops) => {
             parentElement={"Archive"}
             weekList={weekList}
             week={week}
-            deleteTodoTask={deleteDONETodoTask}
             todos={doneTodoList.filter((todo) => getWeek(todo.date) === week)}
           />
         ))}

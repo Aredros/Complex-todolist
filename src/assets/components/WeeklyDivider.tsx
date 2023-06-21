@@ -31,32 +31,12 @@ interface WeeklyDividerProps {
     date: string;
     archived: boolean;
   }[];
-  deleteTodoTask: (id: string) => void;
-  toggleCompleteTask?: (id: string) => void;
-  editTodoTask?: (id: string) => void;
-  finishEditTask?: (
-    task: string,
-    type: string,
-    date: string,
-    taskorreminder: string,
-    id: string
-  ) => void;
   getDoneTodoList?: (doneTodoList: ITodo[]) => void;
   archiveMultipleTodos?: (id: string[]) => void;
 }
 
 export const WeeklyDivider = (props: WeeklyDividerProps) => {
-  const {
-    parentElement,
-    week,
-    weekList,
-    todos,
-    deleteTodoTask,
-    toggleCompleteTask,
-    editTodoTask,
-    archiveMultipleTodos,
-    finishEditTask,
-  } = props;
+  const { parentElement, week, weekList, todos, archiveMultipleTodos } = props;
 
   const [weekCollapsed, setWeekCollapsed] = useState(false); //state for making the week element collapse when clicking on a button
 
@@ -126,10 +106,8 @@ export const WeeklyDivider = (props: WeeklyDividerProps) => {
           <DailyDivider
             key={date}
             date={date}
-            editTodoTask={editTodoTask}
-            toggleCompleteTask={toggleCompleteTask}
-            deleteTodoTask={deleteTodoTask}
-            finishEditTask={finishEditTask}
+            parentElement={parentElement}
+            archiveMultipleTodos={archiveMultipleTodos}
             todos={todos.filter((todo) => todo.date === date)}
           />
         ))}

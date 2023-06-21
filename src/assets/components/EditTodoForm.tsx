@@ -1,15 +1,21 @@
 import React, { useState, useContext } from "react";
 import { AppContext } from "../../App";
 import { TypesContext } from "../pages/TodoWrapper";
+import { finishEditFunction } from "../functions/functions";
+import {
+  collection,
+  updateDoc,
+  doc,
+  deleteDoc,
+  query,
+  where,
+  getDocs,
+  DocumentData,
+  DocumentReference,
+} from "firebase/firestore";
+import { auth, db } from "../../config/firebase"; // Import your initialized Firebase instance
 
 interface EditTodoFormProps {
-  editTask?: (
-    task: string,
-    type: string,
-    date: string,
-    taskorreminder: string,
-    id: string
-  ) => void;
   task: {
     task: string;
     nType: string;
@@ -22,7 +28,7 @@ interface EditTodoFormProps {
 }
 
 export const EditTodoForm = (props: EditTodoFormProps) => {
-  const { editTask, task } = props;
+  const { task } = props;
 
   const [value, setValue] = useState(task.task);
   const [type, setType] = useState(task.nType);
@@ -30,13 +36,91 @@ export const EditTodoForm = (props: EditTodoFormProps) => {
   const [taskorreminder, setTaskorreminder] = useState(task.taskorreminder);
 
   const { allColors } = useContext(AppContext) || {}; // Destructure allColors from the context
-  const { types } = useContext(TypesContext) || {}; // Destructure types from the context
+  const {
+    types,
+    todos = [],
+    setTodos,
+    isLoggedIn,
+  } = useContext(TypesContext) || {}; // Destructure types from the context
+
+  //function to change the editing status of a TODO
+  const finishEditTask = async (
+    task: string,
+    type: string,
+    date: string,
+    taskorreminder: string,
+    id: string
+  ) => {
+    if (isLoggedIn) {
+      try {
+        console.log("Updating task in Firebase");
+
+        // Get the current user's email
+        const userEmail = auth.currentUser?.email;
+
+        // Create a query to fetch the specific todo based on the user and todo ID
+        const q = query(
+          collection(db, "todos"),
+          where("user", "==", userEmail),
+          where("id", "==", id)
+        );
+
+        // Get the document that matches the query
+        const querySnapshot = await getDocs(q);
+
+        // Update the document associated with the user and todo ID
+        querySnapshot.docs.forEach(async (doc) => {
+          await updateDoc(doc.ref, {
+            task,
+            nType: type,
+            date,
+            taskorreminder,
+            isEditing: false,
+          });
+        });
+
+        // Update the local todos state
+        const updatedTodos = (todos || []).map((todo) =>
+          todo.id === id
+            ? {
+                ...todo,
+                task,
+                nType: type,
+                date,
+                taskorreminder,
+                isEditing: false,
+              }
+            : todo
+        );
+        setTodos(updatedTodos);
+      } catch (error) {
+        console.error("Error updating document: ", error);
+      }
+    } else {
+      console.log("Updating task in localStorage");
+
+      // Update the local todos state
+      const updatedTodos = (todos || []).map((todo) =>
+        todo.id === id
+          ? {
+              ...todo,
+              task,
+              nType: type,
+              date,
+              taskorreminder,
+              isEditing: false,
+            }
+          : todo
+      );
+      setTodos(updatedTodos);
+    }
+  };
 
   //this function is called when the user types in the input field
   const handleSubmit = (e: React.FormEvent) => {
     //preventDefault will prevent the page from reloading
     e.preventDefault();
-    editTask?.(value, type, date, taskorreminder, task.id);
+    finishEditTask?.(value, type, date, taskorreminder, task.id);
   };
 
   return (

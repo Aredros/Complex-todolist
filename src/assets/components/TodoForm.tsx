@@ -1,24 +1,69 @@
 import React, { useState, useContext } from "react";
 import { AppContext } from "../../App";
 import { TypesContext } from "../pages/TodoWrapper";
+import { v4 as uuidv4 } from "uuid";
+import { auth, db } from "../../config/firebase";
+import {
+  addDoc,
+  collection,
+  deleteDoc,
+  query,
+  where,
+  getDocs,
+} from "firebase/firestore";
 
-interface TodoFormProps {
-  addTodo: (
-    task: string,
-    nType: string,
-    date: string,
-    taskorreminder: string
-  ) => void;
-}
-
-export const TodoForm = ({ addTodo }: TodoFormProps) => {
+export const TodoForm = () => {
   const [value, setValue] = useState("");
   const [type, setType] = useState("");
   const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
   const [taskorreminder, setTaskorreminder] = useState("task");
 
   const { allColors } = useContext(AppContext) || {}; // Destructure allColors from the context
-  const { types } = useContext(TypesContext) || { types: null }; // Destructure types from the context
+  const { types, todos, setTodos, isLoggedIn } = useContext(TypesContext) || {
+    types: null,
+    todos: null,
+    isLoggedIn: false,
+  }; // Destructure types from the context
+
+  //function to add a TODO
+  const addNewTodo = async (
+    todo: string,
+    type: string,
+    date: string,
+    taskorreminder: string
+  ) => {
+    const newTodo = {
+      id: uuidv4(),
+      task: todo,
+      completed: false,
+      isEditing: false,
+      taskorreminder: taskorreminder,
+      nType: type,
+      user: auth.currentUser?.email || "",
+      date: date,
+      archived: false,
+    };
+
+    const updatedTodos = todos ? [...todos, newTodo] : [newTodo];
+    setTodos(updatedTodos);
+
+    if (isLoggedIn) {
+      try {
+        // Create a new Firestore collection reference
+        const todosCollectionRef = collection(db, "todos");
+
+        // Add the newTodo to Firestore
+        await addDoc(todosCollectionRef, newTodo);
+
+        console.log("sending to Firebase");
+      } catch (err) {
+        console.log(err);
+      }
+    } else {
+      console.log("sending to localStorage");
+      localStorage.setItem("todosLocal", JSON.stringify(updatedTodos));
+    }
+  };
 
   //function to add a TODO to the array of todos
   const handleSubmit = (e: React.FormEvent) => {
@@ -34,7 +79,7 @@ export const TodoForm = ({ addTodo }: TodoFormProps) => {
     }
     if (!value) return;
     //call the addTodo function that was passed down from the App component and send the value of the input field and the type
-    addTodo(value, type, date, taskorreminder);
+    addNewTodo(value, type, date, taskorreminder);
     //reset the input fields after submitting
     setValue("");
 

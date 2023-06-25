@@ -3,7 +3,10 @@ import { AppContext } from "../../App";
 import { TodoItem } from "./TodoItem";
 import { EditTodoForm } from "./EditTodoForm";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBoxArchive } from "@fortawesome/free-solid-svg-icons";
+import {
+  faChevronCircleUp,
+  faChevronCircleDown,
+} from "@fortawesome/free-solid-svg-icons";
 
 // Define interface for Todo object
 interface ITodo {
@@ -32,11 +35,11 @@ interface DailyDividerProps {
     date: string;
     archived: boolean;
   }[];
-  archiveMultipleTodos?: (id: string[]) => void;
 }
 
 export const DailyDivider = (props: DailyDividerProps) => {
-  const { parentElement, date, todos, archiveMultipleTodos } = props;
+  const { parentElement, date, todos } = props;
+  const [dayCollapsed, setDayCollapsed] = useState(false); //state for making the day element collapse when clicking on a button
 
   const { allColors } = useContext(AppContext) || {}; // Destructure allColors from the context
 
@@ -64,13 +67,9 @@ export const DailyDivider = (props: DailyDividerProps) => {
     weekday: "short",
   });
 
-  //handle the click to send ALL items to the archive
-  const handleArchiveClick = (todosToArchive: ITodo[] | undefined = todos) => {
-    if (Array.isArray(todosToArchive)) {
-      (archiveMultipleTodos as (ids: string[]) => void)(
-        todosToArchive.map((todo) => todo.id)
-      );
-    }
+  //Change the Collapsed state
+  const handleCollapseDayClick = () => {
+    setDayCollapsed(!dayCollapsed);
   };
 
   return (
@@ -78,6 +77,11 @@ export const DailyDivider = (props: DailyDividerProps) => {
       className={`Daily-divider ${dayOfWeek} ${
         dayPercentage === "100" && "-completed-day"
       }`}
+      style={{
+        maxHeight: dayCollapsed ? 25 : "2000px",
+        transition: "max-height 0.7s",
+        overflow: "hidden",
+      }}
     >
       <div className="Daily-divider__Header">
         <h3
@@ -97,23 +101,26 @@ export const DailyDivider = (props: DailyDividerProps) => {
         </h3>
 
         <div className="percentageAndArchive">
-          <p className="Daily-divider__Header__Title">
+          <p
+            className="Daily-divider__Header__Title"
+            style={{
+              color:
+                dayPercentage === "100" ? "#2cd477" : allColors?.weeklyCardTxt,
+            }}
+          >
             {isNaN(parseFloat(dayPercentage))
               ? "No tasks today"
               : `Day ${dayPercentage}% completed`}
           </p>
-          {parentElement === "TodoWrapper" && (
-            <div
-              className="daily-archive"
-              onClick={() => handleArchiveClick()}
-              style={{
-                backgroundColor: allColors?.buttonIcons,
-                color: allColors?.buttonText,
-              }}
-            >
-              <FontAwesomeIcon icon={faBoxArchive} />
-            </div>
-          )}
+          <FontAwesomeIcon
+            icon={dayCollapsed ? faChevronCircleDown : faChevronCircleUp}
+            onClick={handleCollapseDayClick}
+            style={{
+              color: allColors?.buttonIcons,
+              fontSize: "14px",
+              alignSelf: "center",
+            }}
+          />
         </div>
       </div>
 

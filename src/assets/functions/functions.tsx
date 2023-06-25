@@ -1,4 +1,13 @@
 import { v4 as uuidv4 } from "uuid";
+import { auth, db } from "../../config/firebase";
+import {
+  addDoc,
+  collection,
+  deleteDoc,
+  query,
+  where,
+  getDocs,
+} from "firebase/firestore";
 
 interface INTTodoTasks {
   id: string;
@@ -103,3 +112,9 @@ export const archiveTaskFunction = (
   localStorage.setItem(`${localStorageFile}`, JSON.stringify(updatedTodos));
   return updatedTodos;
 };
+
+//////////
+//////
+//
+//////
+///////

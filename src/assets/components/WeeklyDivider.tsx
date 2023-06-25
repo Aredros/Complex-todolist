@@ -107,7 +107,6 @@ export const WeeklyDivider = (props: WeeklyDividerProps) => {
             key={date}
             date={date}
             parentElement={parentElement}
-            archiveMultipleTodos={archiveMultipleTodos}
             todos={todos.filter((todo) => todo.date === date)}
           />
         ))}

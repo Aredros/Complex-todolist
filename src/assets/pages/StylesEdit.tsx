@@ -3,12 +3,11 @@ import { AppContext } from "../../App";
 import Navigation from "../components/Navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faChevronCircleUp,
   faChevronCircleDown,
   faTrash,
   faEdit,
 } from "@fortawesome/free-solid-svg-icons";
-import StyleChangerConsole from "../components/StyleChangerConsole";
+import StyleChangerConsole from "../components/Styles/StyleChangerConsole";
 
 interface IColorFuncts {
   change_outerBackgroundColor: (color: string) => void;
@@ -38,12 +37,17 @@ function StylesEdit() {
       style={{ backgroundColor: allColors?.innerBackgroundColor }}
     >
       <Navigation />
-      <h1 style={{ color: allColors?.titleTextColor }}>Week Planner</h1>
+      <div className="MainTitle-and-subtitle">
+        <h1 style={{ color: allColors?.mainTitleColor }}>Styles</h1>
+        <p className="h1sub" style={{ color: allColors?.mainTitleColor }}>
+          By Cheo
+        </p>
+      </div>
       <h2 style={{ color: allColors?.titleTextColor }}>Edit Styles</h2>
       <StyleChangerConsole />
 
       <br />
-      <h3>Example:</h3>
+      <h3 style={{ color: allColors?.titleTextColor }}>Example:</h3>
       <br />
       <div
         className={`Weekly-divider`}
@@ -90,7 +94,10 @@ function StylesEdit() {
         <div className="Weekly-divider__Content">
           <div className={`Daily-divider`}>
             <div className="Daily-divider__Header">
-              <h3 className={`Daily-divider__Header__Title`}> Mon, 29 May</h3>
+              <h3 className={`Daily-divider__Header__Title date`}>
+                {" "}
+                Mon, 29 May
+              </h3>
               <p className="Daily-divider__Header__Title">Day 50% completed</p>
             </div>
             <ul>

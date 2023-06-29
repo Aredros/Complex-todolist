@@ -1,9 +1,10 @@
 import React, { useContext, useEffect, useState } from "react";
-import { AppContext } from "../../App";
+import { AppContext } from "../../../App";
 
 interface IColorFunctions {
   change_outerBackgroundColor: (color: string) => void;
   change_innerBackgroundColor: (color: string) => void;
+  change_mainTitleColor: (color: string) => void;
   change_titleTextColor: (color: string) => void;
   change_weeklyCardBG: (color: string) => void;
   change_weeklyCardTxt: (color: string) => void;
@@ -23,6 +24,9 @@ function StyleChangerConsole() {
   );
   const [innerBGcolor, setInnerBGcolor] = React.useState(
     allColors?.innerBackgroundColor
+  );
+  const [theMainTitleColor, setTheMainTitleColor] = React.useState(
+    allColors?.mainTitleColor
   );
   const [TitleTextColor, setTitleTextColor] = React.useState(
     allColors?.titleTextColor
@@ -66,6 +70,9 @@ function StyleChangerConsole() {
     },
     change_innerBackgroundColor: (color) => {
       ProcessColorSave("innerBackgroundColor", color);
+    },
+    change_mainTitleColor: (color) => {
+      ProcessColorSave("mainTitleColor", color);
     },
     change_titleTextColor: (color) => {
       ProcessColorSave("titleTextColor", color);
@@ -123,13 +130,24 @@ function StyleChangerConsole() {
       <div>
         <input
           type="color"
+          value={theMainTitleColor}
+          onChange={(e) => {
+            changeColor.change_mainTitleColor(e.target.value);
+            setTheMainTitleColor(e.target.value);
+          }}
+        />
+        <label>Main Title Text</label>
+      </div>
+      <div>
+        <input
+          type="color"
           value={TitleTextColor}
           onChange={(e) => {
             changeColor.change_titleTextColor(e.target.value);
             setTitleTextColor(e.target.value);
           }}
         />
-        <label>Outer Text</label>
+        <label>Tabs and titles</label>
       </div>
       <div>
         <input
@@ -140,7 +158,7 @@ function StyleChangerConsole() {
             setWeeklyCardBG(e.target.value);
           }}
         />
-        <label> Week-Card</label>
+        <label>Week-Card Background</label>
       </div>
       <div>
         <input
@@ -151,7 +169,7 @@ function StyleChangerConsole() {
             setWeeklyCardTextColor(e.target.value);
           }}
         />
-        <label> Week-Card Text</label>
+        <label>Week-Card Text</label>
       </div>
       <div>
         <input
@@ -162,7 +180,7 @@ function StyleChangerConsole() {
             setButtonIconsColor(e.target.value);
           }}
         />
-        <label> Buttons and icons</label>
+        <label>Button Bg & icons</label>
       </div>
       <div>
         <input
@@ -173,7 +191,7 @@ function StyleChangerConsole() {
             setButtonTextColor(e.target.value);
           }}
         />
-        <label> Buttons Text</label>
+        <label>Buttons Text</label>
       </div>
       <div>
         <input
@@ -184,7 +202,7 @@ function StyleChangerConsole() {
             setFormBackgroundColor(e.target.value);
           }}
         />
-        <label> Form Background</label>
+        <label>Form Background</label>
       </div>
       <div>
         <input
@@ -195,7 +213,7 @@ function StyleChangerConsole() {
             setItemBackgroundColor(e.target.value);
           }}
         />
-        <label> Item Background</label>
+        <label>Task Item Background</label>
       </div>
       <div>
         <input
@@ -206,7 +224,7 @@ function StyleChangerConsole() {
             setItemTextColor(e.target.value);
           }}
         />
-        <label> Item Text</label>
+        <label>Task Item Text</label>
       </div>
       <div>
         <input
@@ -217,7 +235,7 @@ function StyleChangerConsole() {
             setReminderBackgroundColor(e.target.value);
           }}
         />
-        <label> Reminder Background</label>
+        <label>Reminder Background</label>
       </div>
     </form>
   );

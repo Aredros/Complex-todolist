@@ -92,23 +92,6 @@ export const TodoForm = () => {
       onSubmit={handleSubmit}
       style={{ background: allColors?.formBackgroundColor }}
     >
-      <div className="TodoForm__TaskReminder">
-        <input
-          type="radio"
-          name="task-reminder"
-          value="task"
-          onChange={() => setTaskorreminder("task")}
-          checked={taskorreminder === "task"}
-        />{" "}
-        <label style={{ color: allColors?.titleTextColor }}>Task </label>
-        <input
-          type="radio"
-          name="task-reminder"
-          value="reminder"
-          onChange={() => setTaskorreminder("reminder")}
-        />
-        <label style={{ color: allColors?.titleTextColor }}>Reminder</label>
-      </div>
       <div className="TodoForm__Task">
         <input
           type="text"
@@ -142,6 +125,17 @@ export const TodoForm = () => {
                 {type.typeName}
               </option>
             ))}
+          </select>
+        </div>
+        <div className="TodoForm__CatDate__category">
+          <select
+            id="taskOrReminder"
+            name="task-reminder"
+            value={taskorreminder}
+            onChange={(e) => setTaskorreminder(e.target.value)}
+          >
+            <option value="task">Task</option>
+            <option value="reminder">Reminder</option>
           </select>
         </div>
         <div className="TodoForm__CatDate__date">

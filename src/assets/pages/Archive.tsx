@@ -80,7 +80,12 @@ export const Archive = (props: Iprops) => {
         <p style={{ color: allColors?.titleTextColor }}>
           Only working with LocalStorage for the time being
         </p>
-        <h1 style={{ color: allColors?.titleTextColor }}>Archive</h1>
+        <div className="MainTitle-and-subtitle">
+          <h1 style={{ color: allColors?.mainTitleColor }}>Archive</h1>
+          <p className="h1sub" style={{ color: allColors?.mainTitleColor }}>
+            By Cheo
+          </p>
+        </div>
         <div className="changeWeekList">
           <p
             className="changeWeekList__title"

@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useContext } from "react";
+import { AppContext } from "../../App";
 import { auth, googleProvider } from "../../config/firebase";
 import {
   createUserWithEmailAndPassword,
@@ -13,6 +14,8 @@ export const Auth = () => {
   const [password, setPassword] = React.useState("");
 
   const [isRegistering, setIsRegistering] = React.useState(false);
+
+  const { allColors } = useContext(AppContext) || {}; // Destructure allColors from the context
 
   console.log(auth?.currentUser?.email);
 
@@ -50,7 +53,7 @@ export const Auth = () => {
 
   return (
     <div className="TodoWrapper auth">
-      <h1>Complex Todo</h1>
+      <h1 style={{ color: allColors?.mainTitleColor }}>Complex Todo</h1>
       <button onClick={signAnon}>Use without logging in</button>
       <div className="auth__inputs">
         {isRegistering ? (

@@ -56,7 +56,6 @@ $background-1: #27274d;
 
 .TodoWrapper {
   h1 {
-    color: #fff;
     margin-bottom: 0.5rem;
     font-size: 3.2em;
   }
@@ -293,6 +292,7 @@ $background-1: #27274d;
 }
 
 .Weekly-divider {
+  margin-top: 1rem;
   margin-bottom: 1rem;
   box-shadow: 3px 1px 1px rgba(24, 24, 24, 0.39);
   position: relative;
@@ -482,6 +482,12 @@ $background-1: #27274d;
   }
 }
 
+.editColor-form {
+  label {
+    color: #fff;
+  }
+}
+
 /*Styles spécifiques pour les écrans de taille moyenne type tablette*/
 @media screen and (min-width: 780px) {
   .App {
@@ -543,6 +549,22 @@ $background-1: #27274d;
 @media screen and (min-width: 980px) {
   .changeWeekList {
     display: block;
+  }
+
+  .TodoWrapper {
+    position: relative;
+    .MainTitle-and-subtitle {
+      position: absolute;
+      text-align: center;
+      margin: 0;
+      left: -60%;
+      width: 60%;
+      top: 10px;
+    }
+    h1 {
+      font-size: 2.5em;
+      margin: 0;
+    }
   }
 
   .TodoWrapper--weekly {

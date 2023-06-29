@@ -27,6 +27,7 @@ interface IDoneTodo {
 interface IAppContext {
   outerBackgroundColor: string;
   innerBackgroundColor: string;
+  mainTitleColor: string;
   titleTextColor: string;
   weeklyCardBG: string;
   weeklyBorder: string;
@@ -57,6 +58,7 @@ function App() {
   const [allColors, setAllColors] = useState({
     outerBackgroundColor: "#334549",
     innerBackgroundColor: "#ffffff",
+    mainTitleColor: "#ffffff",
     titleTextColor: "#005657",
     weeklyCardBG: "#ffffff",
     weeklyBorder: "#005657",

@@ -207,12 +207,17 @@ export const TodoWrapper = () => {
         style={{ backgroundColor: allColors?.innerBackgroundColor }}
       >
         <Navigation />
-        <h1 style={{ color: allColors?.titleTextColor }}>Week Planner</h1>
+        <div className="MainTitle-and-subtitle">
+          <h1 style={{ color: allColors?.mainTitleColor }}>Week Planner</h1>
+          <p className="h1sub" style={{ color: allColors?.mainTitleColor }}>
+            By Cheo
+          </p>
+        </div>
+        <TodoForm />
+        {isLoggedIn && <FilterTodoItem filterOneItem={filterOneItem} />}
         <DisplayTypesContext.Provider value={{ setWeekList }}>
           <DisplayTypes />
         </DisplayTypesContext.Provider>
-        <TodoForm />
-        {isLoggedIn && <FilterTodoItem filterOneItem={filterOneItem} />}
         {weeks.map(
           (week) =>
             todos.some(

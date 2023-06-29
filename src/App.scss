@@ -118,12 +118,12 @@ $background-1: #27274d;
     select {
       background: rgba(95, 95, 95, 0.69);
       border: 1px solid #313131;
-      padding: 0.5rem 1rem;
+      padding: 0.1rem 0.1rem;
     }
     select option {
       background: #fff;
       border: 1px solid #313131;
-      padding: 0.5rem 1rem;
+      padding: 0.1rem 0.1rem;
       color: black;
     }
   }
@@ -499,11 +499,20 @@ $background-1: #27274d;
     padding: 2rem;
   }
 
-  .TodoForm {
+  .TodoForm,
+  .EditTodoForm,
+  .TypeForm {
     width: 486px;
     &__CatDate {
       padding-left: 20px;
       padding-right: 20px;
+      input,
+      select {
+        padding: 0.5rem 1rem;
+      }
+      select option {
+        padding: 0.5rem 1rem;
+      }
     }
   }
 

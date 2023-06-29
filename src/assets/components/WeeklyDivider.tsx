@@ -1,20 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { AppContext } from "../../App";
 import { DailyDivider } from "./DailyDivider";
-import { WeekSuccessPercentage } from "./WeekSuccessPercentage";
-
-// Define interface for Todo object
-interface ITodo {
-  id: string;
-  task: string;
-  completed: boolean;
-  isEditing: boolean;
-  taskorreminder: string;
-  user: string;
-  nType: string;
-  date: string;
-  archived: boolean;
-}
+import { WeekHeader } from "./WeekHead/WeekHeader";
 
 interface WeeklyDividerProps {
   parentElement: string;
@@ -31,16 +18,16 @@ interface WeeklyDividerProps {
     date: string;
     archived: boolean;
   }[];
-  getDoneTodoList?: (doneTodoList: ITodo[]) => void;
-  archiveMultipleTodos?: (id: string[]) => void;
 }
 
 export const WeeklyDivider = (props: WeeklyDividerProps) => {
-  const { parentElement, week, weekList, todos, archiveMultipleTodos } = props;
+  const { parentElement, week, weekList, todos } = props;
 
   const [weekCollapsed, setWeekCollapsed] = useState(false); //state for making the week element collapse when clicking on a button
 
-  const { allColors } = useContext(AppContext) || {}; // Destructure allColors from the context
+  const { allColors, doneTodoList, setDoneTodoList } = useContext(
+    AppContext
+  ) || { doneTodoList: [], setDoneTodoList: () => {} }; // Destructure allColors from the context
 
   // Get an array of unique dates that the tasks belong to in this week
   const dates = [...new Set(todos.map((todo) => todo.date))];
@@ -62,15 +49,6 @@ export const WeeklyDivider = (props: WeeklyDividerProps) => {
   //calculate how much of the week is not complete -only used for the style
   const weekNotComplete = parseInt(weekPercentage) - 100;
 
-  //handle the click to send ALL items to the archive
-  const handleArchiveClick = (todosToArchive: ITodo[] | undefined = todos) => {
-    if (Array.isArray(todosToArchive)) {
-      (archiveMultipleTodos as (ids: string[]) => void)(
-        todosToArchive.map((todo) => todo.id)
-      );
-    }
-  };
-
   //Change the Collapsed state
   const handleCollapseClick = () => {
     setWeekCollapsed(!weekCollapsed);
@@ -86,11 +64,11 @@ export const WeeklyDivider = (props: WeeklyDividerProps) => {
         border: "1px solid " + allColors?.weeklyBorder,
       }}
     >
-      <WeekSuccessPercentage
+      <WeekHeader
         parentElement={parentElement}
         week={week}
         weekPercentage={weekPercentage}
-        handleArchiveClick={handleArchiveClick}
+        todos={todos}
         weekCollapsed={weekCollapsed}
         handleCollapseClick={handleCollapseClick}
         weekNotComplete={weekNotComplete}

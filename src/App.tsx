@@ -2,7 +2,7 @@ import "./App.scss";
 import "./Login.scss";
 import "./Editpage.scss";
 import { deleteTodoFunction } from "./assets/functions/functions";
-import React, { useState, useEffect, useContext, createContext } from "react";
+import React, { useState, useEffect, createContext } from "react";
 import { TodoWrapper } from "./assets/pages/TodoWrapper";
 import { Auth } from "./assets/pages/auth";
 import { auth } from "./config/firebase";
@@ -39,15 +39,15 @@ interface IAppContext {
   reminderBackgroundColor: string;
 }
 
-interface ITallColors {
+interface ITallAppFile {
   allColors: IAppContext;
   setAllColors: React.Dispatch<React.SetStateAction<IAppContext>>;
+  setDoneTodoList: React.Dispatch<React.SetStateAction<IDoneTodo[]>>;
+  doneTodoList: IDoneTodo[];
 }
 
-//crearting context that will pass the colors
-export const AppContext = React.createContext<ITallColors | undefined>(
-  undefined
-);
+//crearting context that will pass the colors and doneTodoList
+export const AppContext = createContext<ITallAppFile | undefined>(undefined);
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -102,21 +102,6 @@ function App() {
     return () => unsubscribe();
   }, []);
 
-  //function to get the TodosFrom the child component
-  const getDoneTodoList = (doneItems: IDoneTodo[]) => {
-    const filteredItems = doneItems.filter((item) => {
-      return !doneTodoList.some((doneItem) => doneItem.id === item.id);
-    });
-
-    setDoneTodoList((doneTodoList) => [...doneTodoList, ...filteredItems]);
-
-    // Update local storage with the updated doneTodoList state
-    localStorage.setItem(
-      `doneTodoList`,
-      JSON.stringify([...doneTodoList, ...filteredItems])
-    );
-  };
-
   //function to delete a TODO
   const deleteDONETodoTask = (id: string) => {
     const updatedTodos = deleteTodoFunction(id, doneTodoList, "doneTodoList");
@@ -125,7 +110,12 @@ function App() {
 
   return (
     <AppContext.Provider
-      value={{ allColors: allColors as IAppContext, setAllColors }}
+      value={{
+        allColors: allColors as IAppContext,
+        setAllColors,
+        setDoneTodoList,
+        doneTodoList,
+      }}
     >
       <div
         className="App"
@@ -134,10 +124,7 @@ function App() {
         {isAuthenticated ? (
           <BrowserRouter>
             <Routes>
-              <Route
-                path="/Complex-todolist/"
-                element={<TodoWrapper getDoneTodoList={getDoneTodoList} />}
-              />
+              <Route path="/Complex-todolist/" element={<TodoWrapper />} />
               <Route
                 path="/Complex-todolist/archive"
                 element={

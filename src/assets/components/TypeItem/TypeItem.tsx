@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
-import { AppContext } from "../../App";
-import { TypesContext } from "../pages/TodoWrapper";
+import { AppContext } from "../../../App";
+import { TypesContext } from "../../pages/TodoWrapper";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash, faEdit } from "@fortawesome/free-solid-svg-icons";
 

@@ -5,8 +5,9 @@ import { deleteTodoFunction } from "./assets/functions/functions";
 import React, { useState, useEffect, createContext } from "react";
 import { TodoWrapper } from "./assets/pages/TodoWrapper";
 import { Auth } from "./assets/pages/auth";
-import { auth } from "./config/firebase";
+import { auth, db } from "./config/firebase";
 import { onAuthStateChanged, signOut } from "firebase/auth";
+import { collection, query, where, getDocs } from "firebase/firestore";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import StylesEdit from "./assets/pages/StylesEdit";
 import { Archive } from "./assets/pages/Archive";
@@ -40,11 +41,20 @@ interface IAppContext {
   reminderBackgroundColor: string;
 }
 
+interface IType {
+  id: string; // Add ID field to IType interface
+  typeName: string;
+  color: string;
+}
+
 interface ITallAppFile {
   allColors: IAppContext;
   setAllColors: React.Dispatch<React.SetStateAction<IAppContext>>;
-  setDoneTodoList: React.Dispatch<React.SetStateAction<IDoneTodo[]>>;
-  doneTodoList: IDoneTodo[];
+  allTypes: IType[] | null;
+  setAllTypes: (types: IType[]) => void;
+  allTodos: IDoneTodo[] | null | undefined;
+  setAllTodos: (todos: IDoneTodo[]) => void;
+  isLoggedIn: boolean;
 }
 
 //crearting context that will pass the colors and doneTodoList
@@ -52,7 +62,11 @@ export const AppContext = createContext<ITallAppFile | undefined>(undefined);
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [doneTodoList, setDoneTodoList] = useState<IDoneTodo[]>([]);
+  const [allTodos, setAllTodos] = useState<IDoneTodo[]>([]); // Array of todo objects
+  const [allTypes, setAllTypes] = useState<IType[] | null>([
+    { id: "1", typeName: "No-cat", color: "#f8f8f8" },
+  ]);
+  const [isLoggedIn, setIsLoggedIn] = useState(false); //check if the user is logged in or not
 
   //array that stores all colors that will be used in the app
   const [allColors, setAllColors] = useState({
@@ -72,10 +86,12 @@ function App() {
   });
 
   useEffect(() => {
-    //Fetch the previous todos from LocalStorage
-    const storedTodos = localStorage.getItem("doneTodoList");
-    if (storedTodos) {
-      setDoneTodoList(JSON.parse(storedTodos));
+    //empty array and local storage
+    //localStorage.clear();
+    //Fetch the types State
+    const storedTypes = localStorage.getItem("typesLocal");
+    if (storedTypes) {
+      setAllTypes(JSON.parse(storedTypes));
     }
 
     //useEffect to get all stored colors in localStorage
@@ -89,7 +105,76 @@ function App() {
       }
       // console.log(key + " : " + allColors[key]);
     });
-  }, []); //the empty array is to make sure the useEffect only runs once
+
+    //Verifying if the user is Anon or not
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      setIsLoggedIn(user ? !user.isAnonymous : false);
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, []); // the empty array is to make sure the useEffect only runs once
+
+  useEffect(() => {
+    // Get todos from Firestore database
+    const getTodosFromDatabase = async () => {
+      try {
+        if (auth.currentUser) {
+          // Get the current user's email
+          const userEmail = auth.currentUser.email;
+
+          // Create a query to fetch todos where the user is the same as the current user
+          const q = query(
+            collection(db, "todos"),
+            where("user", "==", userEmail)
+          );
+
+          // Get the documents that match the query
+          const querySnapshot = await getDocs(q);
+
+          // Map the documents to an array of todos
+          const todosFromDatabase: IDoneTodo[] = [];
+          const todoIds: Set<string> = new Set(); // Set to track unique todo IDs
+
+          querySnapshot.docs.forEach((doc) => {
+            const todo = doc.data() as IDoneTodo; // Cast the document data to ITodo
+            if (!todoIds.has(todo.id)) {
+              // Check if the todo ID is already in the set
+              todosFromDatabase.push(todo);
+              todoIds.add(todo.id); // Add the todo ID to the set
+            }
+          });
+
+          // Update the todos state with the retrieved todos
+          setAllTodos(todosFromDatabase);
+
+          // Do something with the retrieved todos
+          console.log("Todos from database:", todosFromDatabase);
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    if (isLoggedIn) {
+      // Fetch todos from Firebase
+      getTodosFromDatabase();
+    } else {
+      const storedTodos = localStorage.getItem("todosLocal") || "";
+      // Fetch todos from LocalStorage
+      setAllTodos(JSON.parse(storedTodos));
+    }
+
+    // Verifying if the user is Anon or not
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      setIsLoggedIn(user ? !user.isAnonymous : false);
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, [isLoggedIn]); // Run the effect whenever the isLoggedIn state changes
 
   //useEffect used to  check if the user is authenticated or not
   useEffect(() => {
@@ -104,19 +189,18 @@ function App() {
     return () => unsubscribe();
   }, []);
 
-  //function to delete a TODO
-  const deleteDONETodoTask = (id: string) => {
-    const updatedTodos = deleteTodoFunction(id, doneTodoList, "doneTodoList");
-    setDoneTodoList(updatedTodos);
-  };
+  /****************************************************************** */
 
   return (
     <AppContext.Provider
       value={{
         allColors: allColors as IAppContext,
         setAllColors,
-        setDoneTodoList,
-        doneTodoList,
+        allTypes,
+        setAllTypes,
+        allTodos,
+        setAllTodos,
+        isLoggedIn,
       }}
     >
       <div
@@ -127,15 +211,7 @@ function App() {
           <BrowserRouter>
             <Routes>
               <Route path="/Complex-todolist/" element={<TodoWrapper />} />
-              <Route
-                path="/Complex-todolist/archive"
-                element={
-                  <Archive
-                    doneTodoList={doneTodoList}
-                    deleteDONETodoTask={deleteDONETodoTask}
-                  />
-                }
-              />
+              <Route path="/Complex-todolist/archive" element={<Archive />} />
               <Route path="/Complex-todolist/styles" element={<StylesEdit />} />
             </Routes>
           </BrowserRouter>

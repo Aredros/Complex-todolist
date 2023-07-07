@@ -1,5 +1,4 @@
 import React, { useState, useContext } from "react";
-import { TypesContext } from "../pages/TodoWrapper";
 import { AppContext } from "../../App";
 
 interface TodoFormProps {
@@ -9,8 +8,7 @@ interface TodoFormProps {
 export const FilterTodoItem = ({ filterOneItem }: TodoFormProps) => {
   const [markedOneItem, setMarkedOneItem] = useState("");
 
-  const { allColors } = useContext(AppContext) || {};
-  const { types } = useContext(TypesContext) || {};
+  const { allColors, allTypes } = useContext(AppContext) || {};
 
   // function to handle filtering of items
   const handleButtonClick = (filteredItem: string) => {
@@ -39,7 +37,7 @@ export const FilterTodoItem = ({ filterOneItem }: TodoFormProps) => {
             <option key="type-id-no-type" value="">
               Show all
             </option>
-            {types?.map((type) => (
+            {allTypes?.map((type) => (
               <option key={`type-id ${type.id}`} value={type.typeName}>
                 {type.typeName}
               </option>

@@ -1,9 +1,11 @@
 import React, { useEffect, useState, useContext, createContext } from "react";
 import { AppContext } from "../../App";
 import { WeeklyDivider } from "../components/WeeklyDivider";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCalendarDays, faList } from "@fortawesome/free-solid-svg-icons";
+import { TypeItem } from "../components/TypeItem/TypeItem";
 import Navigation from "../components/Navigation";
+import DbAndLogOut from "../components/DbAndLogOut";
+import { FilterTodoItem } from "../components/FilterTodoItem";
+import { DisplayTypes } from "../components/DisplayTypes";
 
 // Define interface for Todo object
 interface ITodo {
@@ -18,46 +20,41 @@ interface ITodo {
   archived: boolean;
 }
 
-interface IType {
-  id: string; // Add ID field to IType interface
-  typeName: string;
-  color: string;
-}
-
-interface ITypesContextValue {
-  types: IType[] | null;
-}
-
-//passing the props
-interface Iprops {
-  doneTodoList: ITodo[];
-  deleteDONETodoTask: (id: string) => void;
-}
-
-export const TypesContext = React.createContext<ITypesContextValue>({
-  types: null,
+export const DisplayTypesContext = createContext<{
+  setWeekList: (value: boolean) => void;
+}>({
+  setWeekList: () => {},
 });
 
-export const Archive = (props: Iprops) => {
-  const { doneTodoList, deleteDONETodoTask } = props; //props being brought by parent component
-  const [types, setTypes] = useState<IType[]>([]); // Specify type as IType[]
+export const Archive = () => {
+  const {
+    allColors,
+    allTodos = [],
+    setAllTodos,
+    setAllTypes,
+    isLoggedIn,
+  } = useContext(AppContext) || {}; //getting the colors from the context
+  //
+
   const [weekList, setWeekList] = useState(true); //state for choosing between weekly or daily list
 
-  const { allColors } = useContext(AppContext) || {}; // Destructure allColors from the context
+  const [filteredType, setFilteredType] = useState<string | null>(null);
 
   /****************************************************************** */
   /***************FUNCTIONS FOR DATES AND CHRONOLOGICALLY ARRANGEMENT */
 
   // function to sort todos tasks based on date
-  const sortTodos = (TodosToSort: ITodo[]) => {
-    return TodosToSort.sort(
+  const sortTodos = (todos: ITodo[]) => {
+    return todos.sort(
       (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
     );
   };
 
   // Get an array of unique weeks that the tasks belong to (using the SortTodos function to sort the tasks by date)
   const weeks = [
-    ...new Set(sortTodos(doneTodoList).map((todo) => getWeek(todo.date))),
+    ...new Set(
+      allTodos ? sortTodos(allTodos).map((todo) => getWeek(todo.date)) : []
+    ),
   ];
 
   // Helper function to get the ISO week number from a date string
@@ -70,64 +67,48 @@ export const Archive = (props: Iprops) => {
     return `${date.getFullYear()}-W${weekNo.toString().padStart(2, "0")}`;
   }
 
+  // Function to filter todos by type
+  function filterOneItem(type: string) {
+    setFilteredType(type);
+  }
+
   return (
-    <TypesContext.Provider value={{ types }}>
-      <div
-        className={`TodoWrapper ${!weekList && "TodoWrapper--weekly"}`}
-        style={{ backgroundColor: allColors?.innerBackgroundColor }}
-      >
-        <Navigation />
-        <p style={{ color: allColors?.titleTextColor }}>
-          Only working with LocalStorage for the time being
+    <div
+      className={`TodoWrapper ${!weekList && "TodoWrapper--weekly"}`}
+      style={{ backgroundColor: allColors?.innerBackgroundColor }}
+    >
+      <Navigation />
+      <div className="MainTitle-and-subtitle">
+        <h1 style={{ color: allColors?.mainTitleColor }}>Archive</h1>
+        <p className="h1sub" style={{ color: allColors?.mainTitleColor }}>
+          By Cheo
         </p>
-        <div className="MainTitle-and-subtitle">
-          <h1 style={{ color: allColors?.mainTitleColor }}>Archive</h1>
-          <p className="h1sub" style={{ color: allColors?.mainTitleColor }}>
-            By Cheo
-          </p>
-        </div>
-        <div className="changeWeekList">
-          <p
-            className="changeWeekList__title"
-            style={{ color: allColors?.titleTextColor }}
-          >
-            Display type
-          </p>
-          <div className="changeWeekList__buttons">
-            <div
-              className="changeWeekList__buttons__button"
-              style={{ backgroundColor: allColors?.buttonIcons }}
-              onClick={() => setWeekList(true)}
-            >
-              <FontAwesomeIcon
-                icon={faList}
-                style={{ color: allColors?.buttonText }}
-              />
-              <span style={{ color: allColors?.buttonText }}> List</span>
-            </div>
-            <div
-              className="changeWeekList__buttons__button"
-              style={{ backgroundColor: allColors?.buttonIcons }}
-              onClick={() => setWeekList(false)}
-            >
-              <FontAwesomeIcon
-                icon={faCalendarDays}
-                style={{ color: allColors?.buttonText }}
-              />
-              <span style={{ color: allColors?.buttonText }}> Calendar</span>
-            </div>
-          </div>
-        </div>
-        {weeks.map((week) => (
-          <WeeklyDivider
-            key={week}
-            parentElement={"Archive"}
-            weekList={weekList}
-            week={week}
-            todos={doneTodoList.filter((todo) => getWeek(todo.date) === week)}
-          />
-        ))}
       </div>
-    </TypesContext.Provider>
+      {isLoggedIn && <FilterTodoItem filterOneItem={filterOneItem} />}
+      <DisplayTypesContext.Provider value={{ setWeekList }}>
+        <DisplayTypes />
+      </DisplayTypesContext.Provider>
+      {weeks.map(
+        (week) =>
+          allTodos?.some(
+            (todo) => todo.archived && getWeek(todo.date) === week
+          ) && (
+            <WeeklyDivider
+              key={week}
+              parentElement={"Archive"}
+              weekList={weekList}
+              week={week}
+              todos={allTodos.filter(
+                (todo) =>
+                  getWeek(todo.date) === week &&
+                  todo.archived &&
+                  (!filteredType || todo.nType === filteredType)
+              )}
+            />
+          )
+      )}
+      <TypeItem />
+      <DbAndLogOut />
+    </div>
   );
 };

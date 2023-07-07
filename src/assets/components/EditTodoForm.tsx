@@ -1,6 +1,5 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { AppContext } from "../../App";
-import { TypesContext } from "../pages/TodoWrapper";
 import { finishEditFunction } from "../functions/functions";
 import {
   collection,
@@ -35,13 +34,13 @@ export const EditTodoForm = (props: EditTodoFormProps) => {
   const [date, setDate] = useState(task.date);
   const [taskorreminder, setTaskorreminder] = useState(task.taskorreminder);
 
-  const { allColors } = useContext(AppContext) || {}; // Destructure allColors from the context
   const {
-    types,
-    todos = [],
-    setTodos,
+    allColors,
+    allTodos = [],
+    allTypes,
+    setAllTodos = () => {},
     isLoggedIn,
-  } = useContext(TypesContext) || {}; // Destructure types from the context
+  } = useContext(AppContext) || {}; // Destructure allColors from the context
 
   //function to change the editing status of a TODO
   const finishEditTask = async (
@@ -80,7 +79,7 @@ export const EditTodoForm = (props: EditTodoFormProps) => {
         });
 
         // Update the local todos state
-        const updatedTodos = (todos || []).map((todo) =>
+        const updatedTodos = (allTodos || []).map((todo) =>
           todo.id === id
             ? {
                 ...todo,
@@ -92,15 +91,13 @@ export const EditTodoForm = (props: EditTodoFormProps) => {
               }
             : todo
         );
-        setTodos(updatedTodos);
+        setAllTodos(updatedTodos);
       } catch (error) {
         console.error("Error updating document: ", error);
       }
     } else {
-      console.log("Updating task in localStorage");
-
       // Update the local todos state
-      const updatedTodos = (todos || []).map((todo) =>
+      const updatedTodos = (allTodos || []).map((todo) =>
         todo.id === id
           ? {
               ...todo,
@@ -112,7 +109,7 @@ export const EditTodoForm = (props: EditTodoFormProps) => {
             }
           : todo
       );
-      setTodos(updatedTodos);
+      setAllTodos(updatedTodos);
     }
   };
 
@@ -122,6 +119,14 @@ export const EditTodoForm = (props: EditTodoFormProps) => {
     e.preventDefault();
     finishEditTask?.(value, type, date, taskorreminder, task.id);
   };
+
+  //UPDATE LocalStorage when allTodos changes
+  useEffect(() => {
+    if (!isLoggedIn) {
+      // Update localStorage whenever allTodos changes
+      localStorage.setItem("todosLocal", JSON.stringify(allTodos));
+    }
+  }, [allTodos]);
 
   return (
     <form
@@ -157,7 +162,7 @@ export const EditTodoForm = (props: EditTodoFormProps) => {
             onChange={(e) => setType(e.target.value)}
             {...(taskorreminder === "reminder" && { disabled: true })}
           >
-            {types?.map((type) => (
+            {allTypes?.map((type) => (
               <option key={type.id} value={type.typeName}>
                 {type.typeName}
               </option>

@@ -1,6 +1,5 @@
 import React, { useContext } from "react";
 import { AppContext } from "../../../App";
-import { TypesContext } from "../../pages/TodoWrapper";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { auth, db } from "../../../config/firebase";
@@ -29,8 +28,12 @@ interface TodoItemProps {
 export const DeleteItemButton = (props: TodoItemProps) => {
   const { todo } = props;
 
-  const { allColors } = useContext(AppContext) || {}; // Destructure allColors from the context
-  const { todos = [], setTodos, isLoggedIn } = useContext(TypesContext) || {}; // Destructure types from the context
+  const {
+    allColors,
+    allTodos = [],
+    setAllTodos = () => {},
+    isLoggedIn,
+  } = useContext(AppContext) || {}; // Destructure allColors from the context
 
   const deleteTodoTask = async (id: string) => {
     if (isLoggedIn) {
@@ -56,8 +59,8 @@ export const DeleteItemButton = (props: TodoItemProps) => {
         });
 
         // Remove the deleted todo from the todos state
-        const updatedTodos = todos?.filter((todo) => todo.id !== id) || [];
-        setTodos(updatedTodos);
+        const updatedTodos = allTodos?.filter((todo) => todo.id !== id) || [];
+        setAllTodos(updatedTodos);
       } catch (err) {
         console.log(err);
       }
@@ -65,8 +68,8 @@ export const DeleteItemButton = (props: TodoItemProps) => {
       console.log("deleting from localStorage");
 
       // Remove the deleted todo from the todos state
-      const updatedTodos = deleteTodoFunction(id, todos || [], "todosLocal");
-      setTodos(updatedTodos);
+      const updatedTodos = deleteTodoFunction(id, allTodos || [], "todosLocal");
+      setAllTodos(updatedTodos);
     }
   };
 

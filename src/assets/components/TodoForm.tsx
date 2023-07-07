@@ -1,6 +1,5 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { AppContext } from "../../App";
-import { TypesContext } from "../pages/TodoWrapper";
 import { v4 as uuidv4 } from "uuid";
 import { auth, db } from "../../config/firebase";
 import {
@@ -18,12 +17,14 @@ export const TodoForm = () => {
   const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
   const [taskorreminder, setTaskorreminder] = useState("task");
 
-  const { allColors } = useContext(AppContext) || {}; // Destructure allColors from the context
-  const { types, todos, setTodos, isLoggedIn } = useContext(TypesContext) || {
-    types: null,
-    todos: null,
-    isLoggedIn: false,
-  }; // Destructure types from the context
+  const {
+    allColors,
+    allTodos = [],
+    setAllTodos = () => {},
+    allTypes,
+    setAllTypes,
+    isLoggedIn,
+  } = useContext(AppContext) || {}; // Destructure allColors from the context
 
   //function to add a TODO
   const addNewTodo = async (
@@ -44,8 +45,8 @@ export const TodoForm = () => {
       archived: false,
     };
 
-    const updatedTodos = todos ? [...todos, newTodo] : [newTodo];
-    setTodos(updatedTodos);
+    const updatedTodos = allTodos ? [...allTodos, newTodo] : [newTodo];
+    setAllTodos(updatedTodos);
 
     if (isLoggedIn) {
       try {
@@ -59,9 +60,6 @@ export const TodoForm = () => {
       } catch (err) {
         console.log(err);
       }
-    } else {
-      console.log("sending to localStorage");
-      localStorage.setItem("todosLocal", JSON.stringify(updatedTodos));
     }
   };
 
@@ -74,8 +72,8 @@ export const TodoForm = () => {
       setDate(new Date().toISOString().slice(0, 10));
     }
     //If no type is selected, set it to the first type in the array
-    if (!type && types) {
-      setType(types[0].typeName);
+    if (!type && allTypes) {
+      setType(allTypes[0].typeName);
     }
     if (!value) return;
     //call the addTodo function that was passed down from the App component and send the value of the input field and the type
@@ -85,6 +83,13 @@ export const TodoForm = () => {
 
     setDate(new Date().toISOString().slice(0, 10));
   };
+
+  useEffect(() => {
+    if (!isLoggedIn) {
+      // Update localStorage whenever allTodos changes
+      localStorage.setItem("todosLocal", JSON.stringify(allTodos));
+    }
+  }, [allTodos]);
 
   return (
     <form
@@ -120,7 +125,7 @@ export const TodoForm = () => {
             onChange={(e) => setType(e.target.value)}
             {...(taskorreminder === "reminder" && { disabled: true })}
           >
-            {types?.map((type) => (
+            {allTypes?.map((type) => (
               <option key={`type-id ${type.id}`} value={type.typeName}>
                 {type.typeName}
               </option>

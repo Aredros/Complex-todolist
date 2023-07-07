@@ -1,15 +1,20 @@
 import React, { useContext } from "react";
 import { AppContext } from "../../App";
+import { auth } from "../../config/firebase";
+import { signOut } from "firebase/auth";
 
-interface ITDBandLog {
-  isLoggedIn: Boolean;
-  logItOut: () => void;
-}
+function DbAndLogOut() {
+  const { allColors, isLoggedIn } = useContext(AppContext) || {}; // Destructure allColors from the context
 
-function DbAndLogOut(props: ITDBandLog) {
-  const { isLoggedIn, logItOut } = props;
+  //function to log out//
+  const logItOut = async () => {
+    try {
+      await signOut(auth);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
-  const { allColors } = useContext(AppContext) || {}; // Destructure allColors from the context
   return (
     <div className="bottom-buttons">
       <button

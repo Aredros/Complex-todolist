@@ -1,6 +1,5 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { AppContext } from "../../../App";
-import { TypesContext } from "../../pages/TodoWrapper";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit } from "@fortawesome/free-solid-svg-icons";
 import { auth, db } from "../../../config/firebase";
@@ -28,16 +27,24 @@ interface TodoItemProps {
 export const StartEditButton = (props: TodoItemProps) => {
   const { todo } = props;
 
-  const { allColors } = useContext(AppContext) || {}; // Destructure allColors from the context
-  const { todos = [], setTodos, isLoggedIn } = useContext(TypesContext) || {}; // Destructure types from the context
+  const {
+    allColors,
+    allTodos = [],
+    setAllTodos = () => {},
+    isLoggedIn,
+  } = useContext(AppContext) || {}; // Destructure allColors from the context
 
   //START EDIT THE TODO
   // Function to change the editing status of a TODO
   const editTodoTask = async (id: string) => {
+    const updatedTodos = (allTodos || []).map((todo) =>
+      todo.id === id ? { ...todo, isEditing: !todo.isEditing } : todo
+    );
+    setAllTodos(updatedTodos);
+
     if (isLoggedIn) {
       try {
         console.log("updating editing status in Firebase");
-
         const userEmail = auth.currentUser?.email;
         const q = query(
           collection(db, "todos"),
@@ -51,26 +58,27 @@ export const StartEditButton = (props: TodoItemProps) => {
           await updateDoc(doc.ref, { isEditing: !doc.data().isEditing });
         });
 
-        const updatedTodos = (todos || []).map((todo) =>
+        const updatedTodos = (allTodos || []).map((todo) =>
           todo.id === id ? { ...todo, isEditing: !todo.isEditing } : todo
         );
-        setTodos(updatedTodos);
+        setAllTodos(updatedTodos);
       } catch (err) {
         console.log(err);
       }
-    } else {
-      console.log("updating editing status in localStorage");
-
-      const updatedTodos = (todos || []).map((todo) =>
-        todo.id === id ? { ...todo, isEditing: !todo.isEditing } : todo
-      );
-      setTodos(updatedTodos);
     }
   };
 
   const handleEditClick = () => {
     editTodoTask?.(todo.id);
   };
+
+  //UPDATE LocalStorage when allTodos changes
+  useEffect(() => {
+    if (!isLoggedIn) {
+      // Update localStorage whenever allTodos changes
+      localStorage.setItem("todosLocal", JSON.stringify(allTodos));
+    }
+  }, [allTodos]);
 
   return (
     <FontAwesomeIcon

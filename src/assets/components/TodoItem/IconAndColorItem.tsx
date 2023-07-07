@@ -1,6 +1,5 @@
 import React, { useContext } from "react";
 import { AppContext } from "../../../App";
-import { TypesContext } from "../../pages/TodoWrapper";
 
 interface TodoItemProps {
   handleToggleClick: () => void;
@@ -19,16 +18,12 @@ interface TodoItemProps {
 export const IconAndColorItem = (props: TodoItemProps) => {
   const { todo, handleToggleClick } = props;
 
-  const { allColors } = useContext(AppContext) || {}; // Destructure allColors from the context
-  const {
-    types,
-    todos = [],
-    setTodos,
-    isLoggedIn,
-  } = useContext(TypesContext) || {}; // Destructure types from the context
+  const { allTypes } = useContext(AppContext) || {}; // Destructure allColors from the context
 
   //get the type color
-  const typecolor = types?.find((type) => type.typeName === todo.nType)?.color;
+  const typecolor = allTypes?.find(
+    (type) => type.typeName === todo.nType
+  )?.color;
 
   return (
     <div

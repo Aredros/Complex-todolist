@@ -1,6 +1,5 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { AppContext } from "../../../App";
-import { TypesContext } from "../../pages/TodoWrapper";
 import { auth, db } from "../../../config/firebase";
 import {
   collection,
@@ -29,13 +28,12 @@ interface TodoItemProps {
 export const TodoItem = (props: TodoItemProps) => {
   const { todo } = props;
 
-  const { allColors } = useContext(AppContext) || {}; // Destructure allColors from the context
   const {
-    types,
-    todos = [],
-    setTodos,
+    allColors,
+    allTodos = [],
+    setAllTodos = () => {},
     isLoggedIn,
-  } = useContext(TypesContext) || {}; // Destructure types from the context
+  } = useContext(AppContext) || {}; // Destructure allColors from the context
 
   //function to change the completed status of a TODO
   const toggleCompleteTask = async (id: string) => {
@@ -61,21 +59,13 @@ export const TodoItem = (props: TodoItemProps) => {
           await updateDoc(doc.ref, { completed: !doc.data().completed }); // Use updateDoc instead of doc.ref.update
         });
         // Update the completed status in the local todos state
-        const updatedTodos = (todos || []).map((todo) =>
+        const updatedTodos = (allTodos || []).map((todo) =>
           todo.id === id ? { ...todo, completed: !todo.completed } : todo
         );
-        setTodos(updatedTodos);
+        setAllTodos(updatedTodos);
       } catch (err) {
         console.log(err);
       }
-    } else {
-      console.log("updating status in localStorage");
-
-      // Update the completed status in the local todos state
-      const updatedTodos = (todos || []).map((todo) =>
-        todo.id === id ? { ...todo, completed: !todo.completed } : todo
-      );
-      setTodos(updatedTodos);
     }
   };
 
@@ -83,6 +73,14 @@ export const TodoItem = (props: TodoItemProps) => {
     //handle the mark task as completed
     todo.taskorreminder === "task" ? toggleCompleteTask?.(todo.id) : null;
   };
+
+  //UPDATE LocalStorage when allTodos changes
+  useEffect(() => {
+    if (!isLoggedIn) {
+      // Update localStorage whenever allTodos changes
+      localStorage.setItem("todosLocal", JSON.stringify(allTodos));
+    }
+  }, [allTodos]);
 
   return (
     <li

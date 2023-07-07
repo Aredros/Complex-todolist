@@ -1,21 +1,20 @@
 import React, { useState, useEffect, useContext } from "react";
 import { AppContext } from "../../../App";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { TypesContext } from "../../pages/TodoWrapper";
 import { faBoxArchive } from "@fortawesome/free-solid-svg-icons";
 import { auth, db } from "../../../config/firebase";
 import {
   collection,
   doc,
   query,
+  updateDoc,
   where,
   getDocs,
   setDoc,
   deleteDoc,
 } from "firebase/firestore";
-import { deleteTodoFunction } from "../../functions/functions";
 
-interface ITodo {
+interface IDoneTodo {
   id: string;
   task: string;
   completed: boolean;
@@ -28,81 +27,81 @@ interface ITodo {
 }
 
 interface ArchiveButtonIT {
-  Weektodos: ITodo[];
+  Weektodos: IDoneTodo[];
 }
 
 export const ArchiveWeekButton = (props: ArchiveButtonIT) => {
   const { Weektodos } = props;
 
-  const { allColors, doneTodoList, setDoneTodoList } = useContext(
-    AppContext
-  ) || { doneTodoList: [], setDoneTodoList: () => {} }; // Destructure allColors from the context
-  const { todos, setTodos, isLoggedIn } = useContext(TypesContext) || {}; // Destructure setTodos from the context
+  const {
+    allColors,
+    allTodos = [],
+    setAllTodos = () => {},
+    isLoggedIn,
+  } = useContext(AppContext) || { allTodos: [], setAllTodos: () => {} };
 
-  // DELETE Function (needed for updating in Firebase)
-  const deleteTodoTask = async (id: string) => {
-    if (isLoggedIn) {
-      try {
-        console.log("deleting from Firebase");
-
-        // Get the current user's email
-        const userEmail = auth.currentUser?.email;
-
-        // Create a query to fetch the specific todo based on the user and todo ID
-        const q = query(
-          collection(db, "todos"),
-          where("user", "==", userEmail),
-          where("id", "==", id)
-        );
-
-        // Get the document that matches the query
-        const querySnapshot = await getDocs(q);
-
-        // Delete the document associated with the user and todo ID
-        querySnapshot.docs.forEach(async (doc) => {
-          await deleteDoc(doc.ref);
-        });
-
-        // Remove the deleted todo from the todos state
-        const updatedTodos = todos?.filter((todo) => todo.id !== id) || [];
-        setTodos(updatedTodos);
-      } catch (err) {
-        console.log(err);
-      }
-    } else {
-      console.log("deleting from localStorage");
-
-      // Remove the deleted todo from the todos state
-      const updatedTodos = deleteTodoFunction(id, todos || [], "todosLocal");
-      setTodos(updatedTodos);
-    }
-  };
   //////
 
   //Function to change the Archived boolean status
   const archiveMultipleTodos = (ids: string[]) => {
-    setDoneTodoList((prevDoneTodoList) => [
-      ...prevDoneTodoList,
-      ...Weektodos.filter(
-        (todo) =>
-          ids.includes(todo.id) &&
-          !doneTodoList.some(({ id }) => id === todo.id)
-      ),
-    ]);
+    const updatedTodos = Weektodos?.map((todo) => {
+      if (ids.includes(todo.id)) {
+        // Only modify archived property if it's not already true
+        return { ...todo, archived: true };
+      }
+      return todo;
+    }) as IDoneTodo[];
 
-    ids.forEach((id) => {
-      deleteTodoTask(id);
+    // Modify the Weektodos array outside of setAllTodos
+    if (allTodos) {
+      const modifiedAllTodos = [
+        ...allTodos.filter(
+          (todo) => !Weektodos.find((item) => item.id === todo.id)
+        ),
+        ...updatedTodos,
+      ];
+
+      setAllTodos(modifiedAllTodos);
+    }
+
+    ids.forEach(async (id: string) => {
+      if (isLoggedIn) {
+        try {
+          console.log("updating editing status in Firebase");
+
+          const userEmail = auth.currentUser?.email;
+          const q = query(
+            collection(db, "todos"),
+            where("user", "==", userEmail),
+            where("id", "==", id)
+          );
+
+          const querySnapshot = await getDocs(q);
+
+          querySnapshot.docs.forEach(async (doc) => {
+            await updateDoc(doc.ref, { archived: true });
+          });
+        } catch (err) {
+          console.log(err);
+        }
+      }
     });
   };
 
   //handle the click to send ALL items to the archive
   const handleArchiveClick = (
-    todosToArchive: ITodo[] | undefined = Weektodos
+    todosToArchive: IDoneTodo[] | undefined = Weektodos
   ) => {
     if (Array.isArray(todosToArchive)) {
-      (archiveMultipleTodos as (ids: string[]) => void)(
-        todosToArchive.map((todo) => todo.id)
-      );
+      const filteredTodos = todosToArchive
+        .filter((todo) => !todo.archived)
+        .map((todo) => todo.id);
+      archiveMultipleTodos(filteredTodos);
+    }
+
+    if (!isLoggedIn) {
+      // Update local storage for offline mode
+      localStorage.setItem("todosLocal", JSON.stringify(allTodos));
     }
   };
 

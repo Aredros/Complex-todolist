@@ -8,20 +8,8 @@ import {
   faChevronCircleDown,
 } from "@fortawesome/free-solid-svg-icons";
 
-// Define interface for Todo object
-interface ITodo {
-  id: string;
-  task: string;
-  completed: boolean;
-  isEditing: boolean;
-  taskorreminder: string;
-  user: string;
-  nType: string;
-  date: string;
-  archived: boolean;
-}
-
 interface DailyDividerProps {
+  weekDisplayType: boolean;
   parentElement: string;
   date: string;
   todos: {
@@ -38,7 +26,7 @@ interface DailyDividerProps {
 }
 
 export const DailyDivider = (props: DailyDividerProps) => {
-  const { parentElement, date, todos } = props;
+  const { weekDisplayType, date, todos } = props;
   const [dayCollapsed, setDayCollapsed] = useState(false); //state for making the day element collapse when clicking on a button
 
   const { allColors } = useContext(AppContext) || {}; // Destructure allColors from the context
@@ -112,15 +100,17 @@ export const DailyDivider = (props: DailyDividerProps) => {
               ? "No tasks today"
               : `Day ${dayPercentage}% completed`}
           </p>
-          <FontAwesomeIcon
-            icon={dayCollapsed ? faChevronCircleDown : faChevronCircleUp}
-            onClick={handleCollapseDayClick}
-            style={{
-              color: allColors?.buttonIcons,
-              fontSize: "14px",
-              alignSelf: "center",
-            }}
-          />
+          {weekDisplayType && (
+            <FontAwesomeIcon
+              icon={dayCollapsed ? faChevronCircleDown : faChevronCircleUp}
+              onClick={handleCollapseDayClick}
+              style={{
+                color: allColors?.buttonIcons,
+                fontSize: "14px",
+                alignSelf: "center",
+              }}
+            />
+          )}
         </div>
       </div>
 

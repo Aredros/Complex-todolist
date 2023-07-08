@@ -120,6 +120,11 @@ export const EditTodoForm = (props: EditTodoFormProps) => {
     finishEditTask?.(value, type, date, taskorreminder, task.id);
   };
 
+  const reminderEffectHandler = (element: string) => {
+    setType("");
+    setTaskorreminder(element);
+  };
+
   //UPDATE LocalStorage when allTodos changes
   useEffect(() => {
     if (!isLoggedIn) {
@@ -174,7 +179,7 @@ export const EditTodoForm = (props: EditTodoFormProps) => {
             id="taskOrReminder"
             name="task-reminder"
             value={taskorreminder}
-            onChange={(e) => setTaskorreminder(e.target.value)}
+            onChange={(e) => reminderEffectHandler(e.target.value)}
           >
             <option value="task">Task</option>
             <option value="reminder">Reminder</option>

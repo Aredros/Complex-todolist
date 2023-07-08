@@ -3,12 +3,6 @@ import { AppContext } from "../../../App";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 
-interface IType {
-  id: string; // Add ID field to IType interface
-  typeName: string;
-  color: string;
-}
-
 export const TypeItem = () => {
   const {
     allColors,

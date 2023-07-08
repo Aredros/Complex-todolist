@@ -84,6 +84,11 @@ export const TodoForm = () => {
     setDate(new Date().toISOString().slice(0, 10));
   };
 
+  const reminderEffectHandler = (element: string) => {
+    setType("");
+    setTaskorreminder(element);
+  };
+
   useEffect(() => {
     if (!isLoggedIn) {
       // Update localStorage whenever allTodos changes
@@ -137,7 +142,7 @@ export const TodoForm = () => {
             id="taskOrReminder"
             name="task-reminder"
             value={taskorreminder}
-            onChange={(e) => setTaskorreminder(e.target.value)}
+            onChange={(e) => reminderEffectHandler(e.target.value)}
           >
             <option value="task">Task</option>
             <option value="reminder">Reminder</option>

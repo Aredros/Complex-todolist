@@ -50,6 +50,9 @@ $background-1: #27274d;
       -moz-border-radius: 8px;
       -ms-border-radius: 8px;
       -o-border-radius: 8px;
+      :hover {
+        cursor: pointer;
+      }
     }
   }
 }
@@ -179,6 +182,23 @@ $background-1: #27274d;
       padding-left: 5px;
     }
   }
+  &__icons {
+    justify-content: center;
+    display: flex;
+    gap: 5px;
+    svg {
+      height: 20px;
+      padding: 5px;
+      border-radius: 5px;
+      -webkit-border-radius: 5px;
+      -moz-border-radius: 5px;
+      -ms-border-radius: 5px;
+      -o-border-radius: 5px;
+    }
+    :hover {
+      cursor: pointer;
+    }
+  }
 }
 
 .date-title {
@@ -214,20 +234,13 @@ $background-1: #27274d;
   // border: 1px solid rgba(26, 26, 26, 0.473);
   border-top: 1px solid rgba(26, 26, 26, 0.473);
   color: black;
-  padding: 0.5rem 0.75rem;
+  padding: 0.5rem 0.6rem;
 
   cursor: pointer;
   min-height: 40px;
   position: relative;
   //small box shadow
 
-  &:first-child {
-    // border-radius: 0 2px 2px 2px;
-    // -webkit-border-radius: 0 2px 2px 2px;
-    // -moz-border-radius: 0 2px 2px 2px;
-    // -ms-border-radius: 0 2px 2px 2px;
-    // -o-border-radius: 0 2px 2px 2px;
-  }
   &:last-child {
     border-bottom: 0;
     border-bottom-left-radius: 10px;
@@ -237,19 +250,19 @@ $background-1: #27274d;
     }
   }
   &__type-color {
-    width: 15px;
+    width: 30px;
     height: 100%;
     position: absolute;
     left: 0;
-    // border-radius: 0 0 2px 2px;
-    // -webkit-border-radius: 0 0 2px 2px;
-    // -moz-border-radius: 0 0 2px 2px;
-    // -ms-border-radius: 0 0 2px 2px;
-    // -o-border-radius: 0 0 2px 2px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  svg {
   }
   &__container {
     max-width: 315px;
-    margin-left: 15px;
+    margin-left: 30px;
     flex-grow: 1;
     text-align: left;
     p {
@@ -260,7 +273,7 @@ $background-1: #27274d;
   }
   &__icons {
     display: flex;
-    gap: 0.75rem;
+    gap: 0.5rem;
   }
   &.completed {
     background: #2cd477 !important;
@@ -297,6 +310,42 @@ $background-1: #27274d;
     font-family: sans-serif;
     font-weight: 700;
   }
+}
+
+.TypeArea {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.TypeItem {
+  display: flex;
+  flex-wrap: wrap;
+  background: #fff;
+  color: black;
+  padding: 0.5rem 0.6rem;
+  cursor: pointer;
+  min-height: 40px;
+  gap: 8px;
+  position: relative;
+  &__color {
+    width: 25px;
+    height: 25px;
+    border-radius: 8px;
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    -ms-border-radius: 8px;
+    -o-border-radius: 8px;
+  }
+  .types-nameNnumber {
+    display: flex;
+    gap: 5px;
+  }
+  border-radius: 8px;
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
+  -ms-border-radius: 8px;
+  -o-border-radius: 8px;
 }
 
 .Weekly-divider {

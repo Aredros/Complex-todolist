@@ -45,6 +45,7 @@ interface IType {
   id: string; // Add ID field to IType interface
   typeName: string;
   color: string;
+  icon: string;
 }
 
 interface ITallAppFile {
@@ -64,7 +65,7 @@ function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [allTodos, setAllTodos] = useState<IDoneTodo[]>([]); // Array of todo objects
   const [allTypes, setAllTypes] = useState<IType[] | null>([
-    { id: "1", typeName: "No-cat", color: "#f8f8f8" },
+    { id: "1", typeName: "No-cat", color: "#f8f8f8", icon: "" },
   ]);
   const [isLoggedIn, setIsLoggedIn] = useState(false); //check if the user is logged in or not
 

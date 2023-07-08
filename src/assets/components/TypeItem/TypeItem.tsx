@@ -53,18 +53,16 @@ export const TypeItem = () => {
     <>
       {allTypes?.map((type) => (
         <div
-          className={`TodoItem`}
+          className={`TypeItem`}
           key={`typeItem-${type.id}`}
           style={{
-            backgroundColor: allColors?.itemBackgroundColor,
+            backgroundColor: allColors?.formBackgroundColor,
             color: allColors?.itemText,
           }}
         >
           <div
+            className="TypeItem__color"
             style={{
-              width: "25px",
-              height: "25px",
-              borderRadius: "8px",
               background: type.color,
             }}
           ></div>

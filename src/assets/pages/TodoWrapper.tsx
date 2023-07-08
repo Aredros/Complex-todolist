@@ -115,7 +115,10 @@ export const TodoWrapper = () => {
           )
       )}
       <TypeForm />
-      <TypeItem />
+      <div className="TypeArea">
+        <TypeItem />
+      </div>
+
       <DbAndLogOut />
     </div>
   );

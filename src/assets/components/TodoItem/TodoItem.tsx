@@ -11,6 +11,7 @@ import {
 import { DeleteItemButton } from "./DeleteItemButton";
 import { StartEditButton } from "./StartEditButton";
 import { IconAndColorItem } from "./IconAndColorItem";
+import { DuplicateItemButton } from "./DuplicateItemButton";
 
 interface TodoItemProps {
   todo: {
@@ -22,6 +23,7 @@ interface TodoItemProps {
     user: string;
     nType: string;
     date: string;
+    archived: boolean;
   };
 }
 
@@ -37,6 +39,11 @@ export const TodoItem = (props: TodoItemProps) => {
 
   //function to change the completed status of a TODO
   const toggleCompleteTask = async (id: string) => {
+    // Update the completed status in the local todos state
+    const updatedTodos = (allTodos || []).map((todo) =>
+      todo.id === id ? { ...todo, completed: !todo.completed } : todo
+    );
+    setAllTodos(updatedTodos);
     if (isLoggedIn) {
       try {
         console.log("updating status in Firebase");
@@ -58,11 +65,6 @@ export const TodoItem = (props: TodoItemProps) => {
         querySnapshot.docs.forEach(async (doc) => {
           await updateDoc(doc.ref, { completed: !doc.data().completed }); // Use updateDoc instead of doc.ref.update
         });
-        // Update the completed status in the local todos state
-        const updatedTodos = (allTodos || []).map((todo) =>
-          todo.id === id ? { ...todo, completed: !todo.completed } : todo
-        );
-        setAllTodos(updatedTodos);
       } catch (err) {
         console.log(err);
       }
@@ -109,6 +111,7 @@ export const TodoItem = (props: TodoItemProps) => {
       </div>
 
       <div className="TodoItem__icons">
+        <DuplicateItemButton todo={todo} />
         <StartEditButton todo={todo} />
         <DeleteItemButton todo={todo} />
       </div>

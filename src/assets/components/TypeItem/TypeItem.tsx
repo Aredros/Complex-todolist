@@ -3,6 +3,12 @@ import { AppContext } from "../../../App";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 
+interface IType {
+  id: string; // Add ID field to IType interface
+  typeName: string;
+  color: string;
+}
+
 export const TypeItem = () => {
   const {
     allColors,
@@ -27,6 +33,22 @@ export const TypeItem = () => {
     }
   };
 
+  //Get all items from this type
+  const CountAllItems = (typeName: string) =>
+    allTodos?.filter((t) => t.nType === typeName).length || [];
+
+  //Get all completed items from this type
+  const CountCompletedItems = (typeName: string) => {
+    const MoreThanZero = allTodos?.filter(
+      (t) => t.nType === typeName && t.completed === true
+    ).length;
+    if (MoreThanZero && MoreThanZero > 0) {
+      return MoreThanZero;
+    } else {
+      return 0;
+    }
+  };
+
   return (
     <>
       {allTypes?.map((type) => (
@@ -46,7 +68,16 @@ export const TypeItem = () => {
               background: type.color,
             }}
           ></div>
-          <p>{type.typeName}</p>
+          <div className="types-nameNnumber">
+            {" "}
+            <p>{type.typeName}</p>
+            <p className="types-nameNnumber__number">
+              {`[${CountCompletedItems(type.typeName)}/${CountAllItems(
+                type.typeName
+              )}]`}
+            </p>
+          </div>
+
           <div>
             <FontAwesomeIcon
               key={type.id}

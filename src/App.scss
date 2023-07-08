@@ -271,11 +271,19 @@ $background-1: #27274d;
   .completed {
     font-size: 13px;
   }
-  // border-radius: 2px;
-  // -webkit-border-radius: 2px;
-  // -moz-border-radius: 2px;
-  // -ms-border-radius: 2px;
-  // -o-border-radius: 2px;
+  .types-nameNnumber {
+    display: flex;
+    gap: 5px;
+    &__number {
+      // background-color: #27274d48;
+      // padding: 2px 8px;
+      // border-radius: 8px;
+      // -webkit-border-radius: 8px;
+      // -moz-border-radius: 8px;
+      // -ms-border-radius: 8px;
+      // -o-border-radius: 8px;
+    }
+  }
 }
 
 //for Reminders

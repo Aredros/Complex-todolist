@@ -100,14 +100,7 @@ export const TodoItem = (props: TodoItemProps) => {
       <IconAndColorItem todo={todo} handleToggleClick={handleToggleClick} />
       <div className="TodoItem__container" onClick={handleToggleClick}>
         {" "}
-        <p className={`${todo.completed && "completed"}`}>
-          {todo.task}
-          {todo.taskorreminder === "task"
-            ? todo.nType
-              ? " / " + todo.nType
-              : " / No-cat"
-            : null}
-        </p>
+        <p className={`${todo.completed && "completed"}`}>{todo.task}</p>
       </div>
 
       <div className="TodoItem__icons">

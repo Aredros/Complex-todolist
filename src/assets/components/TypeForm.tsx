@@ -63,7 +63,7 @@ export const TypeForm = () => {
           const typesCollectionRef = collection(db, "categories");
 
           // Add the newTodo to Firestore
-          await addDoc(typesCollectionRef, newTypes);
+          await addDoc(typesCollectionRef, newType);
 
           console.log("sending TYPE to Firebase");
         } catch (err) {

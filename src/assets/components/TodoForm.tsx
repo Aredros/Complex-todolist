@@ -2,14 +2,7 @@ import React, { useState, useContext, useEffect } from "react";
 import { AppContext } from "../../App";
 import { v4 as uuidv4 } from "uuid";
 import { auth, db } from "../../config/firebase";
-import {
-  addDoc,
-  collection,
-  deleteDoc,
-  query,
-  where,
-  getDocs,
-} from "firebase/firestore";
+import { addDoc, collection } from "firebase/firestore";
 
 export const TodoForm = () => {
   const [value, setValue] = useState("");

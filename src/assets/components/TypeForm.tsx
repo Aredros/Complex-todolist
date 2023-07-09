@@ -1,6 +1,8 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { AppContext } from "../../App";
 import { v4 as uuidv4 } from "uuid";
+import { auth, db } from "../../config/firebase";
+import { addDoc, collection } from "firebase/firestore";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faShieldHeart,
@@ -17,6 +19,7 @@ import {
 
 interface IType {
   id: string; // Add ID field to IType interface
+  user: string;
   typeName: string;
   color: string;
   icon: string;
@@ -31,10 +34,11 @@ export const TypeForm = () => {
     allColors,
     allTypes = [],
     setAllTypes = () => {},
+    isLoggedIn,
   } = useContext(AppContext) || {};
 
   //function to create a new Type
-  const addType = (typeName: string, color: string, icon: string) => {
+  const addType = async (typeName: string, color: string, icon: string) => {
     if (allTypes === null) {
       // Handle the case where types is null (optional)
       console.log("Types array is null");
@@ -44,6 +48,7 @@ export const TypeForm = () => {
     if (!allTypes?.some((t) => t.typeName === typeName)) {
       const newType: IType = {
         id: uuidv4(), // Assign a unique ID to the new type
+        user: auth.currentUser?.email || "",
         typeName: typeName,
         color: color,
         icon: icon || "",
@@ -51,8 +56,20 @@ export const TypeForm = () => {
       const newTypes = [...allTypes, newType];
       //add the new type to the types array
       setAllTypes(newTypes);
-      //save the new types array to local storage
-      localStorage.setItem("typesLocal", JSON.stringify(newTypes));
+
+      if (isLoggedIn) {
+        try {
+          // Create a new Firestore collection reference
+          const typesCollectionRef = collection(db, "categories");
+
+          // Add the newTodo to Firestore
+          await addDoc(typesCollectionRef, newTypes);
+
+          console.log("sending TYPE to Firebase");
+        } catch (err) {
+          console.log(err);
+        }
+      }
     }
   };
 
@@ -84,6 +101,13 @@ export const TypeForm = () => {
     else if (g < 0) g = 0;
     return (usePound ? "#" : "") + (g | (b << 8) | (r << 16)).toString(16);
   };
+
+  useEffect(() => {
+    if (!isLoggedIn) {
+      // Update localStorage whenever allTodos changes
+      localStorage.setItem("typesLocal", JSON.stringify(allTypes));
+    }
+  }, [allTypes]);
 
   return (
     <form

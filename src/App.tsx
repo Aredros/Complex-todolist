@@ -43,6 +43,7 @@ interface IAppContext {
 
 interface IType {
   id: string; // Add ID field to IType interface
+  user: string;
   typeName: string;
   color: string;
   icon: string;
@@ -65,7 +66,7 @@ function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [allTodos, setAllTodos] = useState<IDoneTodo[]>([]); // Array of todo objects
   const [allTypes, setAllTypes] = useState<IType[] | null>([
-    { id: "1", typeName: "No-cat", color: "#f8f8f8", icon: "" },
+    { id: "1", user: "", typeName: "No-cat", color: "#f8f8f8", icon: "" },
   ]);
   const [isLoggedIn, setIsLoggedIn] = useState(false); //check if the user is logged in or not
 
@@ -89,11 +90,6 @@ function App() {
   useEffect(() => {
     //empty array and local storage
     //localStorage.clear();
-    //Fetch the types State
-    const storedTypes = localStorage.getItem("typesLocal");
-    if (storedTypes) {
-      setAllTypes(JSON.parse(storedTypes));
-    }
 
     //useEffect to get all stored colors in localStorage
     Object.keys(allColors).forEach((key) => {
@@ -117,8 +113,8 @@ function App() {
     };
   }, []); // the empty array is to make sure the useEffect only runs once
 
+  // Get todos from Firestore database //
   useEffect(() => {
-    // Get todos from Firestore database
     const getTodosFromDatabase = async () => {
       try {
         if (auth.currentUser) {
@@ -165,6 +161,67 @@ function App() {
       const storedTodos = localStorage.getItem("todosLocal") || "";
       // Fetch todos from LocalStorage
       setAllTodos(JSON.parse(storedTodos));
+    }
+
+    // Verifying if the user is Anon or not
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      setIsLoggedIn(user ? !user.isAnonymous : false);
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, [isLoggedIn]); // Run the effect whenever the isLoggedIn state changes
+
+  // Get TYPES from Firestore or Localstorage //
+  useEffect(() => {
+    // Get types from Firestore database
+    const getTypesFromDatabase = async () => {
+      try {
+        if (auth.currentUser) {
+          // Get the current user's email
+          const userEmail = auth.currentUser.email;
+
+          // Create a query to fetch todos where the user is the same as the current user
+          const q = query(
+            collection(db, "categories"),
+            where("user", "==", userEmail)
+          );
+
+          // Get the documents that match the query
+          const querySnapshot = await getDocs(q);
+
+          // Map the documents to an array of todos
+          const typesFromDatabase: IType[] = [];
+          const typeIds: Set<string> = new Set(); // Set to track unique todo IDs
+
+          querySnapshot.docs.forEach((doc) => {
+            const type = doc.data() as IType; // Cast the document data to ITodo
+            if (!typeIds.has(type.id)) {
+              // Check if the todo ID is already in the set
+              typesFromDatabase.push(type);
+              typeIds.add(type.id); // Add the todo ID to the set
+            }
+          });
+
+          // Update the todos state with the retrieved todos
+          setAllTypes(typesFromDatabase);
+
+          // Do something with the retrieved todos
+          console.log("Types from database:", typesFromDatabase);
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    if (isLoggedIn) {
+      // Fetch todos from Firebase
+      getTypesFromDatabase();
+    } else {
+      const storedTypes = localStorage.getItem("typesLocal") || "";
+      // Fetch todos from LocalStorage
+      setAllTypes(JSON.parse(storedTypes));
     }
 
     // Verifying if the user is Anon or not

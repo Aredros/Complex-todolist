@@ -30,7 +30,7 @@ export const EditTodoForm = (props: EditTodoFormProps) => {
   const { task } = props;
 
   const [value, setValue] = useState(task.task);
-  const [type, setType] = useState(task.nType);
+  const [type, setType] = useState(task.nType || "");
   const [date, setDate] = useState(task.date);
   const [taskorreminder, setTaskorreminder] = useState(task.taskorreminder);
 
@@ -117,7 +117,8 @@ export const EditTodoForm = (props: EditTodoFormProps) => {
   const handleSubmit = (e: React.FormEvent) => {
     //preventDefault will prevent the page from reloading
     e.preventDefault();
-    finishEditTask?.(value, type, date, taskorreminder, task.id);
+    const updatedType = taskorreminder === "task" ? type : ""; // Set nType to empty string if taskorreminder is not "task"
+    finishEditTask?.(value, updatedType, date, taskorreminder, task.id);
   };
 
   //UPDATE LocalStorage when allTodos changes

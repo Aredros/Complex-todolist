@@ -25,6 +25,11 @@ interface DailyDividerProps {
   }[];
 }
 
+interface ITlocalStorageCollapse {
+  dayDate: string;
+  IsDayCollapsed: boolean;
+}
+
 export const DailyDivider = (props: DailyDividerProps) => {
   const { weekDisplayType, date, todos } = props;
   const [dayCollapsed, setDayCollapsed] = useState(false); //state for making the day element collapse when clicking on a button
@@ -58,7 +63,43 @@ export const DailyDivider = (props: DailyDividerProps) => {
   //Change the Collapsed state
   const handleCollapseDayClick = () => {
     setDayCollapsed(!dayCollapsed);
+    //AFTER DOING A CHANGE IN COLLAPSE SEND IT TO LOCAL STORAGE
+    const storedCollapses = localStorage.getItem("collapsedItems");
+    const parsedCollapses = storedCollapses ? JSON.parse(storedCollapses) : [];
+
+    const existingCollapse = parsedCollapses.find(
+      (itemOfCollapse: ITlocalStorageCollapse) =>
+        itemOfCollapse.dayDate === date
+    );
+    if (existingCollapse) {
+      // If the collapse for the specific day already exists, update its collapse status
+      existingCollapse.IsDayCollapsed = !dayCollapsed;
+    } else {
+      // Create a new collapse and add it to parsedCollapses
+      const newCollapse = {
+        dayDate: date,
+        IsDayCollapsed: !dayCollapsed,
+      };
+      parsedCollapses.push(newCollapse);
+    }
+
+    // Update localStorage with the updated collapses
+    localStorage.setItem("collapsedItems", JSON.stringify(parsedCollapses));
   };
+
+  //Get the COLLAPSES from localStorage
+  useEffect(() => {
+    const storedCollapses = localStorage.getItem("collapsedItems") || "";
+    // Fetch todos from LocalStorage
+    const ParsedCollapses: ITlocalStorageCollapse[] = storedCollapses
+      ? JSON.parse(storedCollapses)
+      : [];
+
+    const specificDay = ParsedCollapses.find(({ dayDate }) => dayDate === date);
+    if (specificDay) {
+      setDayCollapsed(specificDay.IsDayCollapsed);
+    }
+  }, []);
 
   return (
     <div

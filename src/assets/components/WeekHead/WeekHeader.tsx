@@ -4,10 +4,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faChevronCircleUp,
   faChevronCircleDown,
+  faLayerGroup,
 } from "@fortawesome/free-solid-svg-icons";
 import { WeekSuccessPercentage } from "./WeekSuccessPercentage";
 import { EditWeekObjective } from "./EditWeekObjective";
 import { ArchiveWeekButton } from "./ArchiveWeekButton";
+import { WeekTypeCounter } from "./WeekTypeCounter";
 
 interface ISuccessProps {
   parentElement: string;
@@ -29,17 +31,16 @@ interface ISuccessProps {
   }[];
 }
 
-export const WeekHeaderContext = createContext<{
+interface ITContextWeekHeader {
   setEditingWeekObjective: (value: boolean) => void;
   weekObjective: string;
   setWeekObjective: (value: string) => void;
   editingWeekObjective: boolean;
-}>({
-  weekObjective: "",
-  setWeekObjective: () => {},
-  editingWeekObjective: false,
-  setEditingWeekObjective: () => {},
-});
+}
+
+export const WeekHeaderContext = createContext<ITContextWeekHeader | undefined>(
+  undefined
+);
 
 export const WeekHeader = (props: ISuccessProps) => {
   const {
@@ -54,6 +55,7 @@ export const WeekHeader = (props: ISuccessProps) => {
 
   const [weekObjective, setWeekObjective] = useState("");
   const [editingWeekObjective, setEditingWeekObjective] = useState(false);
+  const [displayWeekTypeCounter, setDisplayWeekTypeCounter] = useState(true);
 
   const { allColors } = useContext(AppContext) || {}; // Destructure allColors from the context
 
@@ -131,6 +133,19 @@ export const WeekHeader = (props: ISuccessProps) => {
                   {parentElement === "TodoWrapper" && (
                     <ArchiveWeekButton Weektodos={todos} />
                   )}
+
+                  <button
+                    onClick={() =>
+                      setDisplayWeekTypeCounter(!displayWeekTypeCounter)
+                    }
+                    style={{
+                      backgroundColor: allColors?.buttonIcons,
+                      color: allColors?.buttonText,
+                    }}
+                  >
+                    <FontAwesomeIcon icon={faLayerGroup} />
+                    Progress
+                  </button>
                 </div>
                 <FontAwesomeIcon
                   icon={weekCollapsed ? faChevronCircleDown : faChevronCircleUp}
@@ -142,6 +157,17 @@ export const WeekHeader = (props: ISuccessProps) => {
               </div>
             </>
           )}
+        </div>
+        <div
+          style={{
+            maxHeight: displayWeekTypeCounter ? 0 : "2000px",
+            transition: "max-height 0.7s",
+            overflow: "hidden",
+            width: "100%",
+            margin: "10px auto",
+          }}
+        >
+          <WeekTypeCounter todos={todos} week={week} />
         </div>
       </div>
     </WeekHeaderContext.Provider>

@@ -32,7 +32,7 @@ export const TodoForm = () => {
       completed: false,
       isEditing: false,
       taskorreminder: taskorreminder,
-      nType: type,
+      nType: taskorreminder === "task" ? type : "", // Set nType to type only if taskorreminder is "task", otherwise set it to empty
       user: auth.currentUser?.email || "",
       date: date,
       archived: false,

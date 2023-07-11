@@ -43,6 +43,7 @@ $background-1: #27274d;
     justify-content: center;
     gap: 5px;
     flex-wrap: wrap;
+    margin-bottom: 10px;
     &__button {
       padding: 2px 10px;
       border-radius: 8px;
@@ -183,8 +184,10 @@ $background-1: #27274d;
     }
   }
   &__icons {
-    justify-content: center;
+    margin: 10px 5% 0;
+    justify-content: space-between;
     display: flex;
+    flex-wrap: wrap;
     gap: 5px;
     svg {
       height: 20px;

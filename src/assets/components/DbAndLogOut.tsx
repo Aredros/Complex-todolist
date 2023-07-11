@@ -1,10 +1,10 @@
-import React, { useContext } from "react";
+import { useContext } from "react";
 import { AppContext } from "../../App";
 import { auth } from "../../config/firebase";
 import { signOut } from "firebase/auth";
 
 function DbAndLogOut() {
-  const { allColors, isLoggedIn } = useContext(AppContext) || {}; // Destructure allColors from the context
+  const { allColors } = useContext(AppContext) || {}; // Destructure allColors from the context
 
   //function to log out//
   const logItOut = async () => {

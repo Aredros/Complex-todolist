@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext, createContext } from "react";
+import { useState, useContext, createContext } from "react";
 import { AppContext } from "../../App";
 import { WeeklyDivider } from "../components/WeeklyDivider";
 import { TypeItem } from "../components/TypeItem/TypeItem";
@@ -27,13 +27,7 @@ export const DisplayTypesContext = createContext<{
 });
 
 export const Archive = () => {
-  const {
-    allColors,
-    allTodos = [],
-    setAllTodos,
-    setAllTypes,
-    isLoggedIn,
-  } = useContext(AppContext) || {}; //getting the colors from the context
+  const { allColors, allTodos = [], isLoggedIn } = useContext(AppContext) || {}; //getting the colors from the context
   //
 
   const [weekList, setWeekList] = useState(true); //state for choosing between weekly or daily list

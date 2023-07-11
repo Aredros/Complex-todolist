@@ -1,12 +1,13 @@
-import React, { useState, useEffect, useContext } from "react";
+import { useContext } from "react";
 import { DisplayTypesContext } from "../pages/TodoWrapper";
 import { AppContext } from "../../App";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalendarDays, faList } from "@fortawesome/free-solid-svg-icons";
+import { opacify } from "polished";
 
 export const DisplayTypes = () => {
   const { allColors } = useContext(AppContext) || {}; // Destructure allColors from the context
-  const { setWeekList } = useContext(DisplayTypesContext) || {
+  const { setWeekList, weekList } = useContext(DisplayTypesContext) || {
     setWeekList: () => {},
   }; // Destructure setWeekList from the context
 
@@ -21,7 +22,10 @@ export const DisplayTypes = () => {
       <div className="changeWeekList__buttons">
         <div
           className="changeWeekList__buttons__button"
-          style={{ backgroundColor: allColors?.buttonIcons }}
+          style={{
+            backgroundColor: allColors?.buttonIcons,
+            opacity: weekList ? 1 : 0.85,
+          }}
           onClick={() => setWeekList(true)}
         >
           <FontAwesomeIcon
@@ -32,7 +36,10 @@ export const DisplayTypes = () => {
         </div>
         <div
           className="changeWeekList__buttons__button"
-          style={{ backgroundColor: allColors?.buttonIcons }}
+          style={{
+            backgroundColor: allColors?.buttonIcons,
+            opacity: weekList ? 0.85 : 1,
+          }}
           onClick={() => setWeekList(false)}
         >
           <FontAwesomeIcon

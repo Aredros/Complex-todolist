@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext, createContext } from "react";
+import { useState, useContext, createContext } from "react";
 import { AppContext } from "../../App";
 import { TodoForm } from "../components/TodoForm";
 import { WeeklyDivider } from "../components/WeeklyDivider";
@@ -24,18 +24,14 @@ interface ITodo {
 
 export const DisplayTypesContext = createContext<{
   setWeekList: (value: boolean) => void;
+  weekList: boolean;
 }>({
   setWeekList: () => {},
+  weekList: false,
 });
 
 export const TodoWrapper = () => {
-  const {
-    allColors,
-    allTodos = [],
-    setAllTodos,
-    setAllTypes,
-    isLoggedIn,
-  } = useContext(AppContext) || {}; //getting the colors from the context
+  const { allColors, allTodos = [], isLoggedIn } = useContext(AppContext) || {}; //getting the colors from the context
   //
 
   const [weekList, setWeekList] = useState(true); //state for choosing between weekly or daily list
@@ -92,7 +88,7 @@ export const TodoWrapper = () => {
       </div>
       <TodoForm />
       {isLoggedIn && <FilterTodoItem filterOneItem={filterOneItem} />}
-      <DisplayTypesContext.Provider value={{ setWeekList }}>
+      <DisplayTypesContext.Provider value={{ setWeekList, weekList }}>
         <DisplayTypes />
       </DisplayTypesContext.Provider>
       {weeks.map(

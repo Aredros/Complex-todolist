@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import { useContext } from "react";
 import { AppContext } from "../../../App";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -31,7 +31,7 @@ interface TodoItemProps {
 export const IconAndColorItem = (props: TodoItemProps) => {
   const { todo, handleToggleClick } = props;
 
-  const { allTypes, allColors } = useContext(AppContext) || {}; // Destructure allColors from the context
+  const { allTypes } = useContext(AppContext) || {}; // Destructure allColors from the context
 
   //get the type color
   const typecolor = allTypes?.find(

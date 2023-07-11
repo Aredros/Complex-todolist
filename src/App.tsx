@@ -73,7 +73,7 @@ function App() {
   const [allColors, setAllColors] = useState({
     outerBackgroundColor: "#334549",
     innerBackgroundColor: "#ffffff",
-    mainTitleColor: "#ffffff",
+    mainTitleColor: "#000000",
     titleTextColor: "#005657",
     weeklyCardBG: "#ffffff",
     weeklyBorder: "#005657",

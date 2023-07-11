@@ -1,6 +1,6 @@
-import React, { useContext } from "react";
+import { useContext } from "react";
 import { AppContext } from "../../App";
-import { NavLink, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 function Navigation() {
   const { allColors } = useContext(AppContext) || {};

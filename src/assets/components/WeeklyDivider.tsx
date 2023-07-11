@@ -2,7 +2,6 @@ import React, { useState, useEffect, useContext } from "react";
 import { AppContext } from "../../App";
 import { DailyDivider } from "./DailyDivider";
 import { WeekHeader } from "./WeekHead/WeekHeader";
-import { WeekTypeCounter } from "./WeekHead/WeekTypeCounter";
 
 interface ITodo {
   id: string;

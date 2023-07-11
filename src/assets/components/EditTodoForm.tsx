@@ -1,16 +1,11 @@
 import React, { useState, useContext, useEffect } from "react";
 import { AppContext } from "../../App";
-import { finishEditFunction } from "../functions/functions";
 import {
   collection,
   updateDoc,
-  doc,
-  deleteDoc,
   query,
   where,
   getDocs,
-  DocumentData,
-  DocumentReference,
 } from "firebase/firestore";
 import { auth, db } from "../../config/firebase"; // Import your initialized Firebase instance
 

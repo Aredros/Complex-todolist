@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext } from "react";
 import { AppContext } from "../../App";
 import { TodoItem } from "./TodoItem/TodoItem";
 import { EditTodoForm } from "./EditTodoForm";

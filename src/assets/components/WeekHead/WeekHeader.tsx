@@ -31,13 +31,6 @@ interface ISuccessProps {
   }[];
 }
 
-interface ITContextWeekHeader {
-  setEditingWeekObjective: (value: boolean) => void;
-  weekObjective: string;
-  setWeekObjective: (value: string) => void;
-  editingWeekObjective: boolean;
-}
-
 export const WeekHeaderContext = createContext<
   | {
       setEditingWeekObjective: (value: boolean) => void;

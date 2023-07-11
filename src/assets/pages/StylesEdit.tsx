@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import { useContext } from "react";
 import { AppContext } from "../../App";
 import Navigation from "../components/Navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -21,11 +21,6 @@ interface IColorFuncts {
   change_itemBackgroundColor: (color: string) => void;
   change_itemText: (color: string) => void;
   change_reminderBackgroundColor: (color: string) => void;
-}
-
-//combine all colors in an array
-interface IcolorArray {
-  allColorFunctions: IColorFuncts;
 }
 
 function StylesEdit() {

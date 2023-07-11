@@ -38,9 +38,15 @@ interface ITContextWeekHeader {
   editingWeekObjective: boolean;
 }
 
-export const WeekHeaderContext = createContext<ITContextWeekHeader | undefined>(
-  undefined
-);
+export const WeekHeaderContext = createContext<
+  | {
+      setEditingWeekObjective: (value: boolean) => void;
+      weekObjective: string;
+      setWeekObjective: (value: string) => void;
+      editingWeekObjective: boolean;
+    }
+  | undefined
+>(undefined);
 
 export const WeekHeader = (props: ISuccessProps) => {
   const {
@@ -77,10 +83,10 @@ export const WeekHeader = (props: ISuccessProps) => {
   return (
     <WeekHeaderContext.Provider
       value={{
+        setEditingWeekObjective,
         weekObjective,
         setWeekObjective,
         editingWeekObjective,
-        setEditingWeekObjective,
       }}
     >
       <div className={`Weekly-divider__Header header_week_of_${parentElement}`}>

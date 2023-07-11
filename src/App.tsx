@@ -1,7 +1,6 @@
 import "./App.scss";
 import "./Login.scss";
 import "./Editpage.scss";
-import { deleteTodoFunction } from "./assets/functions/functions";
 import React, { useState, useEffect, createContext } from "react";
 import { TodoWrapper } from "./assets/pages/TodoWrapper";
 import { Auth } from "./assets/pages/auth";
@@ -95,10 +94,14 @@ function App() {
     Object.keys(allColors).forEach((key) => {
       const stored_indiv_color = localStorage.getItem(key);
       if (stored_indiv_color) {
-        setAllColors((prevColors) => ({
-          ...prevColors,
-          [key]: stored_indiv_color,
-        }));
+        try {
+          setAllColors((prevColors) => ({
+            ...prevColors,
+            [key]: stored_indiv_color,
+          }));
+        } catch (error) {
+          console.log(`Error parsing stored color for ${key}:`, error);
+        }
       }
       // console.log(key + " : " + allColors[key]);
     });
@@ -159,8 +162,12 @@ function App() {
       getTodosFromDatabase();
     } else {
       const storedTodos = localStorage.getItem("todosLocal") || "";
-      // Fetch todos from LocalStorage
-      setAllTodos(JSON.parse(storedTodos));
+      try {
+        // Fetch todos from LocalStorage
+        setAllTodos(JSON.parse(storedTodos));
+      } catch (error) {
+        console.log("Error parsing stored todos:", error);
+      }
     }
 
     // Verifying if the user is Anon or not
@@ -220,8 +227,12 @@ function App() {
       getTypesFromDatabase();
     } else {
       const storedTypes = localStorage.getItem("typesLocal") || "";
-      // Fetch todos from LocalStorage
-      setAllTypes(JSON.parse(storedTypes));
+      try {
+        // Fetch todos from LocalStorage
+        setAllTypes(JSON.parse(storedTypes));
+      } catch (error) {
+        console.log("Error parsing stored types:", error);
+      }
     }
 
     // Verifying if the user is Anon or not

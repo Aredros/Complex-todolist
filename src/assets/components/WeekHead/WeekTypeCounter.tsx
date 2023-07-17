@@ -69,7 +69,7 @@ export const WeekTypeCounter = (props: ITWeekTypeCounter) => {
           }}
         >
           {" "}
-          <IconWeekType todoType={item} />
+          <IconWeekType todoType={item} key={`progress=${week}`} />
           <div>
             <p style={{ color: allColors?.weeklyCardTxt }}>
               {item}: {CountCompletedItems(item)}/{CountAllItems(item)}

@@ -10,6 +10,8 @@ import {
 } from "firebase/firestore";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import { IconWeekType } from "../WeekHead/IconWeekType";
+import { v4 as uuidv4 } from "uuid";
 
 export const TypeItem = () => {
   const {
@@ -94,12 +96,7 @@ export const TypeItem = () => {
             color: allColors?.itemText,
           }}
         >
-          <div
-            className="TypeItem__color"
-            style={{
-              background: type.color,
-            }}
-          ></div>
+          <IconWeekType todoType={type.typeName} key={`typeItem-${type.id}`} />
           <div className="types-nameNnumber">
             {" "}
             <p>{type.typeName}</p>

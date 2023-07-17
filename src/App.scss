@@ -81,6 +81,13 @@ $background-1: #27274d;
   box-shadow: 2px 1px 1px rgba(24, 24, 24, 0.384);
 }
 
+//PERSONAL LINKS
+.personal-links {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
 /*Effects shared between Creating forms and Editing Forms*/
 .TodoForm,
 .EditTodoForm,

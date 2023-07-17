@@ -16,10 +16,11 @@ import {
 
 interface TodoTypeProps {
   todoType: string;
+  key: string;
 }
 
 export const IconWeekType = (props: TodoTypeProps) => {
-  const { todoType } = props;
+  const { todoType, key } = props;
 
   const { allTypes } = useContext(AppContext) || {}; // Destructure allColors from the context
 
@@ -32,6 +33,7 @@ export const IconWeekType = (props: TodoTypeProps) => {
   return (
     <div
       className="((TodoItem__type-color"
+      key={key}
       style={{
         backgroundColor: typecolor ?? "gray",
         padding: "1px",

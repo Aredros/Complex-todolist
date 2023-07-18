@@ -7,6 +7,7 @@ import {
   signInWithPopup,
   signInAnonymously,
 } from "firebase/auth";
+import PersonalLinks from "../components/PersonalLinks";
 
 export const Auth = () => {
   const [email, setEmail] = React.useState("");
@@ -52,7 +53,11 @@ export const Auth = () => {
 
   return (
     <div className="TodoWrapper auth">
+      <PersonalLinks />
       <h1 style={{ color: allColors?.mainTitleColor }}>Complex Todo</h1>
+      <p className="h1sub" style={{ color: allColors?.mainTitleColor }}>
+        By Cheo
+      </p>
       <button onClick={signAnon}>Use without logging in</button>
       <div className="auth__inputs">
         {isRegistering ? (

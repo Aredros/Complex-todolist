@@ -6,6 +6,7 @@ import Navigation from "../components/Navigation";
 import DbAndLogOut from "../components/DbAndLogOut";
 import { FilterTodoItem } from "../components/FilterTodoItem";
 import { DisplayTypes } from "../components/DisplayTypes";
+import PersonalLinks from "../components/PersonalLinks";
 
 // Define interface for Todo object
 interface ITodo {
@@ -73,6 +74,7 @@ export const Archive = () => {
     >
       <Navigation />
       <div className="MainTitle-and-subtitle">
+        <PersonalLinks />
         <h1 style={{ color: allColors?.mainTitleColor }}>Archive</h1>
         <p className="h1sub" style={{ color: allColors?.mainTitleColor }}>
           By Cheo

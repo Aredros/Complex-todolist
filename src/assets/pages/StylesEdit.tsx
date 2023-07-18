@@ -8,6 +8,7 @@ import {
   faEdit,
 } from "@fortawesome/free-solid-svg-icons";
 import StyleChangerConsole from "../components/Styles/StyleChangerConsole";
+import PersonalLinks from "../components/PersonalLinks";
 
 interface IColorFuncts {
   change_outerBackgroundColor: (color: string) => void;
@@ -33,6 +34,7 @@ function StylesEdit() {
     >
       <Navigation />
       <div className="MainTitle-and-subtitle">
+        <PersonalLinks />
         <h1 style={{ color: allColors?.mainTitleColor }}>Styles</h1>
         <p className="h1sub" style={{ color: allColors?.mainTitleColor }}>
           By Cheo

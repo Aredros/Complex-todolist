@@ -10,24 +10,28 @@ function PersonalLinks() {
 
   return (
     <div className="personal-links">
-      <Link to="https://www.linkedin.com/in/jose-david-molina-sosa-webdev/?locale=en_US">
+      <a
+        href="https://www.linkedin.com/in/jose-david-molina-sosa-webdev/?locale=en_US"
+        target="_blank"
+        rel="samecreator"
+      >
         <FontAwesomeIcon
           icon={faLinkedin}
           style={{ color: allColors?.mainTitleColor }}
         />
-      </Link>
-      <Link to="https://cheoworkshop.info/">
+      </a>
+      <a href="https://cheoworkshop.info/" target="_blank" rel="samecreator">
         <FontAwesomeIcon
           icon={faGlobe}
           style={{ color: allColors?.mainTitleColor }}
         />
-      </Link>
-      <Link to="https://github.com/Aredros">
+      </a>
+      <a href="https://github.com/Aredros" target="_blank" rel="samecreator">
         <FontAwesomeIcon
           icon={faGithub}
           style={{ color: allColors?.mainTitleColor }}
         />
-      </Link>
+      </a>
     </div>
   );
 }

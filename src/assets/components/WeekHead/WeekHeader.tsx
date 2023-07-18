@@ -132,7 +132,6 @@ export const WeekHeader = (props: ISuccessProps) => {
                   {parentElement === "TodoWrapper" && (
                     <ArchiveWeekButton Weektodos={todos} />
                   )}
-
                   <button
                     onClick={() =>
                       setDisplayWeekTypeCounter(!displayWeekTypeCounter)

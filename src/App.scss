@@ -86,6 +86,9 @@ $background-1: #27274d;
   display: flex;
   justify-content: center;
   gap: 10px;
+  svg:hover {
+    opacity: 0.8;
+  }
 }
 
 /*Effects shared between Creating forms and Editing Forms*/

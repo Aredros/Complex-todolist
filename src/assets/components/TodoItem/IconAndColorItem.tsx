@@ -34,12 +34,10 @@ export const IconAndColorItem = (props: TodoItemProps) => {
   const { allTypes } = useContext(AppContext) || {}; // Destructure allColors from the context
 
   //get the type color
-  const typecolor = allTypes?.find(
-    (type) => type.typeName === todo.nType
-  )?.color;
+  const typecolor = allTypes?.find((type) => type.id === todo.nType)?.color;
 
   // Get the type icon
-  const typeIcon = allTypes?.find((type) => type.typeName === todo.nType)?.icon; // Assign a default icon if none is found
+  const typeIcon = allTypes?.find((type) => type.id === todo.nType)?.icon; // Assign a default icon if none is found
 
   return (
     <div

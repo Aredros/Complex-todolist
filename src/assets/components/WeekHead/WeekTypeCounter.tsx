@@ -22,7 +22,7 @@ interface ITWeekTypeCounter {
 export const WeekTypeCounter = (props: ITWeekTypeCounter) => {
   const { todos, week } = props;
 
-  const { allColors } = useContext(AppContext) || {}; // Destructure allColors from the context
+  const { allColors, allTypes } = useContext(AppContext) || {}; // Destructure allColors from the context
 
   //Get the type of each todo in an array
   const todoType = todos
@@ -48,6 +48,12 @@ export const WeekTypeCounter = (props: ITWeekTypeCounter) => {
     }
   };
 
+  //Get the typeName using the id
+  const getTypeName = (id: string) => {
+    const theName = allTypes?.find((t) => t.id === id);
+    return theName?.typeName;
+  };
+
   return (
     <div
       style={{
@@ -69,10 +75,11 @@ export const WeekTypeCounter = (props: ITWeekTypeCounter) => {
           }}
         >
           {" "}
-          <IconWeekType todoType={item} key={`progress=${week}`} />
+          <IconWeekType todoType={item} customKey={`progress=${week}`} />
           <div>
             <p style={{ color: allColors?.weeklyCardTxt }}>
-              {item}: {CountCompletedItems(item)}/{CountAllItems(item)}
+              {getTypeName(item)}: {CountCompletedItems(item)}/
+              {CountAllItems(item)}
             </p>
           </div>
         </div>

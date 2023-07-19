@@ -1,12 +1,12 @@
 import { useState, useContext, createContext } from "react";
 import { AppContext } from "../../App";
 import { WeeklyDivider } from "../components/WeeklyDivider";
-import { TypeItem } from "../components/TypeItem/TypeItem";
-import Navigation from "../components/Navigation";
-import DbAndLogOut from "../components/DbAndLogOut";
+import { TypeArea } from "../components/TypeItem/TypeArea";
+import Navigation from "../components/Navigations/Navigation";
+import DbAndLogOut from "../components/Navigations/DbAndLogOut";
 import { FilterTodoItem } from "../components/FilterTodoItem";
 import { DisplayTypes } from "../components/DisplayTypes";
-import PersonalLinks from "../components/PersonalLinks";
+import PersonalLinks from "../components/Navigations/PersonalLinks";
 
 // Define interface for Todo object
 interface ITodo {
@@ -103,7 +103,7 @@ export const Archive = () => {
             />
           )
       )}
-      <TypeItem />
+      <TypeArea />
       <DbAndLogOut />
     </div>
   );

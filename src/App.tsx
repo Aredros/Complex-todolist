@@ -46,12 +46,13 @@ interface IType {
   typeName: string;
   color: string;
   icon: string;
+  isEditing: boolean;
 }
 
 interface ITallAppFile {
   allColors: IAppContext;
   setAllColors: React.Dispatch<React.SetStateAction<IAppContext>>;
-  allTypes: IType[] | null;
+  allTypes: IType[] | null | undefined;
   setAllTypes: (types: IType[]) => void;
   allTodos: IDoneTodo[] | null | undefined;
   setAllTodos: (todos: IDoneTodo[]) => void;
@@ -65,7 +66,14 @@ function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [allTodos, setAllTodos] = useState<IDoneTodo[]>([]); // Array of todo objects
   const [allTypes, setAllTypes] = useState<IType[] | null>([
-    { id: "1", user: "", typeName: "No-cat", color: "#f8f8f8", icon: "" },
+    {
+      id: "1",
+      user: "",
+      typeName: "No-cat",
+      color: "#f8f8f8",
+      icon: "",
+      isEditing: false,
+    },
   ]);
   const [isLoggedIn, setIsLoggedIn] = useState(false); //check if the user is logged in or not
 
@@ -89,6 +97,10 @@ function App() {
   useEffect(() => {
     //empty array and local storage
     //localStorage.clear();
+
+    const updateThem = allTypes?.map((type) =>
+      type.isEditing === undefined ? { ...type, isEditing: false } : type
+    );
 
     //useEffect to get all stored colors in localStorage
     Object.keys(allColors).forEach((key) => {

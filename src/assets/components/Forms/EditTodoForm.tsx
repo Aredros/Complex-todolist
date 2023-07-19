@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
-import { AppContext } from "../../App";
+import { AppContext } from "../../../App";
 import {
   collection,
   updateDoc,
@@ -7,7 +7,7 @@ import {
   where,
   getDocs,
 } from "firebase/firestore";
-import { auth, db } from "../../config/firebase"; // Import your initialized Firebase instance
+import { auth, db } from "../../../config/firebase"; // Import your initialized Firebase instance
 
 interface EditTodoFormProps {
   task: {
@@ -159,7 +159,7 @@ export const EditTodoForm = (props: EditTodoFormProps) => {
             {...(taskorreminder === "reminder" && { disabled: true })}
           >
             {allTypes?.map((type) => (
-              <option key={type.id} value={type.typeName}>
+              <option key={type.id} value={type.id}>
                 {type.typeName}
               </option>
             ))}

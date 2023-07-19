@@ -16,24 +16,24 @@ import {
 
 interface TodoTypeProps {
   todoType: string;
-  key: string;
+  customKey: string;
 }
 
 export const IconWeekType = (props: TodoTypeProps) => {
-  const { todoType, key } = props;
+  const { todoType, customKey } = props;
 
   const { allTypes } = useContext(AppContext) || {}; // Destructure allColors from the context
 
   //get the type color
-  const typecolor = allTypes?.find((type) => type.typeName === todoType)?.color;
+  const typecolor = allTypes?.find((type) => type.id === todoType)?.color;
 
   // Get the type icon
-  const typeIcon = allTypes?.find((type) => type.typeName === todoType)?.icon; // Assign a default icon if none is found
+  const typeIcon = allTypes?.find((type) => type.id === todoType)?.icon; // Assign a default icon if none is found
 
   return (
     <div
       className="((TodoItem__type-color"
-      key={key}
+      key={customKey}
       style={{
         backgroundColor: typecolor ?? "gray",
         padding: "1px",

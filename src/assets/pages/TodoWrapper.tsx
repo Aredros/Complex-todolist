@@ -1,14 +1,14 @@
 import { useState, useContext, createContext } from "react";
 import { AppContext } from "../../App";
-import { TodoForm } from "../components/TodoForm";
+import { TodoForm } from "../components/Forms/TodoForm";
 import { WeeklyDivider } from "../components/WeeklyDivider";
-import { TypeForm } from "../components/TypeForm";
-import { TypeItem } from "../components/TypeItem/TypeItem";
-import Navigation from "../components/Navigation";
-import DbAndLogOut from "../components/DbAndLogOut";
+import { TypeForm } from "../components/Forms/TypeForm";
+import { TypeArea } from "../components/TypeItem/TypeArea";
+import Navigation from "../components/Navigations/Navigation";
+import DbAndLogOut from "../components/Navigations/DbAndLogOut";
 import { FilterTodoItem } from "../components/FilterTodoItem";
 import { DisplayTypes } from "../components/DisplayTypes";
-import PersonalLinks from "../components/PersonalLinks";
+import PersonalLinks from "../components/Navigations/PersonalLinks";
 
 // Define interface for Todo object
 interface ITodo {
@@ -114,7 +114,7 @@ export const TodoWrapper = () => {
       )}
       <TypeForm />
       <div className="TypeArea">
-        <TypeItem />
+        <TypeArea />
       </div>
 
       <DbAndLogOut />

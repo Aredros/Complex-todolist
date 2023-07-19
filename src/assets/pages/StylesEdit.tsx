@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { AppContext } from "../../App";
-import Navigation from "../components/Navigation";
+import Navigation from "../components/Navigations/Navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faChevronCircleDown,
@@ -8,7 +8,7 @@ import {
   faEdit,
 } from "@fortawesome/free-solid-svg-icons";
 import StyleChangerConsole from "../components/Styles/StyleChangerConsole";
-import PersonalLinks from "../components/PersonalLinks";
+import PersonalLinks from "../components/Navigations/PersonalLinks";
 
 interface IColorFuncts {
   change_outerBackgroundColor: (color: string) => void;

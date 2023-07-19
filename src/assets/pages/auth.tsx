@@ -7,7 +7,7 @@ import {
   signInWithPopup,
   signInAnonymously,
 } from "firebase/auth";
-import PersonalLinks from "../components/PersonalLinks";
+import PersonalLinks from "../components/Navigations/PersonalLinks";
 
 export const Auth = () => {
   const [email, setEmail] = React.useState("");

@@ -1,23 +1,23 @@
 import React, { useState, useContext, useEffect } from "react";
-import { AppContext } from "../../App";
+import { AppContext } from "../../../App";
 import { v4 as uuidv4 } from "uuid";
-import { auth, db } from "../../config/firebase";
+import { auth, db } from "../../../config/firebase";
 import { addDoc, collection } from "firebase/firestore";
 
 export const TodoForm = () => {
-  const [value, setValue] = useState("");
-  const [type, setType] = useState("");
-  const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
-  const [taskorreminder, setTaskorreminder] = useState("task");
-
   const {
     allColors,
     allTodos = [],
     setAllTodos = () => {},
-    allTypes,
+    allTypes = [],
     setAllTypes,
     isLoggedIn,
   } = useContext(AppContext) || {}; // Destructure allColors from the context
+
+  const [value, setValue] = useState("");
+  const [type, setType] = useState((allTypes && allTypes[0]?.id) || "");
+  const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
+  const [taskorreminder, setTaskorreminder] = useState("task");
 
   //function to add a TODO
   const addNewTodo = async (
@@ -64,10 +64,7 @@ export const TodoForm = () => {
     if (!date) {
       setDate(new Date().toISOString().slice(0, 10));
     }
-    //If no type is selected, set it to the first type in the array
-    if (!type && allTypes) {
-      setType(allTypes[0].typeName);
-    }
+
     if (!value) return;
     //call the addTodo function that was passed down from the App component and send the value of the input field and the type
     addNewTodo(value, type, date, taskorreminder);
@@ -119,7 +116,7 @@ export const TodoForm = () => {
             {...(taskorreminder === "reminder" && { disabled: true })}
           >
             {allTypes?.map((type) => (
-              <option key={`type-id ${type.id}`} value={type.typeName}>
+              <option key={`type-id ${type?.id}`} value={type?.id}>
                 {type.typeName}
               </option>
             ))}

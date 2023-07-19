@@ -1,6 +1,6 @@
 import { useContext } from "react";
-import { AppContext } from "../../App";
-import { auth } from "../../config/firebase";
+import { AppContext } from "../../../App";
+import { auth } from "../../../config/firebase";
 import { signOut } from "firebase/auth";
 
 function DbAndLogOut() {

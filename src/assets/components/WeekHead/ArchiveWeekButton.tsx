@@ -45,7 +45,7 @@ export const ArchiveWeekButton = (props: ArchiveButtonIT) => {
     const updatedTodos = Weektodos?.map((todo) => {
       if (ids.includes(todo.id)) {
         // Only modify archived property if it's not already true
-        return { ...todo, archived: true };
+        return { ...todo, archived: !todo.archived };
       }
       return todo;
     }) as IDoneTodo[];
@@ -77,7 +77,7 @@ export const ArchiveWeekButton = (props: ArchiveButtonIT) => {
           const querySnapshot = await getDocs(q);
 
           querySnapshot.docs.forEach(async (doc) => {
-            await updateDoc(doc.ref, { archived: true });
+            await updateDoc(doc.ref, { archived: !doc.data().archived });
           });
         } catch (err) {
           console.log(err);
@@ -91,9 +91,7 @@ export const ArchiveWeekButton = (props: ArchiveButtonIT) => {
     todosToArchive: IDoneTodo[] | undefined = Weektodos
   ) => {
     if (Array.isArray(todosToArchive)) {
-      const filteredTodos = todosToArchive
-        .filter((todo) => !todo.archived)
-        .map((todo) => todo.id);
+      const filteredTodos = todosToArchive.map((todo) => todo.id);
       archiveMultipleTodos(filteredTodos);
     }
 
@@ -113,7 +111,7 @@ export const ArchiveWeekButton = (props: ArchiveButtonIT) => {
     >
       {" "}
       <FontAwesomeIcon icon={faBoxArchive} />
-      archive
+      {Weektodos[0]?.archived ? "Unarchive" : "Archive"}
     </button>
   );
 };

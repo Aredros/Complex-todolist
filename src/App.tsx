@@ -21,6 +21,7 @@ interface IDoneTodo {
   user: string;
   nType: string;
   date: string;
+  startTime: string;
   archived: boolean;
 }
 
@@ -49,6 +50,10 @@ interface IType {
   isEditing: boolean;
 }
 
+interface IAdvancedC {
+  startTimeSettings: boolean;
+}
+
 interface ITallAppFile {
   allColors: IAppContext;
   setAllColors: React.Dispatch<React.SetStateAction<IAppContext>>;
@@ -57,6 +62,8 @@ interface ITallAppFile {
   allTodos: IDoneTodo[] | null | undefined;
   setAllTodos: (todos: IDoneTodo[]) => void;
   isLoggedIn: boolean;
+  advancedConfig: IAdvancedC;
+  setAdvancedConfig: (settings: IAdvancedC) => void;
 }
 
 //crearting context that will pass the colors and doneTodoList
@@ -92,6 +99,10 @@ function App() {
     itemBackgroundColor: "#ffffff",
     itemText: "#000000",
     reminderBackgroundColor: "#ffde8c",
+  });
+
+  const [advancedConfig, setAdvancedConfig] = useState<IAdvancedC>({
+    startTimeSettings: false,
   });
 
   useEffect(() => {
@@ -282,6 +293,8 @@ function App() {
         allTodos,
         setAllTodos,
         isLoggedIn,
+        advancedConfig,
+        setAdvancedConfig,
       }}
     >
       <div

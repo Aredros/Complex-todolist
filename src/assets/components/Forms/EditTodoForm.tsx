@@ -14,6 +14,7 @@ interface EditTodoFormProps {
     task: string;
     nType: string;
     date: string;
+    startTime: string;
     taskorreminder: string;
     id: string;
     completed: boolean;
@@ -27,6 +28,7 @@ export const EditTodoForm = (props: EditTodoFormProps) => {
   const [value, setValue] = useState(task.task);
   const [type, setType] = useState(task.nType || "");
   const [date, setDate] = useState(task.date);
+  const [startTimeValue, setStartTimeValue] = useState(task.startTime || "");
   const [taskorreminder, setTaskorreminder] = useState(task.taskorreminder);
 
   const {
@@ -42,6 +44,7 @@ export const EditTodoForm = (props: EditTodoFormProps) => {
     task: string,
     type: string,
     date: string,
+    startTimeValue: string,
     taskorreminder: string,
     id: string
   ) => {
@@ -68,6 +71,7 @@ export const EditTodoForm = (props: EditTodoFormProps) => {
             task,
             nType: type,
             date,
+            startTimeValue,
             taskorreminder,
             isEditing: false,
           });
@@ -81,6 +85,7 @@ export const EditTodoForm = (props: EditTodoFormProps) => {
                 task,
                 nType: type,
                 date,
+                startTimeValue,
                 taskorreminder,
                 isEditing: false,
               }
@@ -99,6 +104,7 @@ export const EditTodoForm = (props: EditTodoFormProps) => {
               task,
               nType: type,
               date,
+              startTimeValue,
               taskorreminder,
               isEditing: false,
             }
@@ -113,7 +119,14 @@ export const EditTodoForm = (props: EditTodoFormProps) => {
     //preventDefault will prevent the page from reloading
     e.preventDefault();
     const updatedType = taskorreminder === "task" ? type : ""; // Set nType to empty string if taskorreminder is not "task"
-    finishEditTask?.(value, updatedType, date, taskorreminder, task.id);
+    finishEditTask?.(
+      value,
+      updatedType,
+      date,
+      startTimeValue,
+      taskorreminder,
+      task.id
+    );
   };
 
   //UPDATE LocalStorage when allTodos changes
@@ -175,6 +188,14 @@ export const EditTodoForm = (props: EditTodoFormProps) => {
             <option value="task">Task</option>
             <option value="reminder">Reminder</option>
           </select>
+        </div>
+        <div className="TodoForm__CatDate__date">
+          <input
+            type="time"
+            id="startTime"
+            value="13:20"
+            onChange={(e) => setStartTimeValue(e.target.value)}
+          />
         </div>
         <div className="EditTodoForm__CatDate__date">
           <input

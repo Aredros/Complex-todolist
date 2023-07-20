@@ -124,15 +124,26 @@ $background-1: #27274d;
   }
   &__CatDate {
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
     padding-left: 10px;
     padding-right: 10px;
     align-items: baseline;
+    gap: 5px;
+    div {
+      // flex-basis: 49%;
+    }
     input,
     select {
       background: rgba(95, 95, 95, 0.69);
+      color: white;
       border: 1px solid #313131;
       padding: 0.1rem 0.1rem;
+      border-radius: 0px;
+      -webkit-border-radius: 0px;
+      -moz-border-radius: 0px;
+      -ms-border-radius: 0px;
+      -o-border-radius: 0px;
     }
     select option {
       background: #fff;
@@ -376,7 +387,7 @@ $background-1: #27274d;
     flex-direction: column;
     align-items: baseline;
     justify-content: space-between;
-    margin-bottom: 0.2rem;
+    // margin-bottom: 0.2rem;
     border-radius: 8px 8px 0 0;
     -webkit-border-radius: 8px 8px 0 0;
     -moz-border-radius: 8px 8px 0 0;
@@ -470,9 +481,8 @@ $background-1: #27274d;
 }
 
 .Daily-divider {
-  border-bottom: 2px solid #1a1a40;
+  border-bottom: 1px solid #1a1a40;
   width: 100%;
-  margin-bottom: 0.2rem;
   // padding: 5px;
   &__Header {
     display: flex;
@@ -530,6 +540,15 @@ $background-1: #27274d;
   /*fix last child*/
   &:last-child {
     border-bottom: none;
+  }
+}
+
+.Daily-divider + .days-separator {
+  color: black;
+  padding: 0px;
+  margin: 0px;
+  &:last-child {
+    display: none;
   }
 }
 

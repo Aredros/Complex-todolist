@@ -21,6 +21,7 @@ interface DailyDividerProps {
     user: string;
     nType: string;
     date: string;
+    startTime: string;
     archived: boolean;
   }[];
 }
@@ -82,9 +83,21 @@ export const DailyDivider = (props: DailyDividerProps) => {
       };
       parsedCollapses.push(newCollapse);
     }
-
     // Update localStorage with the updated collapses
     localStorage.setItem("collapsedItems", JSON.stringify(parsedCollapses));
+  };
+
+  const sortTodos = (todos: DailyDividerProps["todos"]) => {
+    return todos.sort((a, b) => {
+      const [hourA, minuteA] = a.startTime?.split(":").map(Number) ?? [0, 0];
+      const [hourB, minuteB] = b.startTime?.split(":").map(Number) ?? [0, 0];
+
+      if (hourA !== hourB) {
+        return hourA - hourB; // Sort by hour first
+      } else {
+        return minuteA - minuteB; // If hours are equal, sort by minute
+      }
+    });
   };
 
   //Get the COLLAPSES from localStorage
@@ -102,68 +115,73 @@ export const DailyDivider = (props: DailyDividerProps) => {
   }, []);
 
   return (
-    <div
-      className={`Daily-divider ${dayOfWeek} ${
-        dayPercentage === "100" && "-completed-day"
-      }`}
-      style={{
-        maxHeight: dayCollapsed ? 25 : "2000px",
-        transition: "max-height 0.7s",
-        overflow: "hidden",
-      }}
-    >
-      <div className="Daily-divider__Header">
-        <h3
-          className={`Daily-divider__Header__Title date ${
-            dateObj === today ? "todayDate" : ""
-          }`}
-        >
-          {" "}
-          {
-            //use the new Date function to convert the date string to a date object
-            new Date(date).toLocaleDateString("en-GB", {
-              weekday: "short",
-              day: "numeric",
-              month: "short",
-            })
-          }
-        </h3>
-
-        <div className="percentageAndArchive">
-          <p
-            className="Daily-divider__Header__Title"
-            style={{
-              color:
-                dayPercentage === "100" ? "#2cd477" : allColors?.weeklyCardTxt,
-            }}
+    <>
+      <div
+        className={`Daily-divider ${dayOfWeek} ${
+          dayPercentage === "100" && "-completed-day"
+        }`}
+        style={{
+          maxHeight: dayCollapsed ? 25 : "3000px",
+          transition: "max-height 0.7s",
+          overflow: "hidden",
+        }}
+      >
+        <div className="Daily-divider__Header">
+          <h3
+            className={`Daily-divider__Header__Title date ${
+              dateObj === today ? "todayDate" : ""
+            }`}
           >
-            {isNaN(parseFloat(dayPercentage))
-              ? "No tasks today"
-              : `Day ${dayPercentage}% completed`}
-          </p>
-          {weekDisplayType && (
-            <FontAwesomeIcon
-              icon={dayCollapsed ? faChevronCircleDown : faChevronCircleUp}
-              onClick={handleCollapseDayClick}
-              style={{
-                color: allColors?.buttonIcons,
-                fontSize: "14px",
-                alignSelf: "center",
-              }}
-            />
-          )}
-        </div>
-      </div>
+            {" "}
+            {
+              //use the new Date function to convert the date string to a date object
+              new Date(date).toLocaleDateString("en-GB", {
+                weekday: "short",
+                day: "numeric",
+                month: "short",
+              })
+            }
+          </h3>
 
-      <ul>
-        {todos.map((todo) =>
-          todo.isEditing ? (
-            <EditTodoForm key={todo.task} task={todo} />
-          ) : (
-            <TodoItem key={todo.task} todo={todo} />
-          )
-        )}
-      </ul>
-    </div>
+          <div className="percentageAndArchive">
+            <p
+              className="Daily-divider__Header__Title"
+              style={{
+                color:
+                  dayPercentage === "100"
+                    ? "#2cd477"
+                    : allColors?.weeklyCardTxt,
+              }}
+            >
+              {isNaN(parseFloat(dayPercentage))
+                ? "No tasks today"
+                : `Day ${dayPercentage}% completed`}
+            </p>
+            {weekDisplayType && (
+              <FontAwesomeIcon
+                icon={dayCollapsed ? faChevronCircleDown : faChevronCircleUp}
+                onClick={handleCollapseDayClick}
+                style={{
+                  color: allColors?.buttonIcons,
+                  fontSize: "14px",
+                  alignSelf: "center",
+                }}
+              />
+            )}
+          </div>
+        </div>
+
+        <ul>
+          {sortTodos(todos).map((todo) =>
+            todo.isEditing ? (
+              <EditTodoForm key={todo.task} task={todo} />
+            ) : (
+              <TodoItem key={todo.task} todo={todo} />
+            )
+          )}
+        </ul>
+      </div>
+      <p className="days-separator">. . .</p>
+    </>
   );
 };

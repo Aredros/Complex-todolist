@@ -17,6 +17,7 @@ export const TodoForm = () => {
   const [value, setValue] = useState("");
   const [type, setType] = useState((allTypes && allTypes[0]?.id) || "");
   const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
+  const [startTimeValue, setStartTimeValue] = useState("");
   const [taskorreminder, setTaskorreminder] = useState("task");
 
   //function to add a TODO
@@ -24,6 +25,7 @@ export const TodoForm = () => {
     todo: string,
     type: string,
     date: string,
+    startTime: string,
     taskorreminder: string
   ) => {
     const newTodo = {
@@ -35,6 +37,7 @@ export const TodoForm = () => {
       nType: taskorreminder === "task" ? type : "", // Set nType to type only if taskorreminder is "task", otherwise set it to empty
       user: auth.currentUser?.email || "",
       date: date,
+      startTime: startTime,
       archived: false,
     };
 
@@ -67,7 +70,7 @@ export const TodoForm = () => {
 
     if (!value) return;
     //call the addTodo function that was passed down from the App component and send the value of the input field and the type
-    addNewTodo(value, type, date, taskorreminder);
+    addNewTodo(value, type, date, startTimeValue, taskorreminder);
     //reset the input fields after submitting
     setValue("");
 
@@ -132,6 +135,14 @@ export const TodoForm = () => {
             <option value="task">Task</option>
             <option value="reminder">Reminder</option>
           </select>
+        </div>
+        <div className="TodoForm__CatDate__date">
+          <input
+            type="time"
+            id="startTime"
+            value={startTimeValue}
+            onChange={(e) => setStartTimeValue(e.target.value)}
+          />
         </div>
         <div className="TodoForm__CatDate__date">
           <input

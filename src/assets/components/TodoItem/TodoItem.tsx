@@ -23,6 +23,7 @@ interface TodoItemProps {
     user: string;
     nType: string;
     date: string;
+    startTime: string;
     archived: boolean;
   };
 }
@@ -100,7 +101,12 @@ export const TodoItem = (props: TodoItemProps) => {
       <IconAndColorItem todo={todo} handleToggleClick={handleToggleClick} />
       <div className="TodoItem__container" onClick={handleToggleClick}>
         {" "}
-        <p className={`${todo.completed && "completed"}`}>{todo.task}</p>
+        <p className={`${todo.completed && "completed"}`}>
+          {todo.startTime !== undefined && todo.startTime !== ""
+            ? `${todo.startTime} | `
+            : null}
+          {todo.task}
+        </p>
       </div>
 
       <div className="TodoItem__icons">

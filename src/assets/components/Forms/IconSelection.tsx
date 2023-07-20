@@ -11,6 +11,8 @@ import {
   faMoneyBillTrendUp,
   faGuitar,
   faHome,
+  faDumbbell,
+  faPersonArrowUpFromLine,
   faX,
 } from "@fortawesome/free-solid-svg-icons";
 
@@ -160,6 +162,28 @@ export const IconSelection = (props: ITIconSelection) => {
           color: allColors?.buttonText,
         }}
         onClick={(e) => IconSelectionFunction("faHome")}
+      />
+      <FontAwesomeIcon
+        icon={faDumbbell}
+        style={{
+          backgroundColor:
+            iconValue === "faDumbbell"
+              ? lightenDarkenColor(allColors?.buttonIcons || "", -20)
+              : allColors?.buttonIcons,
+          color: allColors?.buttonText,
+        }}
+        onClick={(e) => IconSelectionFunction("faDumbbell")}
+      />
+      <FontAwesomeIcon
+        icon={faPersonArrowUpFromLine}
+        style={{
+          backgroundColor:
+            iconValue === "faPersonArrowUpFromLine"
+              ? lightenDarkenColor(allColors?.buttonIcons || "", -20)
+              : allColors?.buttonIcons,
+          color: allColors?.buttonText,
+        }}
+        onClick={(e) => IconSelectionFunction("faPersonArrowUpFromLine")}
       />
     </div>
   );

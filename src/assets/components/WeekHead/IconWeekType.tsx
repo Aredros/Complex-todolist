@@ -11,6 +11,8 @@ import {
   faMoneyBillTrendUp,
   faGuitar,
   faHome,
+  faDumbbell,
+  faPersonArrowUpFromLine,
   faX,
 } from "@fortawesome/free-solid-svg-icons";
 
@@ -65,6 +67,10 @@ export const IconWeekType = (props: TodoTypeProps) => {
               ? faGuitar
               : typeIcon === "faHome"
               ? faHome
+              : typeIcon === "faDumbbell"
+              ? faDumbbell
+              : typeIcon === "faPersonArrowUpFromLine"
+              ? faPersonArrowUpFromLine
               : faX
           }
           style={{ color: "#edf9f3" }}

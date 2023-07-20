@@ -11,6 +11,7 @@ interface ITodo {
   user: string;
   nType: string;
   date: string;
+  startTime: string;
   archived: boolean;
 }
 

@@ -27,6 +27,7 @@ interface TodoItemProps {
     user: string;
     nType: string;
     date: string;
+    startTime: string;
   };
 }
 

@@ -16,6 +16,7 @@ interface TodoItemProps {
     user: string;
     nType: string;
     date: string;
+    startTime: string;
     archived: boolean;
   };
 }
@@ -41,6 +42,7 @@ export const DuplicateItemButton = (props: TodoItemProps) => {
       nType: todo.nType,
       user: auth.currentUser?.email || "",
       date: todo.date,
+      startTime: todo.startTime,
       archived: todo.archived,
     };
 

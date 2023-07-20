@@ -1,23 +1,13 @@
-import { v4 as uuidv4 } from "uuid";
-import { auth, db } from "../../config/firebase";
-import {
-  addDoc,
-  collection,
-  deleteDoc,
-  query,
-  where,
-  getDocs,
-} from "firebase/firestore";
-
 interface INTTodoTasks {
   id: string;
   task: string;
-  user: string;
   completed: boolean;
-  taskorreminder: string;
   isEditing: boolean;
+  taskorreminder: string;
+  user: string;
   nType: string;
   date: string;
+  startTime: string;
   archived: boolean;
 }
 /********************************************************** */

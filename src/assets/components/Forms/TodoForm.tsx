@@ -10,7 +10,6 @@ export const TodoForm = () => {
     allTodos = [],
     setAllTodos = () => {},
     allTypes = [],
-    setAllTypes,
     isLoggedIn,
   } = useContext(AppContext) || {}; // Destructure allColors from the context
 

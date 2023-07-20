@@ -18,13 +18,8 @@ interface IType {
 export const TypeItem = (props: IType) => {
   const { type } = props;
 
-  const {
-    allColors,
-    allTodos,
-    allTypes,
-    setAllTypes = () => {},
-    isLoggedIn,
-  } = useContext(AppContext) || {}; // Destructure allColors from the context
+  const { allColors, allTodos, allTypes, isLoggedIn } =
+    useContext(AppContext) || {}; // Destructure allColors from the context
 
   //Get all items from this type
   const CountAllItems = (typeID: string) =>

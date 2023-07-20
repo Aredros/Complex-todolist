@@ -5,7 +5,6 @@ import { faBoxArchive } from "@fortawesome/free-solid-svg-icons";
 import { auth, db } from "../../../config/firebase";
 import {
   collection,
-  doc,
   query,
   updateDoc,
   where,

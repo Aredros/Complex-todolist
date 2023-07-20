@@ -3,7 +3,6 @@ import { DisplayTypesContext } from "../pages/TodoWrapper";
 import { AppContext } from "../../App";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalendarDays, faList } from "@fortawesome/free-solid-svg-icons";
-import { opacify } from "polished";
 
 export const DisplayTypes = () => {
   const { allColors } = useContext(AppContext) || {}; // Destructure allColors from the context

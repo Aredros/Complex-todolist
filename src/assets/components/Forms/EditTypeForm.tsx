@@ -8,9 +8,6 @@ import {
   where,
   getDocs,
 } from "firebase/firestore";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash } from "@fortawesome/free-solid-svg-icons";
-import { IconWeekType } from "../WeekHead/IconWeekType";
 import { IconSelection } from "./IconSelection";
 
 interface IType {

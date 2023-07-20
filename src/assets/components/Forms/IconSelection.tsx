@@ -24,12 +24,7 @@ interface ITIconSelection {
 export const IconSelection = (props: ITIconSelection) => {
   const { IconSelectionFunction, iconValue } = props;
 
-  const {
-    allColors,
-    allTodos = [],
-    setAllTodos = () => {},
-    isLoggedIn,
-  } = useContext(AppContext) || {}; // Destructure allColors from the context
+  const { allColors } = useContext(AppContext) || {}; // Destructure allColors from the context
 
   // Function to lighten or darken a color
   const lightenDarkenColor = (color: string, amount: number) => {

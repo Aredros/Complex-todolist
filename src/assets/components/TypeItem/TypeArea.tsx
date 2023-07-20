@@ -5,10 +5,8 @@ import { EditTypeForm } from "../Forms/EditTypeForm";
 
 export const TypeArea = () => {
   const {
-    allColors,
-    allTodos,
     allTypes,
-    setAllTypes = () => {},
+
     isLoggedIn,
   } = useContext(AppContext) || {}; // Destructure allColors from the context
 

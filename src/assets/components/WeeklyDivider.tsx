@@ -80,7 +80,7 @@ export const WeeklyDivider = (props: WeeklyDividerProps) => {
 
       <div
         style={{
-          maxHeight: weekCollapsed ? 0 : "2000px",
+          maxHeight: weekCollapsed ? 0 : "4000px",
           transition: "max-height 0.7s",
         }}
         className={`Weekly-divider__Content content_week_of_${parentElement}`}

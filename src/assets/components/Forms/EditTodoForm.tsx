@@ -44,7 +44,7 @@ export const EditTodoForm = (props: EditTodoFormProps) => {
     task: string,
     type: string,
     date: string,
-    startTimeValue: string,
+    startTime: string,
     taskorreminder: string,
     id: string
   ) => {
@@ -71,7 +71,7 @@ export const EditTodoForm = (props: EditTodoFormProps) => {
             task,
             nType: type,
             date,
-            startTimeValue,
+            startTime: startTimeValue,
             taskorreminder,
             isEditing: false,
           });
@@ -85,7 +85,7 @@ export const EditTodoForm = (props: EditTodoFormProps) => {
                 task,
                 nType: type,
                 date,
-                startTimeValue,
+                startTime: startTimeValue,
                 taskorreminder,
                 isEditing: false,
               }
@@ -104,7 +104,7 @@ export const EditTodoForm = (props: EditTodoFormProps) => {
               task,
               nType: type,
               date,
-              startTimeValue,
+              startTime: startTimeValue,
               taskorreminder,
               isEditing: false,
             }
@@ -193,7 +193,7 @@ export const EditTodoForm = (props: EditTodoFormProps) => {
           <input
             type="time"
             id="startTime"
-            value="13:20"
+            value={startTimeValue}
             onChange={(e) => setStartTimeValue(e.target.value)}
           />
         </div>

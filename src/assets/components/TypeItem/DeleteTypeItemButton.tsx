@@ -38,7 +38,7 @@ export const DeleteTypeItemButton = (props: IType) => {
   //function to delete a Type
   const deleteType = async (type: string, id: string) => {
     //check if the type is being used
-    if (allTodos && allTodos.some((t) => t.nType === type)) {
+    if (allTodos && allTodos.some((t) => t.nType === id)) {
       //if the type is being use, alert the use
       alert("You cannot delete a type that is being used");
     } else {

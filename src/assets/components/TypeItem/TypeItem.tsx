@@ -27,15 +27,13 @@ export const TypeItem = (props: IType) => {
 
   //Get all items from this type
   const CountAllItems = (typeID: string) => {
-    const todosArray = Array.isArray(allTodos) ? allTodos : [];
-    todosArray.filter((t) => t.nType === typeID).length || [];
+    const todosArray = allTodos ? allTodos : [];
+    return todosArray.filter((t) => t.nType === typeID).length;
   };
 
   //Get all completed items from this type
   const CountCompletedItems = (typeID: string) => {
-    const todosArray = Array.isArray(allTodos) ? allTodos : [];
-
-    const MoreThanZero = todosArray.filter(
+    const MoreThanZero = allTodos?.filter(
       (t) => t.nType === typeID && t.completed === true
     ).length;
     if (MoreThanZero && MoreThanZero > 0) {

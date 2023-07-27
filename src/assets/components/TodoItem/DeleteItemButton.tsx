@@ -24,7 +24,15 @@ interface TodoItemProps {
     date: string;
     startTime: string;
     archived: boolean;
+    subTask: ITSubtaskTodo[];
   };
+}
+
+interface ITSubtaskTodo {
+  subTaskCompleted: boolean;
+  subTask: string;
+  subTaskID: string;
+  isSubtaskEditing: boolean;
 }
 
 export const DeleteItemButton = (props: TodoItemProps) => {

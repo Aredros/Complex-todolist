@@ -19,7 +19,15 @@ interface EditTodoFormProps {
     id: string;
     completed: boolean;
     isEditing: boolean;
+    subTask: ITSubtaskTodo[];
   };
+}
+
+interface ITSubtaskTodo {
+  subTaskCompleted: boolean;
+  subTask: string;
+  subTaskID: string;
+  isSubtaskEditing: boolean;
 }
 
 export const EditTodoForm = (props: EditTodoFormProps) => {

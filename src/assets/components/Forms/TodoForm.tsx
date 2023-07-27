@@ -38,6 +38,7 @@ export const TodoForm = () => {
       date: date,
       startTime: startTime,
       archived: false,
+      subTask: [],
     };
 
     const updatedTodos = allTodos ? [...allTodos, newTodo] : [newTodo];

@@ -1,7 +1,7 @@
 import { useContext, useEffect } from "react";
 import { AppContext } from "../../../App";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEdit } from "@fortawesome/free-solid-svg-icons";
+import { faDiagramNext } from "@fortawesome/free-solid-svg-icons";
 import { auth, db } from "../../../config/firebase";
 import {
   collection,
@@ -10,6 +10,7 @@ import {
   where,
   getDocs,
 } from "firebase/firestore";
+import { v4 as uuidv4 } from "uuid";
 
 interface TodoItemProps {
   todo: {
@@ -22,6 +23,7 @@ interface TodoItemProps {
     nType: string;
     date: string;
     startTime: string;
+    archived: boolean;
     subTask: ITSubtaskTodo[];
   };
 }
@@ -32,9 +34,8 @@ interface ITSubtaskTodo {
   isSubtaskEditing: boolean;
 }
 
-export const StartEditButton = (props: TodoItemProps) => {
+export const CreateSubTaskItemButton = (props: TodoItemProps) => {
   const { todo } = props;
-
   const {
     allColors,
     allTodos = [],
@@ -43,16 +44,26 @@ export const StartEditButton = (props: TodoItemProps) => {
   } = useContext(AppContext) || {}; // Destructure allColors from the context
 
   //START EDIT THE TODO
-  // Function to change the editing status of a TODO
-  const editTodoTask = async (id: string) => {
+  // Function to add a new subtask to the todo
+  const addSubtaskTodoTask = async (id: string) => {
+    const newSubTaskTodo = {
+      subTaskCompleted: false,
+      subTask: "",
+      subTaskID: todo.id + "-" + uuidv4(),
+      isSubtaskEditing: false,
+    };
+
+    const updatedSubTaskArray = [...todo.subTask, newSubTaskTodo];
+
     const updatedTodos = (allTodos || []).map((todo) =>
-      todo.id === id ? { ...todo, isEditing: !todo.isEditing } : todo
+      todo.id === id ? { ...todo, subTask: updatedSubTaskArray } : todo
     );
+
     setAllTodos(updatedTodos);
 
     if (isLoggedIn) {
       try {
-        console.log("updating editing status in Firebase");
+        console.log("updating todo with new subtask in Firebase");
         const userEmail = auth.currentUser?.email;
         const q = query(
           collection(db, "todos"),
@@ -63,13 +74,8 @@ export const StartEditButton = (props: TodoItemProps) => {
         const querySnapshot = await getDocs(q);
 
         querySnapshot.docs.forEach(async (doc) => {
-          await updateDoc(doc.ref, { isEditing: !doc.data().isEditing });
+          await updateDoc(doc.ref, { subTask: updatedSubTaskArray });
         });
-
-        const updatedTodos = (allTodos || []).map((todo) =>
-          todo.id === id ? { ...todo, isEditing: !todo.isEditing } : todo
-        );
-        setAllTodos(updatedTodos);
       } catch (err) {
         console.log(err);
       }
@@ -77,7 +83,7 @@ export const StartEditButton = (props: TodoItemProps) => {
   };
 
   const handleEditClick = () => {
-    editTodoTask?.(todo.id);
+    addSubtaskTodoTask?.(todo.id);
   };
 
   //UPDATE LocalStorage when allTodos changes
@@ -89,10 +95,19 @@ export const StartEditButton = (props: TodoItemProps) => {
   }, [allTodos]);
 
   return (
-    <FontAwesomeIcon
-      icon={faEdit}
-      onClick={handleEditClick}
-      style={{ color: allColors?.buttonIcons }}
-    />
+    <>
+      <svg
+        onClick={handleEditClick}
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+      >
+        <path
+          fill={allColors?.buttonIcons}
+          d="M3 3h6v4H3V3m12 7h6v4h-6v-4m0 7h6v4h-6v-4m-2-4H7v5h6v2H5V9h2v2h6v2Z"
+        />
+      </svg>
+    </>
   );
 };

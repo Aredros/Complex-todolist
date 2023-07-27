@@ -22,6 +22,14 @@ interface ITodo {
   date: string;
   startTime: string;
   archived: boolean;
+  subTask: ITSubtaskTodo[];
+}
+
+interface ITSubtaskTodo {
+  subTaskCompleted: boolean;
+  subTask: string;
+  subTaskID: string;
+  isSubtaskEditing: boolean;
 }
 
 export const DisplayTypesContext = createContext<{
@@ -45,6 +53,10 @@ export const TodoWrapper = () => {
 
   // function to sort todos tasks based on date
   const sortTodos = (todos: ITodo[]) => {
+    if (!Array.isArray(todos)) {
+      return [];
+    }
+
     return todos.sort(
       (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
     );

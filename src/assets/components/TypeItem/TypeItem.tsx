@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { AppContext } from "../../../App";
 import { IconWeekType } from "../WeekHead/IconWeekType";
 import { StartTypeEditButton } from "./StartTypeEditButton";
@@ -18,16 +18,24 @@ interface IType {
 export const TypeItem = (props: IType) => {
   const { type } = props;
 
-  const { allColors, allTodos, allTypes, isLoggedIn } =
-    useContext(AppContext) || {}; // Destructure allColors from the context
+  const {
+    allColors,
+    allTodos = [],
+    allTypes = [],
+    isLoggedIn,
+  } = useContext(AppContext) || {}; // Destructure allColors from the context
 
   //Get all items from this type
-  const CountAllItems = (typeID: string) =>
-    allTodos?.filter((t) => t.nType === typeID).length || [];
+  const CountAllItems = (typeID: string) => {
+    const todosArray = Array.isArray(allTodos) ? allTodos : [];
+    todosArray.filter((t) => t.nType === typeID).length || [];
+  };
 
   //Get all completed items from this type
   const CountCompletedItems = (typeID: string) => {
-    const MoreThanZero = allTodos?.filter(
+    const todosArray = Array.isArray(allTodos) ? allTodos : [];
+
+    const MoreThanZero = todosArray.filter(
       (t) => t.nType === typeID && t.completed === true
     ).length;
     if (MoreThanZero && MoreThanZero > 0) {

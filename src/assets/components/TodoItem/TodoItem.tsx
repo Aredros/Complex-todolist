@@ -12,6 +12,8 @@ import { DeleteItemButton } from "./DeleteItemButton";
 import { StartEditButton } from "./StartEditButton";
 import { IconAndColorItem } from "./IconAndColorItem";
 import { DuplicateItemButton } from "./DuplicateItemButton";
+import { CreateSubTaskItemButton } from "./CreateSubTaskItemButton";
+import { SubTaskItem } from "./SubtaskItem";
 
 interface TodoItemProps {
   todo: {
@@ -25,7 +27,15 @@ interface TodoItemProps {
     date: string;
     startTime: string;
     archived: boolean;
+    subTask: ITSubtaskTodo[];
   };
+}
+
+interface ITSubtaskTodo {
+  subTaskCompleted: boolean;
+  subTask: string;
+  subTaskID: string;
+  isSubtaskEditing: boolean;
 }
 
 export const TodoItem = (props: TodoItemProps) => {
@@ -99,13 +109,16 @@ export const TodoItem = (props: TodoItemProps) => {
       }}
     >
       <IconAndColorItem todo={todo} handleToggleClick={handleToggleClick} />
-      <div className="TodoItem__container" onClick={handleToggleClick}>
+      <div className="TodoItem__container">
         {" "}
         <p className={`${todo.completed && "completed"}`}>
-          {todo.startTime !== undefined && todo.startTime !== ""
-            ? `${todo.startTime} | `
-            : null}
-          {todo.task}
+          <b onClick={handleToggleClick}>
+            {todo.startTime !== undefined && todo.startTime !== ""
+              ? `${todo.startTime} | `
+              : null}
+            {todo.task}
+          </b>
+          <CreateSubTaskItemButton todo={todo} />
         </p>
       </div>
 
@@ -114,6 +127,7 @@ export const TodoItem = (props: TodoItemProps) => {
         <StartEditButton todo={todo} />
         <DeleteItemButton todo={todo} />
       </div>
+      {todo.subTask?.length > 0 && <SubTaskItem todo={todo} />}
     </li>
   );
 };

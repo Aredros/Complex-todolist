@@ -18,7 +18,14 @@ interface TodoItemProps {
     date: string;
     startTime: string;
     archived: boolean;
+    subTask: ITSubtaskTodo[];
   };
+}
+interface ITSubtaskTodo {
+  subTaskCompleted: boolean;
+  subTask: string;
+  subTaskID: string;
+  isSubtaskEditing: boolean;
 }
 
 export const DuplicateItemButton = (props: TodoItemProps) => {
@@ -44,6 +51,7 @@ export const DuplicateItemButton = (props: TodoItemProps) => {
       date: todo.date,
       startTime: todo.startTime,
       archived: todo.archived,
+      subTask: todo.subTask,
     };
 
     const updatedTodos = allTodos ? [...allTodos, newTodo] : [newTodo];

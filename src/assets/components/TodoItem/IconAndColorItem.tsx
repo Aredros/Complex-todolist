@@ -28,7 +28,14 @@ interface TodoItemProps {
     nType: string;
     date: string;
     startTime: string;
+    subTask: ITSubtaskTodo[];
   };
+}
+interface ITSubtaskTodo {
+  subTaskCompleted: boolean;
+  subTask: string;
+  subTaskID: string;
+  isSubtaskEditing: boolean;
 }
 
 export const IconAndColorItem = (props: TodoItemProps) => {

@@ -252,6 +252,7 @@ $background-1: #27274d;
 
 .TodoItem {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
   background: #fff;
@@ -285,19 +286,54 @@ $background-1: #27274d;
   svg {
   }
   &__container {
-    max-width: 315px;
+    max-width: 70%;
     margin-left: 30px;
     flex-grow: 1;
     text-align: left;
+    display: flex;
+    align-items: center;
+    gap: 5px;
     p {
-      width: 100%;
       word-wrap: break-word;
       font-size: 15px;
+      b {
+        font-weight: 600;
+      }
+      svg {
+        padding-left: 5px;
+      }
     }
   }
   &__icons {
     display: flex;
     gap: 0.5rem;
+  }
+  &__subtask {
+    flex-basis: 100%;
+    padding-left: 10%;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    border-top: 0.5px solid rgb(177, 177, 177);
+    margin-top: 8px;
+    &__item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      input[type="text"] {
+        background: transparent;
+      }
+      svg {
+        height: 15px;
+      }
+      p {
+        font-size: 13.5px;
+        font-style: italic;
+      }
+      &:first-child {
+        padding-top: 5px;
+      }
+    }
   }
   &.completed {
     background: #2cd477 !important;

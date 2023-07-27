@@ -9,6 +9,14 @@ interface INTTodoTasks {
   date: string;
   startTime: string;
   archived: boolean;
+  subTask: ITSubtaskTodo[];
+}
+
+interface ITSubtaskTodo {
+  subTaskCompleted: boolean;
+  subTask: string;
+  subTaskID: string;
+  isSubtaskEditing: boolean;
 }
 /********************************************************** */
 //*****************FUNCTION to addTodo Task**************** */

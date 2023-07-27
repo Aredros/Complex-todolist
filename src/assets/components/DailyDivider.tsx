@@ -12,18 +12,26 @@ interface DailyDividerProps {
   weekDisplayType: boolean;
   parentElement: string;
   date: string;
-  todos: {
-    id: string;
-    task: string;
-    completed: boolean;
-    isEditing: boolean;
-    taskorreminder: string;
-    user: string;
-    nType: string;
-    date: string;
-    startTime: string;
-    archived: boolean;
-  }[];
+  todos: ITodos[];
+}
+interface ITodos {
+  id: string;
+  task: string;
+  completed: boolean;
+  isEditing: boolean;
+  taskorreminder: string;
+  user: string;
+  nType: string;
+  date: string;
+  startTime: string;
+  archived: boolean;
+  subTask: ITSubtaskTodo[];
+}
+interface ITSubtaskTodo {
+  subTaskCompleted: boolean;
+  subTask: string;
+  subTaskID: string;
+  isSubtaskEditing: boolean;
 }
 
 interface ITlocalStorageCollapse {

@@ -1,8 +1,8 @@
 import { useContext, useEffect } from "react";
-import { AppContext } from "../../../App";
+import { AppContext } from "../../../../App";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit } from "@fortawesome/free-solid-svg-icons";
-import { auth, db } from "../../../config/firebase";
+import { auth, db } from "../../../../config/firebase";
 import {
   collection,
   updateDoc,
@@ -23,6 +23,7 @@ interface TodoItemProps {
     date: string;
     startTime: string;
     subTask: ITSubtaskTodo[];
+    failed: boolean;
   };
 }
 interface ITSubtaskTodo {

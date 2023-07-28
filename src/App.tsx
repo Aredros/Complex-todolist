@@ -24,6 +24,7 @@ interface IDoneTodo {
   startTime: string;
   archived: boolean;
   subTask: ITSubtaskTodo[];
+  failed: boolean;
 }
 
 interface ITSubtaskTodo {
@@ -91,6 +92,7 @@ function App() {
       date: "",
       startTime: "",
       archived: false,
+      failed: false,
       subTask: [
         {
           subTaskCompleted: false,
@@ -144,7 +146,7 @@ function App() {
 
     //useEffect to get all stored colors in localStorage
     Object.keys(allColors).forEach((key) => {
-      const stored_indiv_color = localStorage.getItem(key) || "[]";
+      const stored_indiv_color = localStorage.getItem(key) || "";
       if (stored_indiv_color) {
         try {
           setAllColors((prevColors) => ({

@@ -30,6 +30,7 @@ interface ISuccessProps {
     startTime: string;
     archived: boolean;
     subTask: ITSubtaskTodo[];
+    failed: boolean;
   }[];
 }
 interface ITSubtaskTodo {

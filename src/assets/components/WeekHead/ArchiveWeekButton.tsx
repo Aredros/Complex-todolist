@@ -23,6 +23,7 @@ interface IDoneTodo {
   startTime: string;
   archived: boolean;
   subTask: ITSubtaskTodo[];
+  failed: boolean;
 }
 interface ITSubtaskTodo {
   subTaskCompleted: boolean;

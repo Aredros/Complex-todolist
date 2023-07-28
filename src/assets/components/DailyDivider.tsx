@@ -7,6 +7,7 @@ import {
   faChevronCircleUp,
   faChevronCircleDown,
 } from "@fortawesome/free-solid-svg-icons";
+import { FailedTodoItem } from "./TodoItem/FailedTodoItem";
 
 interface DailyDividerProps {
   weekDisplayType: boolean;
@@ -26,6 +27,7 @@ interface ITodos {
   startTime: string;
   archived: boolean;
   subTask: ITSubtaskTodo[];
+  failed: boolean;
 }
 interface ITSubtaskTodo {
   subTaskCompleted: boolean;
@@ -183,6 +185,8 @@ export const DailyDivider = (props: DailyDividerProps) => {
           {sortTodos(todos).map((todo) =>
             todo.isEditing ? (
               <EditTodoForm key={todo.task} task={todo} />
+            ) : todo.failed ? (
+              <FailedTodoItem key={`failed-${todo.task}`} todo={todo} />
             ) : (
               <TodoItem key={todo.task} todo={todo} />
             )

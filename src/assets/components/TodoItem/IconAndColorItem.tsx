@@ -17,7 +17,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 interface TodoItemProps {
-  handleToggleClick: () => void;
+  handleToggleClick?: () => void;
   todo: {
     id: string;
     task: string;
@@ -29,6 +29,7 @@ interface TodoItemProps {
     date: string;
     startTime: string;
     subTask: ITSubtaskTodo[];
+    failed: boolean;
   };
 }
 interface ITSubtaskTodo {

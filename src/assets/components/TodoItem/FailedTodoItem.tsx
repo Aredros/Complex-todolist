@@ -8,12 +8,12 @@ import {
   where,
   getDocs,
 } from "firebase/firestore";
-import { StartEditButton } from "./buttons/StartEditButton";
+import { DeleteItemButton } from "./buttons/DeleteItemButton";
+
 import { IconAndColorItem } from "./IconAndColorItem";
-import { DuplicateItemButton } from "./buttons/DuplicateItemButton";
-import { CreateSubTaskItemButton } from "./buttons/CreateSubTaskItemButton";
+
 import { SubTaskItem } from "./SubtaskItem";
-import { FailButtonItem } from "./buttons/FailButtonItem";
+import { RecoverButtonItem } from "./buttons/RecoverButtonItem";
 
 interface TodoItemProps {
   todo: {
@@ -39,7 +39,7 @@ interface ITSubtaskTodo {
   isSubtaskEditing: boolean;
 }
 
-export const TodoItem = (props: TodoItemProps) => {
+export const FailedTodoItem = (props: TodoItemProps) => {
   const { todo } = props;
 
   const {
@@ -102,31 +102,30 @@ export const TodoItem = (props: TodoItemProps) => {
         todo.taskorreminder
       }`}
       style={{
-        color: allColors?.itemText,
-        backgroundColor:
-          todo.taskorreminder === "reminder"
-            ? allColors?.reminderBackgroundColor
-            : allColors?.itemBackgroundColor,
+        color: "black",
+        backgroundColor: "#E15656",
       }}
     >
-      <IconAndColorItem todo={todo} handleToggleClick={handleToggleClick} />
+      <IconAndColorItem todo={todo} />
       <div className="TodoItem__container">
         {" "}
-        <p className={`${todo.completed && "completed"}`}>
-          <b onClick={handleToggleClick}>
+        <p
+          style={{
+            textDecoration: "line-through",
+          }}
+        >
+          <b>
             {todo.startTime !== undefined && todo.startTime !== ""
               ? `${todo.startTime} | `
               : null}
             {todo.task}
           </b>
-          <CreateSubTaskItemButton todo={todo} />
         </p>
       </div>
 
       <div className="TodoItem__icons">
-        <DuplicateItemButton todo={todo} />
-        <StartEditButton todo={todo} />
-        <FailButtonItem todo={todo} />
+        <RecoverButtonItem todo={todo} />
+        <DeleteItemButton todo={todo} />
       </div>
       {todo.subTask?.length > 0 && <SubTaskItem todo={todo} />}
     </li>

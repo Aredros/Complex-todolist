@@ -39,6 +39,7 @@ export const TodoForm = () => {
       startTime: startTime,
       archived: false,
       subTask: [],
+      failed: false,
     };
 
     const updatedTodos = allTodos ? [...allTodos, newTodo] : [newTodo];
@@ -140,6 +141,7 @@ export const TodoForm = () => {
           <input
             type="time"
             id="startTime"
+            placeholder="00:00"
             value={startTimeValue}
             onChange={(e) => setStartTimeValue(e.target.value)}
           />

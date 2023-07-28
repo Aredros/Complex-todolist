@@ -1,16 +1,15 @@
-import { useContext } from "react";
-import { AppContext } from "../../../App";
+import { useContext, useEffect } from "react";
+import { AppContext } from "../../../../App";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash } from "@fortawesome/free-solid-svg-icons";
-import { auth, db } from "../../../config/firebase";
+import { faFileCircleXmark } from "@fortawesome/free-solid-svg-icons";
+import { auth, db } from "../../../../config/firebase";
 import {
   collection,
-  deleteDoc,
+  updateDoc,
   query,
   where,
   getDocs,
 } from "firebase/firestore";
-import { deleteTodoFunction } from "../../functions/functions";
 
 interface TodoItemProps {
   todo: {
@@ -23,11 +22,10 @@ interface TodoItemProps {
     nType: string;
     date: string;
     startTime: string;
-    archived: boolean;
     subTask: ITSubtaskTodo[];
+    failed: boolean;
   };
 }
-
 interface ITSubtaskTodo {
   subTaskCompleted: boolean;
   subTask: string;
@@ -35,7 +33,7 @@ interface ITSubtaskTodo {
   isSubtaskEditing: boolean;
 }
 
-export const DeleteItemButton = (props: TodoItemProps) => {
+export const FailButtonItem = (props: TodoItemProps) => {
   const { todo } = props;
 
   const {
@@ -45,48 +43,51 @@ export const DeleteItemButton = (props: TodoItemProps) => {
     isLoggedIn,
   } = useContext(AppContext) || {}; // Destructure allColors from the context
 
-  const deleteTodoTask = async (id: string) => {
+  //SEND TO FAILED
+  // Function to change the editing status of a TODO
+  const failTodoTask = async (id: string) => {
+    const updatedTodos = (allTodos || []).map((todo) =>
+      todo.id === id ? { ...todo, failed: true } : todo
+    );
+    setAllTodos(updatedTodos);
+
     if (isLoggedIn) {
       try {
-        console.log("deleting from Firebase");
-
-        // Get the current user's email
+        console.log("updating fail status in Firebase");
         const userEmail = auth.currentUser?.email;
-
-        // Create a query to fetch the specific todo based on the user and todo ID
         const q = query(
           collection(db, "todos"),
           where("user", "==", userEmail),
           where("id", "==", id)
         );
 
-        // Get the document that matches the query
         const querySnapshot = await getDocs(q);
 
-        // Delete the document associated with the user and todo ID
         querySnapshot.docs.forEach(async (doc) => {
-          await deleteDoc(doc.ref);
+          await updateDoc(doc.ref, { failed: true });
         });
-
-        // Remove the deleted todo from the todos state
-        const updatedTodos = allTodos?.filter((todo) => todo.id !== id) || [];
-        setAllTodos(updatedTodos);
       } catch (err) {
         console.log(err);
       }
-    } else {
-      console.log("deleting from localStorage");
-
-      // Remove the deleted todo from the todos state
-      const updatedTodos = deleteTodoFunction(id, allTodos || [], "todosLocal");
-      setAllTodos(updatedTodos);
     }
   };
 
+  const handleEditClick = () => {
+    failTodoTask?.(todo.id);
+  };
+
+  //UPDATE LocalStorage when allTodos changes
+  useEffect(() => {
+    if (!isLoggedIn) {
+      // Update localStorage whenever allTodos changes
+      localStorage.setItem("todosLocal", JSON.stringify(allTodos));
+    }
+  }, [allTodos]);
+
   return (
     <FontAwesomeIcon
-      icon={faTrash}
-      onClick={() => deleteTodoTask(todo.id)}
+      icon={faFileCircleXmark}
+      onClick={handleEditClick}
       style={{ color: allColors?.buttonIcons }}
     />
   );

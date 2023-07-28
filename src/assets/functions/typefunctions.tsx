@@ -1,17 +1,5 @@
 import { v4 as uuidv4 } from "uuid";
 
-interface INTTodoTasks {
-  id: string;
-  task: string;
-  user: string;
-  completed: boolean;
-  taskorreminder: string;
-  isEditing: boolean;
-  nType: string;
-  date: string;
-  archived: boolean;
-}
-
 interface IType {
   id: string; // Add ID field to IType interface
   typeName: string;

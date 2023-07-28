@@ -20,6 +20,7 @@ interface EditTodoFormProps {
     completed: boolean;
     isEditing: boolean;
     subTask: ITSubtaskTodo[];
+    failed: boolean;
   };
 }
 

@@ -15,6 +15,7 @@ interface ITodo {
   startTime: string;
   archived: boolean;
   subTask: ITSubtaskTodo[];
+  failed: boolean;
 }
 
 interface ITSubtaskTodo {

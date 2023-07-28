@@ -1,9 +1,9 @@
 import { useContext } from "react";
-import { AppContext } from "../../../App";
+import { AppContext } from "../../../../App";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCopy } from "@fortawesome/free-solid-svg-icons";
 import { v4 as uuidv4 } from "uuid";
-import { auth, db } from "../../../config/firebase";
+import { auth, db } from "../../../../config/firebase";
 import { addDoc, collection } from "firebase/firestore";
 
 interface TodoItemProps {
@@ -19,6 +19,7 @@ interface TodoItemProps {
     startTime: string;
     archived: boolean;
     subTask: ITSubtaskTodo[];
+    failed: boolean;
   };
 }
 interface ITSubtaskTodo {
@@ -52,6 +53,7 @@ export const DuplicateItemButton = (props: TodoItemProps) => {
       startTime: todo.startTime,
       archived: todo.archived,
       subTask: todo.subTask,
+      failed: todo.failed,
     };
 
     const updatedTodos = allTodos ? [...allTodos, newTodo] : [newTodo];

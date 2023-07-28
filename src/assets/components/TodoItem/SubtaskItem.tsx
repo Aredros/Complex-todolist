@@ -23,6 +23,7 @@ interface TodoItemProps {
     date: string;
     startTime: string;
     subTask: ITSubtaskTodo[];
+    failed: boolean;
   };
 }
 interface ITSubtaskTodo {

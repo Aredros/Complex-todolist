@@ -79,7 +79,28 @@ export const AppContext = createContext<ITallAppFile | undefined>(undefined);
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [allTodos, setAllTodos] = useState<IDoneTodo[]>([]); // Array of todo objects
+  const [allTodos, setAllTodos] = useState<IDoneTodo[] | null>([
+    {
+      id: "0101",
+      task: "Mock task",
+      completed: false,
+      isEditing: false,
+      taskorreminder: "task",
+      user: "",
+      nType: "",
+      date: "",
+      startTime: "",
+      archived: false,
+      subTask: [
+        {
+          subTaskCompleted: false,
+          subTask: "Mock subtask",
+          subTaskID: "0101",
+          isSubtaskEditing: false,
+        },
+      ],
+    },
+  ]); // Array of todo objects
   const [allTypes, setAllTypes] = useState<IType[] | null>([
     {
       id: "1",
@@ -114,6 +135,55 @@ function App() {
   });
 
   useEffect(() => {
+    // ... your other code ...
+
+    // Fetch todos from Firebase or LocalStorage
+    const fetchTodos = async () => {
+      if (isLoggedIn) {
+        // Fetch todos from Firebase
+        getTodosFromDatabase();
+      } else {
+        const storedTodos = localStorage.getItem("todosLocal") || "[]";
+        try {
+          // Fetch todos from LocalStorage
+          const parsedTodos = JSON.parse(storedTodos) as IDoneTodo[];
+
+          // Check if each item in parsedTodos has the subTask property,
+          // if not, add it with an empty array as the value
+          const updatedTodos = parsedTodos.map((todo) => {
+            if (!todo.hasOwnProperty("subTask")) {
+              return {
+                ...todo,
+                subTask: [],
+              };
+            }
+            return todo;
+          });
+
+          setAllTodos(updatedTodos);
+        } catch (error) {
+          console.log("Error parsing stored todos:", error);
+        }
+      }
+    };
+
+    // Fetch todos from Firestore database
+    const getTodosFromDatabase = async () => {
+      try {
+        if (auth.currentUser) {
+          // ... your other code ...
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    fetchTodos();
+
+    // ... your other code ...
+  }, [isLoggedIn]);
+
+  useEffect(() => {
     //empty array and local storage
     //localStorage.clear();
 
@@ -123,7 +193,7 @@ function App() {
 
     //useEffect to get all stored colors in localStorage
     Object.keys(allColors).forEach((key) => {
-      const stored_indiv_color = localStorage.getItem(key);
+      const stored_indiv_color = localStorage.getItem(key) || "[]";
       if (stored_indiv_color) {
         try {
           setAllColors((prevColors) => ({
@@ -192,7 +262,7 @@ function App() {
       // Fetch todos from Firebase
       getTodosFromDatabase();
     } else {
-      const storedTodos = localStorage.getItem("todosLocal") || "";
+      const storedTodos = localStorage.getItem("todosLocal") || "[]";
       try {
         // Fetch todos from LocalStorage
         setAllTodos(JSON.parse(storedTodos));
@@ -257,7 +327,7 @@ function App() {
       // Fetch todos from Firebase
       getTypesFromDatabase();
     } else {
-      const storedTypes = localStorage.getItem("typesLocal") || "";
+      const storedTypes = localStorage.getItem("typesLocal") || "[]";
       try {
         // Fetch todos from LocalStorage
         setAllTypes(JSON.parse(storedTypes));

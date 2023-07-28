@@ -135,55 +135,6 @@ function App() {
   });
 
   useEffect(() => {
-    // ... your other code ...
-
-    // Fetch todos from Firebase or LocalStorage
-    const fetchTodos = async () => {
-      if (isLoggedIn) {
-        // Fetch todos from Firebase
-        getTodosFromDatabase();
-      } else {
-        const storedTodos = localStorage.getItem("todosLocal") || "[]";
-        try {
-          // Fetch todos from LocalStorage
-          const parsedTodos = JSON.parse(storedTodos) as IDoneTodo[];
-
-          // Check if each item in parsedTodos has the subTask property,
-          // if not, add it with an empty array as the value
-          const updatedTodos = parsedTodos.map((todo) => {
-            if (!todo.hasOwnProperty("subTask")) {
-              return {
-                ...todo,
-                subTask: [],
-              };
-            }
-            return todo;
-          });
-
-          setAllTodos(updatedTodos);
-        } catch (error) {
-          console.log("Error parsing stored todos:", error);
-        }
-      }
-    };
-
-    // Fetch todos from Firestore database
-    const getTodosFromDatabase = async () => {
-      try {
-        if (auth.currentUser) {
-          // ... your other code ...
-        }
-      } catch (err) {
-        console.log(err);
-      }
-    };
-
-    fetchTodos();
-
-    // ... your other code ...
-  }, [isLoggedIn]);
-
-  useEffect(() => {
     //empty array and local storage
     //localStorage.clear();
 

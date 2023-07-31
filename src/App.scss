@@ -398,6 +398,12 @@ $background-1: #27274d;
       display: flex;
       align-items: center;
       gap: 8px;
+      .completed {
+        text-decoration: line-through;
+        color: #20a05a;
+        font-weight: 800;
+        font-style: italic;
+      }
       input[type="text"] {
         background: transparent;
       }

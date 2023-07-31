@@ -85,10 +85,15 @@ export const FailButtonItem = (props: TodoItemProps) => {
   }, [allTodos]);
 
   return (
-    <FontAwesomeIcon
-      icon={faFileCircleXmark}
-      onClick={handleEditClick}
-      style={{ color: allColors?.buttonIcons }}
-    />
+    <>
+      {" "}
+      {!todo.completed && todo.taskorreminder !== "reminder" && (
+        <FontAwesomeIcon
+          icon={faFileCircleXmark}
+          onClick={handleEditClick}
+          style={{ color: allColors?.buttonIcons }}
+        />
+      )}
+    </>
   );
 };

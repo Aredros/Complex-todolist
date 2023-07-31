@@ -1,7 +1,12 @@
 import { useContext, useEffect, useState } from "react";
 import { AppContext } from "../../../App";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faDeleteLeft, faPenToSquare } from "@fortawesome/free-solid-svg-icons";
+import {
+  faDeleteLeft,
+  faPenToSquare,
+  faCircle,
+  faCircleCheck,
+} from "@fortawesome/free-solid-svg-icons";
 import { auth, db } from "../../../config/firebase";
 import {
   collection,
@@ -211,17 +216,13 @@ export const SubTaskItem = (props: TodoItemProps) => {
   return (
     <div className="TodoItem__subtask">
       {todo.subTask?.map((subtask: ITSubtaskTodo) => (
-        <div
-          key={subtask.subTaskID}
-          className={`TodoItem__subtask__item ${
-            subtask.subTaskCompleted && "completed"
-          }`}
-        >
-          <input
-            type="checkbox"
-            checked={subtask.subTaskCompleted}
-            onChange={() => toggleSubTaskComplete(todo.id, subtask.subTaskID)}
+        <div key={subtask.subTaskID} className={`TodoItem__subtask__item`}>
+          <FontAwesomeIcon
+            icon={subtask.subTaskCompleted ? faCircleCheck : faCircle}
+            style={{ color: allColors?.buttonIcons }}
+            onClick={() => toggleSubTaskComplete(todo.id, subtask.subTaskID)}
           />
+
           {subtask.isSubtaskEditing ? (
             <input
               type="text"
@@ -232,7 +233,12 @@ export const SubTaskItem = (props: TodoItemProps) => {
               onChange={(e) => setSubtaskText(e.target.value)}
             />
           ) : (
-            <p>{subtask.subTask === "" ? "New subtask" : subtask.subTask}</p>
+            <p
+              className={`${subtask.subTaskCompleted && "completed"}`}
+              onClick={() => toggleSubTaskComplete(todo.id, subtask.subTaskID)}
+            >
+              {subtask.subTask === "" ? "New subtask" : subtask.subTask}
+            </p>
           )}
 
           <FontAwesomeIcon

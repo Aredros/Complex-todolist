@@ -119,7 +119,9 @@ export const TodoItem = (props: TodoItemProps) => {
               : null}
             {todo.task}
           </b>
-          <CreateSubTaskItemButton todo={todo} />
+          {todo.taskorreminder !== "reminder" && (
+            <CreateSubTaskItemButton todo={todo} />
+          )}
         </p>
       </div>
 

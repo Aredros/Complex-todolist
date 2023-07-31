@@ -1,6 +1,7 @@
 import "./App.scss";
 import "./Login.scss";
 import "./Editpage.scss";
+import django from "./Djangocircle.png";
 import React, { useState, useEffect, createContext } from "react";
 import { TodoWrapper } from "./assets/pages/TodoWrapper";
 import { Auth } from "./assets/pages/auth";
@@ -79,6 +80,7 @@ interface ITallAppFile {
 export const AppContext = createContext<ITallAppFile | undefined>(undefined);
 
 function App() {
+  const [loading, setLoading] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [allTodos, setAllTodos] = useState<IDoneTodo[] | null>([
     {
@@ -137,6 +139,11 @@ function App() {
   });
 
   useEffect(() => {
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+    }, 4000);
+
     //empty array and local storage
     //localStorage.clear();
 
@@ -332,16 +339,51 @@ function App() {
         className="App"
         style={{ backgroundColor: allColors.outerBackgroundColor }}
       >
-        {isAuthenticated ? (
-          <BrowserRouter>
-            <Routes>
-              <Route path="/Complex-todolist/" element={<TodoWrapper />} />
-              <Route path="/Complex-todolist/archive" element={<Archive />} />
-              <Route path="/Complex-todolist/styles" element={<StylesEdit />} />
-            </Routes>
-          </BrowserRouter>
+        {loading ? (
+          <div className="loading">
+            <div className="loading-box">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="180"
+                height="180"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  fill={"#e5bf16"}
+                  d="M12,23a9.63,9.63,0,0,1-8-9.5,9.51,9.51,0,0,1,6.79-9.1A1.66,1.66,0,0,0,12,2.81h0a1.67,1.67,0,0,0-1.94-1.64A11,11,0,0,0,12,23Z"
+                >
+                  <animateTransform
+                    attributeName="transform"
+                    dur="1.5s"
+                    repeatCount="indefinite"
+                    type="rotate"
+                    values="0 12 12;360 12 12"
+                  />
+                </path>
+              </svg>
+              <img className="django-loading" src={django} alt="django" />
+            </div>
+          </div>
         ) : (
-          <Auth />
+          <>
+            {isAuthenticated ? (
+              <BrowserRouter>
+                <Routes>
+                  <Route path="/Complex-todolist/" element={<TodoWrapper />} />
+                  <Route
+                    path="/Complex-todolist/archive"
+                    element={<Archive />}
+                  />
+                  <Route
+                    path="/Complex-todolist/styles"
+                    element={<StylesEdit />}
+                  />
+                </Routes>
+              </BrowserRouter>
+            ) : (
+              <Auth />
+            )}
+          </>
         )}
       </div>
     </AppContext.Provider>

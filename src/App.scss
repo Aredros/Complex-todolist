@@ -1,5 +1,63 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
 
+/*Main charging animation*/
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+  &-box {
+    position: relative;
+    animation: shrinkAndDisappear 1s linear 3s forwards;
+    -webkit-animation: shrinkAndDisappear 1s linear 3s forwards;
+  }
+  svg {
+    z-index: 2;
+  }
+  img {
+    z-index: 5;
+    height: 8.5rem;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    animation: rotateOverItself 35s linear infinite;
+    -webkit-animation: rotateOverItself 35s linear infinite;
+  }
+}
+
+@keyframes rotateOverItself {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes shrinkAndDisappear {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  5% {
+    transform: scale(1.2);
+    opacity: 1;
+    -webkit-transform: scale(1.2);
+    -moz-transform: scale(1.2);
+    -ms-transform: scale(1.2);
+    -o-transform: scale(1.2);
+  }
+  100% {
+    transform: scale(0);
+    opacity: 0;
+  }
+}
+
 /*COLORS*/
 $background-1: #27274d;
 
@@ -248,6 +306,25 @@ $background-1: #27274d;
   -o-border-radius: 2px;
   border-bottom-left-radius: 0;
   border-top-left-radius: 0;
+  &:active {
+    animation: growBTN 0.2s linear forwards;
+    -webkit-animation: growBTN 0.2s linear forwards;
+  }
+}
+//Grow the button when clicked
+@keyframes growBTN {
+  from {
+    transform: scale(1);
+    opacity: 1;
+  }
+  to {
+    transform: scale(1.7);
+    opacity: 0.5;
+    -webkit-transform: scale(1.7);
+    -moz-transform: scale(1.7);
+    -ms-transform: scale(1.7);
+    -o-transform: scale(1.7);
+  }
 }
 
 .TodoItem {

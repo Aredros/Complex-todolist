@@ -16,7 +16,11 @@ import { SubTaskItem } from "./SubtaskItem";
 import { FailButtonItem } from "./buttons/FailButtonItem";
 import { DeleteItemButton } from "./buttons/DeleteItemButton";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircle, faCheck } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCircle,
+  faCheck,
+  faCircleCheck,
+} from "@fortawesome/free-solid-svg-icons";
 
 interface TodoItemProps {
   todo: {
@@ -111,6 +115,7 @@ export const TodoItem = (props: TodoItemProps) => {
   const handleToggleClick = () => {
     //handle the mark task as completed
     todo.taskorreminder === "task" ? toggleCompleteTask?.(todo.id) : null;
+    setEditCompletionMenu(false);
   };
 
   //UPDATE LocalStorage when allTodos changes
@@ -139,6 +144,7 @@ export const TodoItem = (props: TodoItemProps) => {
       <div className="TodoItem__container">
         {" "}
         {todo.taskorreminder === "task" &&
+          !todo.completed &&
           (editCompletionMenu ? (
             <>
               <FontAwesomeIcon
@@ -155,6 +161,13 @@ export const TodoItem = (props: TodoItemProps) => {
               onClick={() => setEditCompletionMenu(true)}
             />
           ))}
+        {todo.completed && (
+          <FontAwesomeIcon
+            icon={faCircleCheck}
+            style={{ color: allColors?.buttonIcons }}
+            onClick={handleToggleClick}
+          />
+        )}
         <p className={`${todo.completed && "completed"}`}>
           <b>
             {todo.startTime !== undefined && todo.startTime !== ""

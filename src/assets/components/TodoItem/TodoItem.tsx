@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState, useRef } from "react";
 import { AppContext } from "../../../App";
 import { auth, db } from "../../../config/firebase";
 import {
@@ -14,6 +14,9 @@ import { DuplicateItemButton } from "./buttons/DuplicateItemButton";
 import { CreateSubTaskItemButton } from "./buttons/CreateSubTaskItemButton";
 import { SubTaskItem } from "./SubtaskItem";
 import { FailButtonItem } from "./buttons/FailButtonItem";
+import { DeleteItemButton } from "./buttons/DeleteItemButton";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircle, faCheck } from "@fortawesome/free-solid-svg-icons";
 
 interface TodoItemProps {
   todo: {
@@ -48,6 +51,28 @@ export const TodoItem = (props: TodoItemProps) => {
     setAllTodos = () => {},
     isLoggedIn,
   } = useContext(AppContext) || {}; // Destructure allColors from the context
+
+  const [editCompletionMenu, setEditCompletionMenu] = useState(false);
+
+  // Add a reference to the TodoItem container
+  const todoItemRef = useRef<HTMLLIElement | null>(null);
+
+  // Close the completion menu when a click occurs outside the TodoItem
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        todoItemRef.current &&
+        !todoItemRef.current.contains(event.target as Node)
+      ) {
+        setEditCompletionMenu(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   //function to change the completed status of a TODO
   const toggleCompleteTask = async (id: string) => {
@@ -98,6 +123,7 @@ export const TodoItem = (props: TodoItemProps) => {
 
   return (
     <li
+      ref={todoItemRef}
       className={`TodoItem ${todo.completed && "completed"} Todo-${
         todo.taskorreminder
       }`}
@@ -112,8 +138,25 @@ export const TodoItem = (props: TodoItemProps) => {
       <IconAndColorItem todo={todo} handleToggleClick={handleToggleClick} />
       <div className="TodoItem__container">
         {" "}
+        {todo.taskorreminder === "task" &&
+          (editCompletionMenu ? (
+            <>
+              <FontAwesomeIcon
+                icon={faCheck}
+                style={{ color: allColors?.buttonIcons }}
+                onClick={handleToggleClick}
+              />
+              <FailButtonItem todo={todo} />{" "}
+            </>
+          ) : (
+            <FontAwesomeIcon
+              icon={faCircle}
+              style={{ color: allColors?.buttonIcons }}
+              onClick={() => setEditCompletionMenu(true)}
+            />
+          ))}
         <p className={`${todo.completed && "completed"}`}>
-          <b onClick={handleToggleClick}>
+          <b>
             {todo.startTime !== undefined && todo.startTime !== ""
               ? `${todo.startTime} | `
               : null}
@@ -126,9 +169,12 @@ export const TodoItem = (props: TodoItemProps) => {
       </div>
 
       <div className="TodoItem__icons">
-        <DuplicateItemButton todo={todo} />
+        {todo.taskorreminder !== "reminder" ? (
+          <DuplicateItemButton todo={todo} />
+        ) : (
+          <DeleteItemButton todo={todo} />
+        )}
         <StartEditButton todo={todo} />
-        <FailButtonItem todo={todo} />
       </div>
       {todo.subTask?.length > 0 && <SubTaskItem todo={todo} />}
     </li>

@@ -46,6 +46,64 @@ function StylesEdit() {
       <br />
       <h3 style={{ color: allColors?.titleTextColor }}>Example:</h3>
       <br />
+      {/* FORM */}
+      <form
+        className="TodoForm"
+        style={{ background: allColors?.formBackgroundColor }}
+      >
+        <div className="TodoForm__Task">
+          <input
+            type="text"
+            placeholder="Example of new task"
+            className="TodoForm__Task__input"
+          />
+          <button
+            type="submit"
+            className="add-btn"
+            style={{
+              backgroundColor: allColors?.buttonIcons,
+              color: allColors?.buttonText,
+            }}
+          >
+            Add Task
+          </button>
+        </div>
+        <div className="TodoForm__CatDate">
+          <div className="TodoForm__CatDate__category">
+            <select id="type" name="type" value="types">
+              <option value="">Example type</option>
+            </select>
+          </div>
+          <div className="TodoForm__CatDate__category">
+            <select id="taskOrReminder" name="task-reminder" value="task">
+              <option value="task">Task</option>
+              <option value="reminder">Reminder</option>
+            </select>
+          </div>
+          <div className="TodoForm__CatDate__date">
+            <input
+              type="time"
+              id="startTime"
+              placeholder="00:00"
+              value="10:00"
+            />
+          </div>
+          <div className="TodoForm__CatDate__date">
+            <input
+              type="date"
+              id="startDate"
+              name="trip-start"
+              //Default value is current date
+              value="2018-01-01"
+              min="2018-01-01"
+              max="2099-12-31"
+            />
+          </div>
+        </div>
+        <div className="TodoForm__overlay"></div>
+      </form>
+
+      {/* THE ITEMS */}
       <div
         className={`Weekly-divider`}
         style={{ backgroundColor: allColors?.weeklyCardBG }}

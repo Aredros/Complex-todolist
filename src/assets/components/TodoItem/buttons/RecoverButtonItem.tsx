@@ -1,7 +1,7 @@
 import { useContext, useEffect } from "react";
 import { AppContext } from "../../../../App";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFileCircleCheck } from "@fortawesome/free-solid-svg-icons";
+import { faCircleXmark } from "@fortawesome/free-solid-svg-icons";
 import { auth, db } from "../../../../config/firebase";
 import {
   collection,
@@ -86,7 +86,7 @@ export const RecoverButtonItem = (props: TodoItemProps) => {
 
   return (
     <FontAwesomeIcon
-      icon={faFileCircleCheck}
+      icon={faCircleXmark}
       onClick={handleEditClick}
       style={{ color: allColors?.buttonIcons }}
     />

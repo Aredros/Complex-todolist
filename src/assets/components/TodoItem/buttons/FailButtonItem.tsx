@@ -1,7 +1,7 @@
 import { useContext, useEffect } from "react";
 import { AppContext } from "../../../../App";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFileCircleXmark } from "@fortawesome/free-solid-svg-icons";
+import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { auth, db } from "../../../../config/firebase";
 import {
   collection,
@@ -89,7 +89,7 @@ export const FailButtonItem = (props: TodoItemProps) => {
       {" "}
       {!todo.completed && todo.taskorreminder !== "reminder" && (
         <FontAwesomeIcon
-          icon={faFileCircleXmark}
+          icon={faXmark}
           onClick={handleEditClick}
           style={{ color: allColors?.buttonIcons }}
         />

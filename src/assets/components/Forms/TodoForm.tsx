@@ -16,7 +16,7 @@ export const TodoForm = () => {
   const [value, setValue] = useState("");
   const [type, setType] = useState((allTypes && allTypes[0]?.id) || "");
   const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
-  const [startTimeValue, setStartTimeValue] = useState("");
+  const [startTimeValue, setStartTimeValue] = useState("10:00");
   const [taskorreminder, setTaskorreminder] = useState("task");
 
   //function to add a TODO
@@ -159,6 +159,7 @@ export const TodoForm = () => {
           />
         </div>
       </div>
+      <div className="TodoForm__overlay"></div>
     </form>
   );
 };

@@ -108,7 +108,7 @@ export const FailedTodoItem = (props: TodoItemProps) => {
     >
       <IconAndColorItem todo={todo} />
       <div className="TodoItem__container">
-        {" "}
+        <RecoverButtonItem todo={todo} />{" "}
         <p
           style={{
             textDecoration: "line-through",
@@ -124,7 +124,6 @@ export const FailedTodoItem = (props: TodoItemProps) => {
       </div>
 
       <div className="TodoItem__icons">
-        <RecoverButtonItem todo={todo} />
         <DeleteItemButton todo={todo} />
       </div>
       {todo.subTask?.length > 0 && <SubTaskItem todo={todo} />}

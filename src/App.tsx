@@ -139,7 +139,7 @@ function App() {
   });
 
   useEffect(() => {
-    setLoading(true);
+    setLoading(false);
     setTimeout(() => {
       setLoading(false);
     }, 4000);

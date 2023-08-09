@@ -120,6 +120,7 @@ $background-1: #27274d;
   h1 {
     margin-bottom: 0.5rem;
     font-size: 3.2em;
+    letter-spacing: 0.1em;
   }
   text-align: center;
   position: relative;
@@ -135,8 +136,34 @@ $background-1: #27274d;
   -o-border-radius: 8px;
 }
 
+//TODOFORM animation hover
 .TodoForm {
   box-shadow: 2px 1px 1px rgba(24, 24, 24, 0.384);
+  position: relative;
+  overflow: hidden;
+  &__overlay {
+    position: absolute;
+    background-color: rgba(250, 250, 250, 0.217);
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 1;
+    width: 100%;
+  }
+  &:hover {
+    box-shadow: 4px 4px 4px rgba(24, 24, 24, 0.384);
+    transform: scale(1.01);
+    -webkit-transform: scale(1.01);
+    -moz-transform: scale(1.01);
+    -ms-transform: scale(1.01);
+    -o-transform: scale(1.01);
+  }
+  transition: box-shadow 0.5s, transform 0.5s;
+  -webkit-transition: box-shadow 0.5s, transform 0.5s;
+  -moz-transition: box-shadow 0.5s, transform 0.5s;
+  -ms-transition: box-shadow 0.5s, transform 0.5s;
+  -o-transition: box-shadow 0.5s, transform 0.5s;
 }
 
 //PERSONAL LINKS
@@ -161,15 +188,14 @@ $background-1: #27274d;
   &__TaskReminder {
     display: flex;
     justify-content: left;
-
     gap: 3px;
   }
   &__Task {
+    z-index: 2;
     display: flex;
     justify-content: center;
     margin-top: 1rem;
     margin-bottom: 0.5rem;
-    // margin: 1rem auto 0.5rem;
     &__input {
       outline: none;
       background: #fff;
@@ -179,8 +205,35 @@ $background-1: #27274d;
       color: black;
       flex: auto;
     }
+    &__input:focus {
+      transform: scale(1.02);
+      -webkit-transform: scale(1.02);
+      -moz-transform: scale(1.02);
+      -ms-transform: scale(1.02);
+      -o-transform: scale(1.02);
+      box-shadow: 3px 2px 2px rgba(24, 24, 24, 0.384);
+      transition: box-shadow 1s transform 1s;
+      -webkit-transition: box-shadow 1s transform 1s;
+      -moz-transition: box-shadow 1s transform 1s;
+      -ms-transition: box-shadow 1s transform 1s;
+      -o-transition: box-shadow 1s transform 1s;
+    }
+    &__input:focus ~ button {
+      transform: scale(1.02);
+      -webkit-transform: scale(1.02);
+      -moz-transform: scale(1.02);
+      -ms-transform: scale(1.02);
+      -o-transform: scale(1.02);
+      box-shadow: 3px 2px 2px rgba(24, 24, 24, 0.384);
+      transition: box-shadow 1s transform 1s;
+      -webkit-transition: box-shadow 1s transform 1s;
+      -moz-transition: box-shadow 1s transform 1s;
+      -ms-transition: box-shadow 1s transform 1s;
+      -o-transition: box-shadow 1s transform 1s;
+    }
   }
   &__CatDate {
+    z-index: 2;
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
@@ -188,9 +241,6 @@ $background-1: #27274d;
     padding-right: 10px;
     align-items: baseline;
     gap: 5px;
-    div {
-      // flex-basis: 49%;
-    }
     input,
     select {
       background: rgba(95, 95, 95, 0.69);
@@ -360,8 +410,6 @@ $background-1: #27274d;
     justify-content: center;
     align-items: center;
   }
-  svg {
-  }
   &__container {
     max-width: 70%;
     margin-left: 26px;
@@ -425,6 +473,41 @@ $background-1: #27274d;
     text-decoration: line-through;
     min-height: 35px;
     font-size: 13px;
+    .TodoItem__type-color svg {
+      font-size: 15px;
+      animation: bell-ring 1s;
+      -webkit-animation: bell-ring 1s;
+    }
+    @keyframes bell-ring {
+      0% {
+        rotate: 0deg;
+        transform: scale(1.3);
+        -webkit-transform: scale(1.3);
+        -moz-transform: scale(1.3);
+        -ms-transform: scale(1.3);
+        -o-transform: scale(1.3);
+      }
+      10% {
+        rotate: 14deg;
+      }
+      30% {
+        rotate: -14deg;
+      }
+      45% {
+        rotate: 9deg;
+      }
+      55% {
+        rotate: -9deg;
+      }
+      60% {
+        rotate: 0deg;
+        transform: scale(1.3);
+        -webkit-transform: scale(1.3);
+        -moz-transform: scale(1.3);
+        -ms-transform: scale(1.3);
+        -o-transform: scale(1.3);
+      }
+    }
   }
   .completed {
     font-size: 13px;

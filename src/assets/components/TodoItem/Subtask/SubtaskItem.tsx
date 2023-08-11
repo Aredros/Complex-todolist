@@ -1,13 +1,8 @@
 import { useContext, useEffect, useState } from "react";
-import { AppContext } from "../../../App";
+import { AppContext } from "../../../../App";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faDeleteLeft,
-  faPenToSquare,
-  faCircle,
-  faCircleCheck,
-} from "@fortawesome/free-solid-svg-icons";
-import { auth, db } from "../../../config/firebase";
+import { faCircle, faCircleCheck } from "@fortawesome/free-solid-svg-icons";
+import { auth, db } from "../../../../config/firebase";
 import {
   collection,
   updateDoc,
@@ -15,6 +10,8 @@ import {
   where,
   getDocs,
 } from "firebase/firestore";
+import { EditSubtaskButton } from "./EditSubtaskButton";
+import { DeleteSubtaskButton } from "./DeleteSubtaskButton";
 
 interface TodoItemProps {
   todo: {
@@ -49,108 +46,6 @@ export const SubTaskItem = (props: TodoItemProps) => {
   } = useContext(AppContext) || {}; // Destructure allColors from the context
 
   const [subtaskText, setSubtaskText] = useState<string>("");
-
-  //START EDIT THE Subtask
-  // Function to change the editing status of a SubTask
-  const editSubTask = async (id: string, theSubID: string) => {
-    const updatedTodos = (allTodos || []).map((todo) =>
-      todo.id === id
-        ? {
-            ...todo,
-            subTask: todo.subTask?.map((each) =>
-              each.subTaskID === theSubID
-                ? {
-                    ...each,
-                    isSubtaskEditing: !each.isSubtaskEditing,
-                    subTask: each.isSubtaskEditing ? subtaskText : each.subTask,
-                  }
-                : each
-            ),
-          }
-        : todo
-    );
-    setAllTodos(updatedTodos);
-    setSubtaskText("");
-    if (isLoggedIn) {
-      try {
-        // Get the current user's email
-        const userEmail = auth.currentUser?.email;
-
-        // Create a query to fetch the specific todo based on the user and todo ID
-        const q = query(
-          collection(db, "todos"),
-          where("user", "==", userEmail),
-          where("id", "==", id)
-        );
-
-        // Get the document that matches the query
-        const querySnapshot = await getDocs(q);
-
-        // Update the subTask of the document associated with the user and todo ID
-        querySnapshot.docs.forEach(async (doc) => {
-          const updatedSubTask = doc
-            .data()
-            .subTask.map((subtask: ITSubtaskTodo) =>
-              subtask.subTaskID === theSubID
-                ? {
-                    ...subtask,
-                    isSubtaskEditing: !subtask.isSubtaskEditing,
-                    subTask: subtask.isSubtaskEditing
-                      ? subtaskText
-                      : subtask.subTask,
-                  }
-                : subtask
-            );
-          await updateDoc(doc.ref, { subTask: updatedSubTask });
-        });
-      } catch (err) {
-        console.log(err);
-      }
-    }
-  };
-
-  //Delete the selecte SubTask
-  const deleteSubTask = async (id: string, theSubID: string) => {
-    const updatedTodos = (allTodos || []).map((todo) =>
-      todo.id === id
-        ? {
-            ...todo,
-            subTask: todo.subTask?.filter(
-              (each) => each.subTaskID !== theSubID
-            ),
-          }
-        : todo
-    );
-    setAllTodos(updatedTodos);
-    if (isLoggedIn) {
-      try {
-        // Get the current user's email
-        const userEmail = auth.currentUser?.email;
-
-        // Create a query to fetch the specific todo based on the user and todo ID
-        const q = query(
-          collection(db, "todos"),
-          where("user", "==", userEmail),
-          where("id", "==", id)
-        );
-
-        // Get the document that matches the query
-        const querySnapshot = await getDocs(q);
-
-        // Update the subTask of the document associated with the user and todo ID
-        querySnapshot.docs.forEach(async (doc) => {
-          const updatedSubTask = doc
-            .data()
-            .subTask.filter(
-              (subtask: ITSubtaskTodo) => subtask.subTaskID !== theSubID
-            );
-          await updateDoc(doc.ref, { subTask: updatedSubTask });
-        });
-      } catch (err) {
-        console.log(err);
-      }
-    }
-  };
 
   const toggleSubTaskComplete = async (id: string, theSubID: string) => {
     const updatedTodos = (allTodos || []).map((todo) =>
@@ -241,16 +136,13 @@ export const SubTaskItem = (props: TodoItemProps) => {
             </p>
           )}
 
-          <FontAwesomeIcon
-            icon={faPenToSquare}
-            style={{ color: allColors?.buttonIcons }}
-            onClick={() => editSubTask(todo.id, subtask.subTaskID)}
+          <EditSubtaskButton
+            IndivSubtask={subtask}
+            todoID={todo.id}
+            subtaskText={subtaskText}
+            setSubtaskText={setSubtaskText}
           />
-          <FontAwesomeIcon
-            icon={faDeleteLeft}
-            style={{ color: allColors?.buttonIcons }}
-            onClick={() => deleteSubTask(todo.id, subtask.subTaskID)}
-          />
+          <DeleteSubtaskButton IndivSubtask={subtask} todoID={todo.id} />
         </div>
       ))}
     </div>

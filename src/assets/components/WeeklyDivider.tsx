@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useContext } from "react";
 import { AppContext } from "../../App";
 import { DailyDivider } from "./DailyDivider";
 import { WeekHeader } from "./WeekHead/WeekHeader";

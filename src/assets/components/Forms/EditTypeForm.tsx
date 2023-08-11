@@ -30,7 +30,6 @@ export const EditTypeForm = (props: IType) => {
 
   const {
     allColors,
-    allTodos,
     allTypes,
     setAllTypes = () => {},
     isLoggedIn,

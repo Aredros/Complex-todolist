@@ -12,7 +12,7 @@ import { StartEditButton } from "./buttons/StartEditButton";
 import { IconAndColorItem } from "./IconAndColorItem";
 import { DuplicateItemButton } from "./buttons/DuplicateItemButton";
 import { CreateSubTaskItemButton } from "./buttons/CreateSubTaskItemButton";
-import { SubTaskItem } from "./SubtaskItem";
+import { SubTaskItem } from "./Subtask/SubtaskItem";
 import { FailButtonItem } from "./buttons/FailButtonItem";
 import { DeleteItemButton } from "./buttons/DeleteItemButton";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -21,6 +21,7 @@ import {
   faCheck,
   faCircleCheck,
 } from "@fortawesome/free-solid-svg-icons";
+import { FavoriteItemButton } from "./buttons/FavoriteItemButton";
 
 interface TodoItemProps {
   todo: {
@@ -36,6 +37,7 @@ interface TodoItemProps {
     archived: boolean;
     subTask: ITSubtaskTodo[];
     failed: boolean;
+    favorite: boolean;
   };
 }
 
@@ -138,6 +140,7 @@ export const TodoItem = (props: TodoItemProps) => {
           todo.taskorreminder === "reminder"
             ? allColors?.reminderBackgroundColor
             : allColors?.itemBackgroundColor,
+        border: todo.favorite ? `2px solid #dfa201` : "",
       }}
     >
       <IconAndColorItem todo={todo} handleToggleClick={handleToggleClick} />
@@ -149,7 +152,9 @@ export const TodoItem = (props: TodoItemProps) => {
             <>
               <FontAwesomeIcon
                 icon={faCheck}
-                style={{ color: allColors?.buttonIcons }}
+                style={{
+                  color: todo.favorite ? "#dfa201" : allColors?.buttonIcons,
+                }}
                 onClick={handleToggleClick}
               />
               <FailButtonItem todo={todo} />{" "}
@@ -157,14 +162,18 @@ export const TodoItem = (props: TodoItemProps) => {
           ) : (
             <FontAwesomeIcon
               icon={faCircle}
-              style={{ color: allColors?.buttonIcons }}
+              style={{
+                color: todo.favorite ? "#dfa201" : allColors?.buttonIcons,
+              }}
               onClick={() => setEditCompletionMenu(true)}
             />
           ))}
         {todo.completed && (
           <FontAwesomeIcon
             icon={faCircleCheck}
-            style={{ color: allColors?.buttonIcons }}
+            style={{
+              color: todo.favorite ? "#dfa201" : allColors?.buttonIcons,
+            }}
             onClick={handleToggleClick}
           />
         )}
@@ -176,7 +185,11 @@ export const TodoItem = (props: TodoItemProps) => {
             {todo.task}
           </b>
           {todo.taskorreminder !== "reminder" && (
-            <CreateSubTaskItemButton todo={todo} />
+            <>
+              {" "}
+              <CreateSubTaskItemButton todo={todo} />
+              <FavoriteItemButton todo={todo} />
+            </>
           )}
         </p>
       </div>

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect } from "react";
 import { AppContext } from "../../../App";
 import { IconWeekType } from "../WeekHead/IconWeekType";
 import { StartTypeEditButton } from "./StartTypeEditButton";
@@ -33,14 +33,14 @@ export const TypeItem = (props: IType) => {
 
   //Get all completed items from this type
   const CountCompletedItems = (typeID: string) => {
-    const MoreThanZero = allTodos?.filter(
-      (t) => t.nType === typeID && t.completed === true
-    ).length;
-    if (MoreThanZero && MoreThanZero > 0) {
-      return MoreThanZero;
-    } else {
+    if (!Array.isArray(allTodos)) {
       return 0;
     }
+    const completedTodos = allTodos.filter(
+      (t) => t.nType === typeID && t.completed === true
+    );
+
+    return completedTodos.length;
   };
 
   useEffect(() => {

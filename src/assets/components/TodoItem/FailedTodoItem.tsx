@@ -12,8 +12,9 @@ import { DeleteItemButton } from "./buttons/DeleteItemButton";
 
 import { IconAndColorItem } from "./IconAndColorItem";
 
-import { SubTaskItem } from "./SubtaskItem";
+import { SubTaskItem } from "./Subtask/SubtaskItem";
 import { RecoverButtonItem } from "./buttons/RecoverButtonItem";
+import { FavoriteItemButton } from "./buttons/FavoriteItemButton";
 
 interface TodoItemProps {
   todo: {
@@ -29,6 +30,7 @@ interface TodoItemProps {
     archived: boolean;
     subTask: ITSubtaskTodo[];
     failed: boolean;
+    favorite: boolean;
   };
 }
 
@@ -43,7 +45,6 @@ export const FailedTodoItem = (props: TodoItemProps) => {
   const { todo } = props;
 
   const {
-    allColors,
     allTodos = [],
     setAllTodos = () => {},
     isLoggedIn,
@@ -83,10 +84,10 @@ export const FailedTodoItem = (props: TodoItemProps) => {
     }
   };
 
-  const handleToggleClick = () => {
-    //handle the mark task as completed
-    todo.taskorreminder === "task" ? toggleCompleteTask?.(todo.id) : null;
-  };
+  // const handleToggleClick = () => {
+  //   //handle the mark task as completed
+  //   todo.taskorreminder === "task" ? toggleCompleteTask?.(todo.id) : null;
+  // };
 
   //UPDATE LocalStorage when allTodos changes
   useEffect(() => {
@@ -120,6 +121,12 @@ export const FailedTodoItem = (props: TodoItemProps) => {
               : null}
             {todo.task}
           </b>
+          {todo.taskorreminder !== "reminder" && (
+            <>
+              {" "}
+              <FavoriteItemButton todo={todo} />
+            </>
+          )}
         </p>
       </div>
 

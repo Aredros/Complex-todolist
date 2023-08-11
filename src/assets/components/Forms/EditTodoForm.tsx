@@ -21,6 +21,7 @@ interface EditTodoFormProps {
     isEditing: boolean;
     subTask: ITSubtaskTodo[];
     failed: boolean;
+    favorite: boolean;
   };
 }
 

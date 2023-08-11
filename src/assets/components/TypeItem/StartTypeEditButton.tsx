@@ -27,7 +27,6 @@ export const StartTypeEditButton = (props: IType) => {
 
   const {
     allColors,
-    allTodos,
     allTypes,
     setAllTypes = () => {},
     isLoggedIn,

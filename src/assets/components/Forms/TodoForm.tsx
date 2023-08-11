@@ -40,6 +40,7 @@ export const TodoForm = () => {
       archived: false,
       subTask: [],
       failed: false,
+      favorite: false,
     };
 
     const updatedTodos = allTodos ? [...allTodos, newTodo] : [newTodo];

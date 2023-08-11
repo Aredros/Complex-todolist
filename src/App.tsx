@@ -6,7 +6,7 @@ import React, { useState, useEffect, createContext } from "react";
 import { TodoWrapper } from "./assets/pages/TodoWrapper";
 import { Auth } from "./assets/pages/auth";
 import { auth, db } from "./config/firebase";
-import { onAuthStateChanged, signOut } from "firebase/auth";
+import { onAuthStateChanged } from "firebase/auth";
 import { collection, query, where, getDocs } from "firebase/firestore";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import StylesEdit from "./assets/pages/StylesEdit";
@@ -26,6 +26,7 @@ interface IDoneTodo {
   archived: boolean;
   subTask: ITSubtaskTodo[];
   failed: boolean;
+  favorite: boolean;
 }
 
 interface ITSubtaskTodo {
@@ -95,6 +96,7 @@ function App() {
       startTime: "",
       archived: false,
       failed: false,
+      favorite: false,
       subTask: [
         {
           subTaskCompleted: false,
@@ -147,10 +149,6 @@ function App() {
     //empty array and local storage
     //localStorage.clear();
 
-    const updateThem = allTypes?.map((type) =>
-      type.isEditing === undefined ? { ...type, isEditing: false } : type
-    );
-
     //useEffect to get all stored colors in localStorage
     Object.keys(allColors).forEach((key) => {
       const stored_indiv_color = localStorage.getItem(key) || "";
@@ -177,8 +175,8 @@ function App() {
     };
   }, []); // the empty array is to make sure the useEffect only runs once
 
-  // Get todos from Firestore database //
   useEffect(() => {
+    // Get TODOS from Firestore database //
     const getTodosFromDatabase = async () => {
       try {
         if (auth.currentUser) {
@@ -218,32 +216,8 @@ function App() {
       }
     };
 
-    if (isLoggedIn) {
-      // Fetch todos from Firebase
-      getTodosFromDatabase();
-    } else {
-      const storedTodos = localStorage.getItem("todosLocal") || "[]";
-      try {
-        // Fetch todos from LocalStorage
-        setAllTodos(JSON.parse(storedTodos));
-      } catch (error) {
-        console.log("Error parsing stored todos:", error);
-      }
-    }
+    // Get TYPES from Firestore //
 
-    // Verifying if the user is Anon or not
-    const unsubscribe = auth.onAuthStateChanged((user) => {
-      setIsLoggedIn(user ? !user.isAnonymous : false);
-    });
-
-    return () => {
-      unsubscribe();
-    };
-  }, [isLoggedIn]); // Run the effect whenever the isLoggedIn state changes
-
-  // Get TYPES from Firestore or Localstorage //
-  useEffect(() => {
-    // Get types from Firestore database
     const getTypesFromDatabase = async () => {
       try {
         if (auth.currentUser) {
@@ -285,14 +259,19 @@ function App() {
 
     if (isLoggedIn) {
       // Fetch todos from Firebase
+      getTodosFromDatabase();
+      //Fetch Types from Firebase
       getTypesFromDatabase();
     } else {
+      const storedTodos = localStorage.getItem("todosLocal") || "[]";
       const storedTypes = localStorage.getItem("typesLocal") || "[]";
       try {
         // Fetch todos from LocalStorage
+        setAllTodos(JSON.parse(storedTodos));
+        // Fetch todos from LocalStorage
         setAllTypes(JSON.parse(storedTypes));
       } catch (error) {
-        console.log("Error parsing stored types:", error);
+        console.log("Error parsing stored Todos/Types:", error);
       }
     }
 

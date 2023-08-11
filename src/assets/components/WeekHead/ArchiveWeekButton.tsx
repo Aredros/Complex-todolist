@@ -24,6 +24,7 @@ interface IDoneTodo {
   archived: boolean;
   subTask: ITSubtaskTodo[];
   failed: boolean;
+  favorite: boolean;
 }
 interface ITSubtaskTodo {
   subTaskCompleted: boolean;

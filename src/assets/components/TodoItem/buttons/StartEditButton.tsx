@@ -24,6 +24,7 @@ interface TodoItemProps {
     startTime: string;
     subTask: ITSubtaskTodo[];
     failed: boolean;
+    favorite: boolean;
   };
 }
 interface ITSubtaskTodo {

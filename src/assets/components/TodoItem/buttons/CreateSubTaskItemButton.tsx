@@ -24,6 +24,7 @@ interface TodoItemProps {
     archived: boolean;
     subTask: ITSubtaskTodo[];
     failed: boolean;
+    favorite: boolean;
   };
 }
 interface ITSubtaskTodo {

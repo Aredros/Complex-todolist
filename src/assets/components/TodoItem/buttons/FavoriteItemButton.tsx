@@ -8,7 +8,6 @@ import {
   where,
   getDocs,
 } from "firebase/firestore";
-import { v4 as uuidv4 } from "uuid";
 
 interface TodoItemProps {
   todo: {

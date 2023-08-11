@@ -20,6 +20,7 @@ interface TodoItemProps {
     archived: boolean;
     subTask: ITSubtaskTodo[];
     failed: boolean;
+    favorite: boolean;
   };
 }
 interface ITSubtaskTodo {
@@ -54,6 +55,7 @@ export const DuplicateItemButton = (props: TodoItemProps) => {
       archived: todo.archived,
       subTask: todo.subTask,
       failed: todo.failed,
+      favorite: todo.favorite,
     };
 
     const updatedTodos = allTodos ? [...allTodos, newTodo] : [newTodo];

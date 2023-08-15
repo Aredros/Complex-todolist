@@ -28,7 +28,12 @@ export const TypeItem = (props: IType) => {
   //Get all items from this type
   const CountAllItems = (typeID: string) => {
     const todosArray = allTodos ? allTodos : [];
-    return todosArray.filter((t) => t.nType === typeID).length;
+    if (Array.isArray(todosArray)) {
+      return todosArray.filter((t) => t.nType === typeID).length;
+    } else {
+      // Handle the case where todosArray is not an array
+      return 0;
+    }
   };
 
   //Get all completed items from this type

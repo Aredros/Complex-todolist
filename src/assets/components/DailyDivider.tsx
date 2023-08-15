@@ -170,12 +170,14 @@ export const DailyDivider = (props: DailyDividerProps) => {
             </p>
             {weekDisplayType && (
               <FontAwesomeIcon
-                icon={dayCollapsed ? faChevronCircleDown : faChevronCircleUp}
+                icon={faChevronCircleDown}
                 onClick={handleCollapseDayClick}
                 style={{
                   color: allColors?.buttonIcons,
                   fontSize: "14px",
                   alignSelf: "center",
+                  transform: dayCollapsed ? "" : "rotate(180deg)",
+                  transition: "transform 1s",
                 }}
               />
             )}
@@ -185,11 +187,11 @@ export const DailyDivider = (props: DailyDividerProps) => {
         <ul>
           {sortTodos(todos).map((todo) =>
             todo.isEditing ? (
-              <EditTodoForm key={todo.task} task={todo} />
+              <EditTodoForm key={`editing-${todo.task}`} task={todo} />
             ) : todo.failed ? (
-              <FailedTodoItem key={`failed-${todo.task}`} todo={todo} />
+              <FailedTodoItem key={`failed-item-${todo.task}`} todo={todo} />
             ) : (
-              <TodoItem key={todo.task} todo={todo} />
+              <TodoItem key={`normal-item-${todo.task}`} todo={todo} />
             )
           )}
         </ul>

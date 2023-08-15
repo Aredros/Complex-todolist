@@ -155,10 +155,12 @@ export const WeekHeader = (props: ISuccessProps) => {
                   </button>
                 </div>
                 <FontAwesomeIcon
-                  icon={weekCollapsed ? faChevronCircleDown : faChevronCircleUp}
+                  icon={faChevronCircleDown}
                   onClick={handleCollapseClick}
                   style={{
                     color: allColors?.buttonIcons,
+                    transform: weekCollapsed ? "" : "rotate(180deg)",
+                    transition: "transform 1s",
                   }}
                 />
               </div>

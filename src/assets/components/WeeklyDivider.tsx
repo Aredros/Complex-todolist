@@ -97,7 +97,7 @@ export const WeeklyDivider = (props: WeeklyDividerProps) => {
       >
         {dates.map((date) => (
           <DailyDivider
-            key={date}
+            key={`dailyDivider-${date}`}
             date={date}
             weekDisplayType={weekList}
             parentElement={parentElement}

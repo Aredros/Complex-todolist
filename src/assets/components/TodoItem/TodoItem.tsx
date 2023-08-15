@@ -22,6 +22,7 @@ import {
   faCircleCheck,
 } from "@fortawesome/free-solid-svg-icons";
 import { FavoriteItemButton } from "./buttons/FavoriteItemButton";
+import { CheckSign } from "./CheckSign";
 
 interface TodoItemProps {
   todo: {
@@ -146,37 +147,13 @@ export const TodoItem = (props: TodoItemProps) => {
       <IconAndColorItem todo={todo} handleToggleClick={handleToggleClick} />
       <div className="TodoItem__container">
         {" "}
-        {todo.taskorreminder === "task" &&
-          !todo.completed &&
-          (editCompletionMenu ? (
-            <>
-              <FontAwesomeIcon
-                icon={faCheck}
-                style={{
-                  color: todo.favorite ? "#dfa201" : allColors?.buttonIcons,
-                }}
-                onClick={handleToggleClick}
-              />
-              <FailButtonItem todo={todo} />{" "}
-            </>
-          ) : (
-            <FontAwesomeIcon
-              icon={faCircle}
-              style={{
-                color: todo.favorite ? "#dfa201" : allColors?.buttonIcons,
-              }}
-              onClick={() => setEditCompletionMenu(true)}
-            />
-          ))}
-        {todo.completed && (
-          <FontAwesomeIcon
-            icon={faCircleCheck}
-            style={{
-              color: todo.favorite ? "#dfa201" : allColors?.buttonIcons,
-            }}
-            onClick={handleToggleClick}
-          />
-        )}
+        {/* KOKO */}
+        <CheckSign
+          editCompletionMenu={editCompletionMenu}
+          todo={todo}
+          handleToggleClick={handleToggleClick}
+          setEditCompletionMenu={setEditCompletionMenu}
+        />
         <p className={`${todo.completed && "completed"}`}>
           <b>
             {todo.startTime !== undefined && todo.startTime !== ""

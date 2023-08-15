@@ -86,7 +86,7 @@ export const IconAndColorItem = (props: TodoItemProps) => {
               ? faPersonArrowUpFromLine
               : faX
           }
-          style={{ color: "#edf9f3" }}
+          style={{ color: todo.favorite ? "#dfa201" : "#edf9f3" }}
         />
       )}
     </div>

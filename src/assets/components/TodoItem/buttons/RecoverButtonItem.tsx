@@ -86,10 +86,51 @@ export const RecoverButtonItem = (props: TodoItemProps) => {
   }, [allTodos]);
 
   return (
-    <FontAwesomeIcon
-      icon={faCircleXmark}
+    <svg
       onClick={handleEditClick}
-      style={{ color: allColors?.buttonIcons }}
-    />
+      width="20px"
+      height="20px"
+      viewBox="0 0 133 133"
+      version="1.1"
+      xmlns="http://www.w3.org/2000/svg"
+      xmlnsXlink="http://www.w3.org/1999/xlink"
+    >
+      <g
+        id="check-group"
+        stroke="none"
+        stroke-width="1"
+        fill="none"
+        fill-rule="evenodd"
+      >
+        <circle
+          id="filled-circle"
+          fill="#5e2525"
+          cx="66.5"
+          cy="66.5"
+          r="54.5"
+        />
+        <circle id="white-circle" fill="#FFFFFF" cx="66.5" cy="66.5" r="55.5" />
+        <circle
+          id="outline"
+          stroke="#5e2525"
+          stroke-width="4"
+          cx="66.5"
+          cy="66.5"
+          r="54.5"
+        />
+        <polyline
+          id="check"
+          stroke="#FFFFFF"
+          stroke-width="5.5"
+          points="41 40 67 64 41 88"
+        />
+        <polyline
+          id="check"
+          stroke="#FFFFFF"
+          stroke-width="5.5"
+          points="92 40 67 64 92 88"
+        />
+      </g>
+    </svg>
   );
 };

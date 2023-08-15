@@ -83,40 +83,8 @@ export const AppContext = createContext<ITallAppFile | undefined>(undefined);
 function App() {
   const [loading, setLoading] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [allTodos, setAllTodos] = useState<IDoneTodo[] | null>([
-    {
-      id: "0101",
-      task: "Mock task",
-      completed: false,
-      isEditing: false,
-      taskorreminder: "task",
-      user: "",
-      nType: "",
-      date: "",
-      startTime: "",
-      archived: false,
-      failed: false,
-      favorite: false,
-      subTask: [
-        {
-          subTaskCompleted: false,
-          subTask: "Mock subtask",
-          subTaskID: "0101",
-          isSubtaskEditing: false,
-        },
-      ],
-    },
-  ]); // Array of todo objects
-  const [allTypes, setAllTypes] = useState<IType[] | null>([
-    {
-      id: "1",
-      user: "",
-      typeName: "No-cat",
-      color: "#f8f8f8",
-      icon: "",
-      isEditing: false,
-    },
-  ]);
+  const [allTodos, setAllTodos] = useState<IDoneTodo[] | null>([]);
+  const [allTypes, setAllTypes] = useState<IType[] | null>([]);
   const [isLoggedIn, setIsLoggedIn] = useState(false); //check if the user is logged in or not
 
   //array that stores all colors that will be used in the app

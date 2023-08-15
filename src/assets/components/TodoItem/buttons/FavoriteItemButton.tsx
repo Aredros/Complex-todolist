@@ -100,7 +100,7 @@ export const FavoriteItemButton = (props: TodoItemProps) => {
         {todo.favorite ? (
           <path
             fill="#dfa201"
-            fill-opacity="0"
+            fillOpacity="0"
             stroke="#dfa201"
             strokeDasharray="32"
             strokeDashoffset="32"
@@ -117,7 +117,7 @@ export const FavoriteItemButton = (props: TodoItemProps) => {
             />
             <animate
               fill="freeze"
-              attributeName="fill-opacity"
+              attributeName="fil-opacity"
               begin="0.5s"
               dur="0.5s"
               values="0;1"

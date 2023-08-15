@@ -2,14 +2,15 @@ import React, { useState, useEffect, useContext, createContext } from "react";
 import { AppContext } from "../../../App";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faChevronCircleUp,
   faChevronCircleDown,
   faLayerGroup,
+  faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import { WeekSuccessPercentage } from "./WeekSuccessPercentage";
 import { EditWeekObjective } from "./EditWeekObjective";
 import { ArchiveWeekButton } from "./ArchiveWeekButton";
 import { WeekTypeCounter } from "./WeekTypeCounter";
+import { DeleteWeekButton } from "./DeleteWeekButton";
 
 interface ISuccessProps {
   parentElement: string;
@@ -152,6 +153,17 @@ export const WeekHeader = (props: ISuccessProps) => {
                   >
                     <FontAwesomeIcon icon={faLayerGroup} />
                     Progress
+                  </button>
+                  <button
+                    onClick={() =>
+                      setDisplayWeekTypeCounter(!displayWeekTypeCounter)
+                    }
+                    style={{
+                      backgroundColor: allColors?.buttonIcons,
+                      color: allColors?.buttonText,
+                    }}
+                  >
+                    <DeleteWeekButton Weektodos={todos} />
                   </button>
                 </div>
                 <FontAwesomeIcon

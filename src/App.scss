@@ -682,6 +682,9 @@ $background-1: #27274d;
     display: flex;
     gap: 5px;
     align-items: center;
+    &:last-child {
+      padding: 2px 3px;
+    }
   }
 }
 

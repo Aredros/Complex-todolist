@@ -1,8 +1,6 @@
 import { useContext } from "react";
 import { DisplayTypesContext } from "../pages/TodoWrapper";
 import { AppContext } from "../../App";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCalendarDays, faList } from "@fortawesome/free-solid-svg-icons";
 
 export const DisplayTypes = () => {
   const { allColors } = useContext(AppContext) || {}; // Destructure allColors from the context
@@ -35,19 +33,19 @@ export const DisplayTypes = () => {
           >
             <g
               stroke={allColors?.buttonText}
-              stroke-linecap="round"
-              stroke-linejoin="round"
+              strokeLinecap="round"
+              strokeLinejoin="round"
             >
               <g
                 fill="none"
-                stroke-dasharray="10"
-                stroke-dashoffset="10"
-                stroke-width="2"
+                strokeDasharray="10"
+                strokeDashoffset="10"
+                strokeWidth="2"
               >
                 <path d="M3 5L5 7L9 3">
                   <animate
                     fill="freeze"
-                    attributeName="stroke-dashoffset"
+                    attributeName="strok-dashoffset"
                     dur="0.2s"
                     values="10;0"
                   />
@@ -73,9 +71,9 @@ export const DisplayTypes = () => {
               </g>
               <g
                 fill={allColors?.buttonText}
-                fill-opacity="0"
-                stroke-dasharray="22"
-                stroke-dashoffset="22"
+                fillOpacity="0"
+                strokeDasharray="22"
+                strokeDashoffset="22"
               >
                 <rect width="9" height="3" x="11.5" y="3.5" rx="1.5">
                   <animate
@@ -148,17 +146,17 @@ export const DisplayTypes = () => {
             <g
               fill="none"
               stroke={allColors?.buttonText}
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
             >
               <rect
                 width="16"
                 height="16"
                 x="4"
                 y="4"
-                stroke-dasharray="64"
-                stroke-dashoffset="64"
+                strokeDasharray="64"
+                strokeDashoffset="64"
                 rx="1"
               >
                 <animate
@@ -168,11 +166,7 @@ export const DisplayTypes = () => {
                   values="64;0"
                 />
               </rect>
-              <path
-                stroke-dasharray="6"
-                stroke-dashoffset="6"
-                d="M7 4V2M17 4V2"
-              >
+              <path strokeDasharray="6" strokeDashoffset="6" d="M7 4V2M17 4V2">
                 <animate
                   fill="freeze"
                   attributeName="stroke-dashoffset"
@@ -181,7 +175,7 @@ export const DisplayTypes = () => {
                   values="6;0"
                 />
               </path>
-              <path stroke-dasharray="12" stroke-dashoffset="12" d="M7 11H17">
+              <path strokeDasharray="12" strokeDashoffset="12" d="M7 11H17">
                 <animate
                   fill="freeze"
                   attributeName="stroke-dashoffset"
@@ -190,7 +184,7 @@ export const DisplayTypes = () => {
                   values="12;0"
                 />
               </path>
-              <path stroke-dasharray="9" stroke-dashoffset="9" d="M7 15H14">
+              <path strokeDasharray="9" strokeDashoffset="9" d="M7 15H14">
                 <animate
                   fill="freeze"
                   attributeName="stroke-dashoffset"

@@ -105,11 +105,11 @@ function App() {
   });
 
   const [advancedConfig, setAdvancedConfig] = useState<IAdvancedC>({
-    startTimeSettings: false,
+    startTimeSettings: true,
   });
 
   useEffect(() => {
-    setLoading(false);
+    setLoading(true);
     setTimeout(() => {
       setLoading(false);
     }, 4000);

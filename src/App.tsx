@@ -53,7 +53,7 @@ interface IAppContext {
 }
 
 interface IType {
-  id: string; // Add ID field to IType interface
+  id: string;
   user: string;
   typeName: string;
   color: string;
@@ -216,9 +216,6 @@ function App() {
 
           // Update the todos state with the retrieved todos
           setAllTypes(typesFromDatabase);
-
-          // Do something with the retrieved todos
-          console.log("Types from database:", typesFromDatabase);
         }
       } catch (err) {
         console.log(err);

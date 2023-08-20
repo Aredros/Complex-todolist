@@ -147,7 +147,6 @@ export const TodoItem = (props: TodoItemProps) => {
       <IconAndColorItem todo={todo} handleToggleClick={handleToggleClick} />
       <div className="TodoItem__container">
         {" "}
-        {/* KOKO */}
         <CheckSign
           editCompletionMenu={editCompletionMenu}
           todo={todo}

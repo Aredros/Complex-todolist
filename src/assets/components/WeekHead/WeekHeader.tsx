@@ -154,17 +154,8 @@ export const WeekHeader = (props: ISuccessProps) => {
                     <FontAwesomeIcon icon={faLayerGroup} />
                     Progress
                   </button>
-                  <button
-                    onClick={() =>
-                      setDisplayWeekTypeCounter(!displayWeekTypeCounter)
-                    }
-                    style={{
-                      backgroundColor: allColors?.buttonIcons,
-                      color: allColors?.buttonText,
-                    }}
-                  >
-                    <DeleteWeekButton Weektodos={todos} />
-                  </button>
+
+                  <DeleteWeekButton Weektodos={todos} />
                 </div>
                 <FontAwesomeIcon
                   icon={faChevronCircleDown}

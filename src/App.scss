@@ -138,36 +138,6 @@ $background-1: #27274d;
   -o-border-radius: 8px;
 }
 
-//TODOFORM animation hover
-.TodoForm {
-  box-shadow: 2px 1px 1px rgba(24, 24, 24, 0.384);
-  position: relative;
-  overflow: hidden;
-  &__overlay {
-    position: absolute;
-    background-color: rgba(250, 250, 250, 0.217);
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    z-index: 1;
-    width: 100%;
-  }
-  &:hover {
-    box-shadow: 4px 4px 4px rgba(24, 24, 24, 0.384);
-    transform: scale(1.01);
-    -webkit-transform: scale(1.01);
-    -moz-transform: scale(1.01);
-    -ms-transform: scale(1.01);
-    -o-transform: scale(1.01);
-  }
-  transition: box-shadow 0.5s, transform 0.5s;
-  -webkit-transition: box-shadow 0.5s, transform 0.5s;
-  -moz-transition: box-shadow 0.5s, transform 0.5s;
-  -ms-transition: box-shadow 0.5s, transform 0.5s;
-  -o-transition: box-shadow 0.5s, transform 0.5s;
-}
-
 //PERSONAL LINKS
 .personal-links {
   display: flex;
@@ -175,115 +145,6 @@ $background-1: #27274d;
   gap: 10px;
   svg:hover {
     opacity: 0.8;
-  }
-}
-
-/*Effects shared between Creating forms and Editing Forms*/
-.TodoForm,
-.EditTodoForm,
-.TypeForm {
-  width: 95%;
-  display: flex;
-  flex-direction: column;
-  margin: 2% auto 2%;
-  padding: 3% 1.8%;
-  &__TaskReminder {
-    display: flex;
-    justify-content: left;
-    gap: 3px;
-  }
-  &__Task {
-    z-index: 2;
-    display: flex;
-    justify-content: center;
-    margin-top: 1rem;
-    margin-bottom: 0.5rem;
-    &__input {
-      outline: none;
-      background: #fff;
-      border: 1px solid #fff;
-      padding: 0.5rem 1rem;
-      width: clamp(150px, 19em, 500px);
-      color: black;
-      flex: auto;
-    }
-    &__input:focus {
-      transform: scale(1.02);
-      -webkit-transform: scale(1.02);
-      -moz-transform: scale(1.02);
-      -ms-transform: scale(1.02);
-      -o-transform: scale(1.02);
-      box-shadow: 3px 2px 2px rgba(24, 24, 24, 0.384);
-      transition: box-shadow 1s transform 1s;
-      -webkit-transition: box-shadow 1s transform 1s;
-      -moz-transition: box-shadow 1s transform 1s;
-      -ms-transition: box-shadow 1s transform 1s;
-      -o-transition: box-shadow 1s transform 1s;
-    }
-    &__input:focus ~ button {
-      transform: scale(1.02);
-      -webkit-transform: scale(1.02);
-      -moz-transform: scale(1.02);
-      -ms-transform: scale(1.02);
-      -o-transform: scale(1.02);
-      box-shadow: 3px 2px 2px rgba(24, 24, 24, 0.384);
-      transition: box-shadow 1s transform 1s;
-      -webkit-transition: box-shadow 1s transform 1s;
-      -moz-transition: box-shadow 1s transform 1s;
-      -ms-transition: box-shadow 1s transform 1s;
-      -o-transition: box-shadow 1s transform 1s;
-    }
-  }
-  &__CatDate {
-    z-index: 2;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    padding-left: 10px;
-    padding-right: 10px;
-    align-items: baseline;
-    gap: 5px;
-    input,
-    select {
-      background: rgba(95, 95, 95, 0.69);
-      color: white;
-      border: 1px solid #313131;
-      padding: 0.1rem 0.1rem;
-      border-radius: 0px;
-      -webkit-border-radius: 0px;
-      -moz-border-radius: 0px;
-      -ms-border-radius: 0px;
-      -o-border-radius: 0px;
-    }
-    select option {
-      background: #fff;
-      border: 1px solid #313131;
-      padding: 0.1rem 0.1rem;
-      color: black;
-    }
-  }
-  border-radius: 10px;
-  -webkit-border-radius: 10px;
-  -moz-border-radius: 10px;
-  -ms-border-radius: 10px;
-  -o-border-radius: 10px;
-}
-/*Effects only for the editing forms*/
-.EditTodoForm {
-  width: 99%;
-  margin: 2px auto;
-  padding-bottom: 1rem;
-  border: 1px solid rgba(26, 26, 26, 0.473);
-  box-shadow: 2px 1px 1px rgba(24, 24, 24, 0.384);
-  border-radius: 2px;
-  -webkit-border-radius: 2px;
-  -moz-border-radius: 2px;
-  -ms-border-radius: 2px;
-  -o-border-radius: 2px;
-  &__Task {
-    width: 98%;
-    margin-left: auto;
-    margin-right: auto;
   }
 }
 
@@ -543,6 +404,7 @@ $background-1: #27274d;
 }
 
 .TypeArea {
+  margin-top: 10px;
   display: flex;
   flex-wrap: wrap;
   gap: 7px;
@@ -794,23 +656,6 @@ $background-1: #27274d;
   .TodoWrapper {
     width: 550px;
     padding: 2rem;
-  }
-
-  .TodoForm,
-  .EditTodoForm,
-  .TypeForm {
-    width: 486px;
-    &__CatDate {
-      padding-left: 20px;
-      padding-right: 20px;
-      input,
-      select {
-        padding: 0.5rem 1rem;
-      }
-      select option {
-        padding: 0.5rem 1rem;
-      }
-    }
   }
 
   //Navigation navbar

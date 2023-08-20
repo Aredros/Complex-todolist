@@ -1,4 +1,5 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, useRef } from "react";
+import "../../styles/components/new-form.scss";
 import { AppContext } from "../../../App";
 import { v4 as uuidv4 } from "uuid";
 import { auth, db } from "../../../config/firebase";
@@ -18,6 +19,16 @@ export const TodoForm = () => {
   const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
   const [startTimeValue, setStartTimeValue] = useState("10:00");
   const [taskorreminder, setTaskorreminder] = useState("task");
+
+  const mainFormHideRef = useRef<HTMLDialogElement | null>(null);
+
+  const openModal = () => {
+    mainFormHideRef.current?.showModal();
+  };
+
+  const closeModal = () => {
+    mainFormHideRef.current?.close();
+  };
 
   //function to add a TODO
   const addNewTodo = async (
@@ -87,80 +98,187 @@ export const TodoForm = () => {
   }, [allTodos]);
 
   return (
-    <form
-      className="TodoForm"
-      onSubmit={handleSubmit}
-      style={{ background: allColors?.formBackgroundColor }}
-    >
-      <div className="TodoForm__Task">
-        <input
-          type="text"
-          value={value}
-          placeholder="Add a new task"
-          className="TodoForm__Task__input"
-          onChange={(e) => setValue(e.target.value)}
-        />
+    <>
+      <div className="add-buttons">
         <button
-          type="submit"
-          className="add-btn"
+          onClick={openModal}
           style={{
             backgroundColor: allColors?.buttonIcons,
             color: allColors?.buttonText,
           }}
         >
-          Add Task
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="22"
+            height="22"
+            viewBox="0 0 22 22"
+          >
+            <g
+              fill="none"
+              stroke="currentColor"
+              stroke-dasharray="18"
+              stroke-dashoffset="18"
+              stroke-linecap="round"
+              stroke-width="2"
+            >
+              <path d="M12 5V19">
+                <animate
+                  fill="freeze"
+                  attributeName="stroke-dashoffset"
+                  begin="0.4s"
+                  dur="0.3s"
+                  values="18;0"
+                />
+              </path>
+              <path d="M5 12H19">
+                <animate
+                  fill="freeze"
+                  attributeName="stroke-dashoffset"
+                  dur="0.3s"
+                  values="18;0"
+                />
+              </path>
+            </g>
+          </svg>{" "}
+          Task
         </button>
       </div>
-      <div className="TodoForm__CatDate">
-        <div className="TodoForm__CatDate__category">
-          <select
-            id="type"
-            name="type"
-            value={type}
-            onChange={(e) => setType(e.target.value)}
-            {...(taskorreminder === "reminder" && { disabled: true })}
+
+      <dialog
+        className="FormContainer"
+        ref={mainFormHideRef}
+        style={{ background: allColors?.formBackgroundColor }}
+      >
+        <div className="FormContainer__header">
+          <h3>New Task</h3>
+
+          <svg
+            onClick={closeModal}
+            width="25px"
+            height="25px"
+            viewBox="0 0 133 133"
+            version="1.1"
+            xmlns="http://www.w3.org/2000/svg"
+            xmlnsXlink="http://www.w3.org/1999/xlink"
           >
-            {allTypes?.map((type) => (
-              <option key={`type-id ${type?.id}`} value={type?.id}>
-                {type.typeName}
-              </option>
-            ))}
-          </select>
+            <g
+              id="check-group"
+              stroke="none"
+              strokeWidth="1"
+              fill="none"
+              fillRule="evenodd"
+            >
+              <circle
+                id="outline"
+                stroke="transparent"
+                strokeWidth="4"
+                cx="66.5"
+                cy="66.5"
+                r="54.5"
+              />
+              <polyline
+                id="check"
+                stroke="#FFFFFF"
+                strokeWidth="5.5"
+                points="41 40 67 64 41 88"
+              />
+              <polyline
+                id="check"
+                stroke="#FFFFFF"
+                strokeWidth="5.5"
+                points="92 40 67 64 92 88"
+              />
+            </g>
+          </svg>
         </div>
-        <div className="TodoForm__CatDate__category">
-          <select
-            id="taskOrReminder"
-            name="task-reminder"
-            value={taskorreminder}
-            onChange={(e) => setTaskorreminder(e.target.value)}
+
+        <form className="TodoForm" onSubmit={handleSubmit}>
+          <div className="TodoForm__radio">
+            {" "}
+            <div className="TodoForm__radio__option">
+              <input
+                type="radio"
+                id="taskreminder"
+                name="task-reminder"
+                value="task"
+                checked={taskorreminder === "task"}
+                onChange={() => setTaskorreminder("task")}
+              />{" "}
+              <label htmlFor="task">Task</label>
+            </div>
+            <div className="TodoForm__radio__option">
+              <input
+                type="radio"
+                id="taskreminder"
+                name="task-reminder"
+                value="reminder"
+                checked={taskorreminder === "reminder"}
+                onChange={() => setTaskorreminder("reminder")}
+              />{" "}
+              <label htmlFor="reminder">Reminder</label>
+            </div>
+          </div>
+
+          <div className="TodoForm__Task">
+            <input
+              type="text"
+              value={value}
+              placeholder="Add a new task"
+              className="TodoForm__Task__input"
+              onChange={(e) => setValue(e.target.value)}
+            />
+          </div>
+          <div className="TodoForm__Category">
+            <select
+              id="type"
+              name="type"
+              value={type}
+              onChange={(e) => setType(e.target.value)}
+              {...(taskorreminder === "reminder" && { disabled: true })}
+            >
+              {allTypes?.map((type) => (
+                <option key={`type-id ${type?.id}`} value={type?.id}>
+                  {type.typeName}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="TodoForm__CatDate">
+            <div className="TodoForm__CatDate__date">
+              <input
+                type="time"
+                id="startTime"
+                placeholder="00:00"
+                value={startTimeValue}
+                onChange={(e) => setStartTimeValue(e.target.value)}
+              />
+            </div>
+            <div className="TodoForm__CatDate__date">
+              <input
+                type="date"
+                id="startDate"
+                name="trip-start"
+                //Default value is current date
+                value={date}
+                onChange={(e) => setDate(e.target.value)}
+                min="2018-01-01"
+                max="2099-12-31"
+              />
+            </div>
+          </div>
+          <button
+            type="submit"
+            className="add-btn"
+            style={{
+              backgroundColor: allColors?.buttonIcons,
+              color: allColors?.buttonText,
+            }}
           >
-            <option value="task">Task</option>
-            <option value="reminder">Reminder</option>
-          </select>
-        </div>
-        <div className="TodoForm__CatDate__date">
-          <input
-            type="time"
-            id="startTime"
-            placeholder="00:00"
-            value={startTimeValue}
-            onChange={(e) => setStartTimeValue(e.target.value)}
-          />
-        </div>
-        <div className="TodoForm__CatDate__date">
-          <input
-            type="date"
-            id="startDate"
-            name="trip-start"
-            //Default value is current date
-            value={date}
-            onChange={(e) => setDate(e.target.value)}
-            min="2018-01-01"
-            max="2099-12-31"
-          />
-        </div>
-      </div>
-      <div className="TodoForm__overlay"></div>
-    </form>
+            Add Task
+          </button>
+          <div className="TodoForm__overlay"></div>
+        </form>
+      </dialog>
+    </>
   );
 };

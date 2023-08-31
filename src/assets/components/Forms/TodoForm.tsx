@@ -88,6 +88,7 @@ export const TodoForm = () => {
     setValue("");
 
     setDate(new Date().toISOString().slice(0, 10));
+    closeModal();
   };
 
   useEffect(() => {

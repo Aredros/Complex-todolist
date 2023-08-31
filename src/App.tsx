@@ -82,7 +82,7 @@ export const AppContext = createContext<ITallAppFile | undefined>(undefined);
 
 function App() {
   const [loading, setLoading] = useState(false);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false); //check if it is an anonymous user or not
   const [allTodos, setAllTodos] = useState<IDoneTodo[] | null>([]);
   const [allTypes, setAllTypes] = useState<IType[] | null>([]);
   const [isLoggedIn, setIsLoggedIn] = useState(false); //check if the user is logged in or not
@@ -98,7 +98,7 @@ function App() {
     weeklyCardTxt: "#000000",
     buttonIcons: "#005657",
     buttonText: "#ffffff",
-    formBackgroundColor: "#5c72b280",
+    formBackgroundColor: "#5c72b2",
     itemBackgroundColor: "#ffffff",
     itemText: "#000000",
     reminderBackgroundColor: "#ffde8c",
